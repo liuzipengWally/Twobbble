@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Twobbble</string>
+    <string name="click_to_login">Click to Login</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="home">Home</string>
+    <!--浏览作品-->
+    <string name="explore">Explore</string>
+    <!--我的作品集-->
+    <string name="my_buckets">My buckets</string>
+    <!--我的作品-->
+    <string name="my_shots">My Shots</string>
+    <string name="likes">Likes</string>
+    <string name="settings">Settings</string>
+    <string name="recent">RECENT</string>
+    <string name="popular">POPULAR</string>
+    <string name="following">FOLLOWING</string>
+</resources>

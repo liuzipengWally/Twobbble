@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/colorPrimary">
+    <!-- item 必须加上 android:id="@android:id/mask"
+    与设置一个随意的颜色才能使flat ripple 的效果实现
+    -->
+    <item
+        android:id="@android:id/mask"
+        android:drawable="@color/black100" />
+</ripple>

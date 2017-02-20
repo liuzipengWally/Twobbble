@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/mHomeMenu"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="@string/home" />
+        <item
+            android:id="@+id/mExploreMenu"
+            android:icon="@drawable/ic_explore_black_24dp"
+            android:title="@string/explore" />
+        <item
+            android:id="@+id/mShotMenu"
+            android:icon="@drawable/ic_color_lens_black_24dp"
+            android:title="@string/my_shots" />
+        <item
+            android:id="@+id/mBucketMenu"
+            android:icon="@drawable/ic_collections_black_24dp"
+            android:title="@string/my_buckets" />
+        <item
+            android:id="@+id/mLikesMenu"
+            android:icon="@drawable/ic_favorite_black_24dp"
+            android:title="@string/likes" />
+        <item
+            android:id="@+id/mSettingsMenu"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="@string/settings" />
+    </group>
+</menu>

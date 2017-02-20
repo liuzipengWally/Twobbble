@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="@dimen/dp8"
+    android:gravity="bottom">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:background="@mipmap/pic_head_safe" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:orientation="vertical"
+        android:padding="@dimen/dp16">
+
+        <ImageView
+            android:id="@+id/mAvatarImg"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@null"
+            android:src="@mipmap/ic_user_placeholder" />
+
+        <TextView
+            android:id="@+id/PhoneNumberText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mAvatarImg"
+            android:layout_marginTop="@dimen/dp16"
+            android:text="@string/click_to_login"
+            android:textColor="@color/light"
+            android:textSize="@dimen/text20"
+            android:textStyle="bold" />
+    </RelativeLayout>
+</FrameLayout>
