@@ -13,6 +13,9 @@ import com.twobbble.application.App
  * Created by liuzipeng on 2017/2/15.
  */
 
+val View.ctx: Context
+    get() = context
+
 fun Activity.showSnackBar(view: View, msg: String, time: Int = Snackbar.LENGTH_SHORT) {
     Snackbar.make(view, msg, time).show()
 }

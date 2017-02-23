@@ -1,5 +1,6 @@
 package com.twobbble.tools
 
+import android.content.Context
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -12,13 +13,20 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation
  */
 class ImageLoad {
     companion object {
-        fun loadNormal(imageView: ImageView, url: String) {
-            Glide.with(App.instance).load(url).placeholder(R.drawable.img_default).diskCacheStrategy(DiskCacheStrategy.ALL)
+        fun loadNormal(context: Context, imageView: ImageView, url: String) {
+            Glide.with(context).load(url).thumbnail(0.1f).placeholder(R.drawable.img_default).
+                    error(R.mipmap.img_network_error_2).diskCacheStrategy(DiskCacheStrategy.ALL)
                     .crossFade().centerCrop().into(imageView)
         }
 
-        fun loadCircle(imageView: ImageView, url: String) {
-            Glide.with(App.instance).load(url).placeholder(R.mipmap.ic_user_placeholder).diskCacheStrategy(DiskCacheStrategy.ALL)
+        fun loadGif(context: Context, imageView: ImageView, url: String) {
+            Glide.with(context).load(url).asGif().thumbnail(0.1f).placeholder(R.drawable.img_default).
+                    error(R.mipmap.img_network_error_2).diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .crossFade().centerCrop().into(imageView)
+        }
+
+        fun loadCircle(context: Context, imageView: ImageView, url: String) {
+            Glide.with(context).load(url).placeholder(R.mipmap.ic_user_placeholder).diskCacheStrategy(DiskCacheStrategy.ALL)
                     .crossFade().bitmapTransform(CropCircleTransformation(App.instance)).into(imageView)
         }
     }

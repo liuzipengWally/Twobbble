@@ -9,6 +9,7 @@ import com.twobbble.R
 import com.twobbble.application.App
 import com.twobbble.entity.ShotList
 import com.twobbble.tools.ImageLoad
+import com.twobbble.tools.ctx
 import com.twobbble.tools.log
 import kotlinx.android.synthetic.main.item_card_bottom.view.*
 import kotlinx.android.synthetic.main.item_card_head.view.*
@@ -31,8 +32,8 @@ class ItemShotAdapter(val mShotList: List<ShotList>) : RecyclerView.Adapter<Item
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindShots(shotList: ShotList) {
             with(shotList) {
-                ImageLoad.loadCircle(itemView.mAvatarImg, shotList.user?.avatar_url.toString())
-                ImageLoad.loadNormal(itemView.mContentImg, shotList.images?.normal.toString())
+                ImageLoad.loadCircle(itemView.ctx, itemView.mAvatarImg, shotList.user?.avatar_url.toString())
+                ImageLoad.loadNormal(itemView.ctx, itemView.mContentImg, shotList.images?.normal.toString())
                 itemView.mTitleText.text = shotList.title
                 itemView.mAuthorText.text = shotList.user?.name
                 itemView.mLikeCountText.text = shotList.likes_count.toString()
