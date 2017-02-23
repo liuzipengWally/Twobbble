@@ -25,14 +25,15 @@ import org.greenrobot.eventbus.EventBus
  */
 class HomeFragment : BaseFragment() {
     private var mContext: Context? = null
-    private var mRecentFragment: RecentFragment? = null
-    private var mPopularFragment: PopularFragment? = null
+    private var mRecentFragment: HomeShotsFragment? = null
+    private var mPopularFragment: HomeShotsFragment? = null
     private var mFollowingFragment: FollowingFragment? = null
     var mFragments: List<Fragment>? = null
     val TITLE_RECENT = "RECENT"
     val TITLE_POPULAR = "POPULAR"
     val TITLE_FOLLOWING = "FOLLOWING"
     var mTitles: List<String>? = null
+    var mPagerAdapter: PagerAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,11 +45,15 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun initView() {
-        mRecentFragment = RecentFragment()
-        mPopularFragment = PopularFragment()
+        mRecentFragment = HomeShotsFragment.newInstance(HomeShotsFragment.RECENT)
+        mPopularFragment = HomeShotsFragment.newInstance()
         mFollowingFragment = FollowingFragment()
         mFragments = arrayListOf(mPopularFragment!!, mRecentFragment!!)
         mTitles = arrayListOf(TITLE_POPULAR, TITLE_RECENT)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        loadPager()
     }
 
     override fun onAttach(context: Context?) {
@@ -58,7 +63,6 @@ class HomeFragment : BaseFragment() {
 
     override fun onStart() {
         super.onStart()
-        loadPager()
         bindEvent()
     }
 
@@ -67,7 +71,8 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun loadPager() {
-        mViewPager?.adapter = PagerAdapter(childFragmentManager)
+        mPagerAdapter = PagerAdapter(childFragmentManager)
+        mViewPager?.adapter = mPagerAdapter
         mTabLayout?.setViewPager(mViewPager)
     }
 

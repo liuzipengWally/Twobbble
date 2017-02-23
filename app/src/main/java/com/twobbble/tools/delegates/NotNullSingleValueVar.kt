@@ -20,4 +20,8 @@ class NotNullSingleValueVar<T>() : ReadWriteProperty<Any?, T> {
         this.value = if (this.value == null) value
         else throw IllegalStateException("object already initialized")
     }
+
+    object DelegatesExt {
+        fun <T> notNullSingleValue(): ReadWriteProperty<Any?, T> = NotNullSingleValueVar()
+    }
 }

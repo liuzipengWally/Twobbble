@@ -1,29 +1,47 @@
 package com.twobbble.view.fragment
 
 import android.app.Fragment
-import android.app.FragmentTransaction
 import android.os.Bundle
+import com.twobbble.tools.QuickSimpleIO
 
 /**
- * Created by liuzipeng on 2017/2/19.
+ * Created by liuzipeng on 2017/2/22.
  */
 open class BaseFragment : Fragment() {
-//    private val STATE_SAVE_IS_HIDDEN = "STATE_SAVE_IS_HIDDEN"
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        if (savedInstanceState != null) {
-//            val isSupportHidden = savedInstanceState.getBoolean(STATE_SAVE_IS_HIDDEN)
-//            val transaction = fragmentManager.beginTransaction()
-//            if (isSupportHidden) {
-//                transaction.hide(this)
-//            } else {
-//                transaction.show(this)
-//            }
-//            transaction.commit()
-//        }
-//    }
-//
-//    override fun onSaveInstanceState(outState: Bundle?) {
-//        outState?.putBoolean(STATE_SAVE_IS_HIDDEN, isHidden)
-//    }
+    var mSimpleIo: QuickSimpleIO? = null
+    var isVisible: Boolean? = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mSimpleIo = QuickSimpleIO.getInstance()
+    }
+
+    /**
+     * 在这里实现Fragment数据的缓加载.
+     * fragment 被设为可见的时候,会调用这个方法
+
+     * @param isVisibleToUser
+     */
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (userVisibleHint) {
+            isVisible = true
+            onVisible()
+        } else {
+            isVisible = false
+            onInvisible()
+        }
+    }
+
+    open fun onVisible() {
+        lazyLoad()
+    }
+
+    open fun lazyLoad() {}
+
+    fun onInvisible() {
+        inVisible()
+    }
+
+    fun inVisible() {}
 }

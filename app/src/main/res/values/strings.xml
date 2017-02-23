@@ -15,4 +15,9 @@
     <string name="recent">RECENT</string>
     <string name="popular">POPULAR</string>
     <string name="following">FOLLOWING</string>
+    <string name="net_disable">The current network is not available</string>
+    <string name="request_error">Request error</string>
+    <string name="no_shot">No shot here</string>
+    <string name="click_retry">Click to try again</string>
+    <string name="gif">GIF</string>
 </resources>

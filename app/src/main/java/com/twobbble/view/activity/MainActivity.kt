@@ -87,11 +87,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         mDrawerLayout.closeDrawer(GravityCompat.START)
         when (item.itemId) {
-            R.id.mHomeMenu -> replaceFragment(mHomeFragment, mHomeFragment!!.isVisible)
-            R.id.mExploreMenu -> replaceFragment(mExploreFragment, mExploreFragment!!.isVisible)
-            R.id.mBucketMenu -> replaceFragment(mBucketsFragment, mBucketsFragment!!.isVisible)
-            R.id.mLikesMenu -> replaceFragment(mLikesFragment, mLikesFragment!!.isVisible)
-            R.id.mShotMenu -> replaceFragment(mShotFragment, mShotFragment!!.isVisible)
+            R.id.mHomeMenu -> replaceFragment(mHomeFragment, mHomeFragment!!.isVisible!!)
+            R.id.mExploreMenu -> replaceFragment(mExploreFragment, mExploreFragment!!.isVisible!!)
+            R.id.mBucketMenu -> replaceFragment(mBucketsFragment, mBucketsFragment!!.isVisible!!)
+            R.id.mLikesMenu -> replaceFragment(mLikesFragment, mLikesFragment!!.isVisible!!)
+            R.id.mShotMenu -> replaceFragment(mShotFragment, mShotFragment!!.isVisible!!)
             R.id.mSettingsMenu -> {
                 startActivity(Intent(this, SettingsActivity::class.java))
                 return false

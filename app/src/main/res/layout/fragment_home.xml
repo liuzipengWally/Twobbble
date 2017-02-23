@@ -4,6 +4,7 @@
     android:id="@+id/mRootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg"
     tools:context="com.twobbble.view.fragment.HomeFragment">
 
     <android.support.design.widget.AppBarLayout
@@ -16,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            android:tag="@string/appbar_scrolling_view_behavior"
+            app:layout_scrollFlags="scroll|enterAlways"
             app:navigationIcon="@drawable/ic_menu_black_24dp"
             app:title="@string/app_name" />
 

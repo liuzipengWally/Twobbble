@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/list_height_small"
+    android:paddingLeft="@dimen/dp16"
+    android:paddingRight="@dimen/dp16">
+
+    <TextView
+        android:id="@+id/mViewsCountText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:text="2222"
+        android:textColor="@color/icon" />
+
+    <ImageView
+        android:id="@+id/eyeImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/dp8"
+        android:layout_toLeftOf="@id/mViewsCountText"
+        android:src="@drawable/ic_remove_red_eye_black_18dp" />
+
+    <TextView
+        android:id="@+id/mCommentCountText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/dp16"
+        android:layout_toLeftOf="@id/eyeImg"
+        android:text="22"
+        android:textColor="@color/icon" />
+
+    <ImageView
+        android:id="@+id/commentImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/dp8"
+        android:layout_toLeftOf="@id/mCommentCountText"
+        android:src="@drawable/ic_forum_black_24dp" />
+
+    <TextView
+        android:id="@+id/mLikeCountText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/dp16"
+        android:layout_toLeftOf="@id/commentImg"
+        android:text="144"
+        android:textColor="@color/icon" />
+
+    <ImageView
+        android:id="@+id/likeImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/dp8"
+        android:layout_toLeftOf="@id/mLikeCountText"
+        android:src="@drawable/ic_favorite_black_18dp" />
+
+
+    <LinearLayout
+        android:id="@+id/mAttachmentLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_attachment_black_24dp" />
+
+        <TextView
+            android:id="@+id/mAttachmentCountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp8"
+            android:text="1"
+            android:textColor="@color/icon" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mReboundLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp16"
+        android:layout_toRightOf="@id/mAttachmentLayout"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_redo_black_24dp" />
+
+        <TextView
+            android:id="@+id/mReboundCountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp8"
+            android:text="2"
+            android:textColor="@color/icon" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -15,7 +15,7 @@
             android:title="@string/my_shots" />
         <item
             android:id="@+id/mBucketMenu"
-            android:icon="@drawable/ic_collections_black_24dp"
+            android:icon="@drawable/ic_bucket_24dp"
             android:title="@string/my_buckets" />
         <item
             android:id="@+id/mLikesMenu"

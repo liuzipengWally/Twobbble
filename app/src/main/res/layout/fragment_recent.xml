@@ -1,13 +1,54 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mRootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.twobbble.view.fragment.RecentFragment">
+    tools:context="com.twobbble.view.fragment.HomeShotsFragment">
 
-    <TextView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/mRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/mRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="recent" />
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/dp56"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:weightSum="1">
+
+        <ImageView
+            android:id="@+id/mErrorImg"
+            android:layout_width="240dp"
+            android:layout_height="244dp"
+            android:src="@mipmap/img_empty_shots" />
+
+        <TextView
+            android:id="@+id/mErrorText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_shot"
+            android:textColor="@color/black100"
+            android:textSize="@dimen/text20"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
+            android:text="@string/click_retry"
+            android:textColor="@color/caption" />
+    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>
