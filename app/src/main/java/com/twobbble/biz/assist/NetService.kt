@@ -24,5 +24,6 @@ interface NetService {
     @GET("shots") fun getShots(@NotNull @Query("access_token") access_token: String,
                                @Query("list") list: String?,
                                @Query("timeframe") timeframe: String?,
-                               @Query("sort") sort: String?): Observable<List<ShotList>>
+                               @Query("sort") sort: String?,
+                               @Query("page") page: Int?): Observable<MutableList<ShotList>>
 }

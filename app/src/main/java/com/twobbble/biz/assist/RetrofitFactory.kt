@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by liuzipeng on 2017/2/20.
  */
-class RetrofitFactory {
+class RetrofitFactory private constructor() {
     val BASE_URL = "https://api.dribbble.com/v1/"
     val TIMEOUT: Long = 20
     private var mRetrofit: Retrofit? = null
@@ -66,9 +66,10 @@ class RetrofitFactory {
                 .writeTimeout(TIMEOUT, TimeUnit.SECONDS).readTimeout(TIMEOUT, TimeUnit.SECONDS)
                 .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                 .cache(Cache(file, cacheSize))
-                .addInterceptor(getInterceptor())
                 .addNetworkInterceptor(getNetworkInterceptor())
-                .retryOnConnectionFailure(true).build()
+                .addInterceptor(getInterceptor())
+                .retryOnConnectionFailure(true)
+                .build()
 
         return client
     }
@@ -84,7 +85,6 @@ class RetrofitFactory {
                         .cacheControl(CacheControl.FORCE_CACHE)
                         .build()
             }
-
             chain.proceed(request)
         }
     }

@@ -9,39 +9,9 @@ import com.twobbble.tools.QuickSimpleIO
  */
 open class BaseFragment : Fragment() {
     var mSimpleIo: QuickSimpleIO? = null
-    var isVisible: Boolean? = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mSimpleIo = QuickSimpleIO.getInstance()
+        mSimpleIo = QuickSimpleIO.instance
     }
-
-    /**
-     * 在这里实现Fragment数据的缓加载.
-     * fragment 被设为可见的时候,会调用这个方法
-
-     * @param isVisibleToUser
-     */
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-        if (userVisibleHint) {
-            isVisible = true
-            onVisible()
-        } else {
-            isVisible = false
-            onInvisible()
-        }
-    }
-
-    open fun onVisible() {
-        lazyLoad()
-    }
-
-    open fun lazyLoad() {}
-
-    fun onInvisible() {
-        inVisible()
-    }
-
-    fun inVisible() {}
 }

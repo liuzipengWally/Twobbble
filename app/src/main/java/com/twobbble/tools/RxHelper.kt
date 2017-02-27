@@ -19,7 +19,7 @@ class RxHelper {
          */
         fun <T> listModeThread(subscribeThread: Scheduler? = Schedulers.io(),
                                unSubscribeThread: Scheduler? = Schedulers.io(),
-                               observeThread: Scheduler? = AndroidSchedulers.mainThread()): Observable.Transformer<List<T>, List<T>> {
+                               observeThread: Scheduler? = AndroidSchedulers.mainThread()): Observable.Transformer<MutableList<T>, MutableList<T>> {
             return Observable.Transformer { observable ->
                 observable.onErrorResumeNext(NetExceptionHandler.HttpResponseFunc())
                         .retry(Constant.RX_RETRY_TIME)

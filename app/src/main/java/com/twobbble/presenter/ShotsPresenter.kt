@@ -6,6 +6,7 @@ import com.twobbble.entity.ShotList
 import com.twobbble.presenter.BasePresenter
 import com.twobbble.tools.Constant
 import com.twobbble.tools.NetSubscriber
+import com.twobbble.tools.log
 import com.twobbble.view.api.IShotsView
 import org.jetbrains.annotations.NotNull
 import rx.subscriptions.CompositeSubscription
@@ -22,24 +23,14 @@ class ShotsPresenter(shotsView: IShotsView) : BasePresenter() {
         mShotsView = shotsView
     }
 
-    fun getShots(access_token: String = Constant.ACCESS_TOKEN, list: String? = null, timeframe: String? = null, sort: String? = null) {
-        val subscriber = mShotsBiz?.getShots(access_token, list, timeframe, sort, object : NetSubscriber<List<ShotList>>() {
-            override fun onStart() {
-                super.onStart()
-                mShotsView?.showProgress()
+    fun getShots(access_token: String = Constant.ACCESS_TOKEN, list: String?, timeframe: String?, sort: String?, page: Int?, isLoadMore: Boolean) {
+        val subscriber = mShotsBiz?.getShots(access_token, list, timeframe, sort, page, object : NetSubscriber<MutableList<ShotList>>(mShotsView) {
+            override fun onFailed(msg: String) {
+                mShotsView?.getShotFailed(msg, isLoadMore)
             }
 
-            override fun onNext(t: List<ShotList>?) {
-                mShotsView?.getShotSuccess(t)
-            }
-
-            override fun onError(t: Throwable?) {
-                t?.printStackTrace()
-                mShotsView?.getShotFailed(t?.message.toString())
-            }
-
-            override fun onCompleted() {
-                mShotsView?.hideProgress()
+            override fun onNext(t: MutableList<ShotList>?) {
+                mShotsView?.getShotSuccess(t, isLoadMore)
             }
         })
 

@@ -24,5 +24,6 @@ interface IShotsBiz {
                  list: String?,
                  timeframe: String?,
                  sort: String?,
-                 subscriber: NetSubscriber<List<ShotList>>): Subscription
+                 page: Int?,
+                 subscriber: NetSubscriber<MutableList<ShotList>>): Subscription
 }

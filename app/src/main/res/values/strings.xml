@@ -20,4 +20,12 @@
     <string name="no_shot">No shot here</string>
     <string name="click_retry">Click to try again</string>
     <string name="gif">GIF</string>
+    <string name="load_retry">Failed to load，Click to try again</string>
+    <string name="search">search</string>
+    <string name="sort">sort</string>
+    <string name="now">Now</string>
+    <string name="week">Past week</string>
+    <string name="month">Past month</string>
+    <string name="year">Past year</string>
+    <string name="ever">All time</string>
 </resources>

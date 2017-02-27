@@ -19,8 +19,8 @@ class ShotsBiz : IShotsBiz {
         mNetService = RetrofitFactory.getInstance().getService()
     }
 
-    override fun getShots(@NotNull access_token: String, list: String?, timeframe: String?, sort: String?, subscriber: NetSubscriber<List<ShotList>>): Subscription {
-        mNetService?.getShots(access_token, list, timeframe, sort)?.
+    override fun getShots(@NotNull access_token: String, list: String?, timeframe: String?, sort: String?, page: Int?, subscriber: NetSubscriber<MutableList<ShotList>>): Subscription {
+        mNetService?.getShots(access_token, list, timeframe, sort, page)?.
                 compose(RxHelper.listModeThread())?.
                 subscribe(subscriber)
 

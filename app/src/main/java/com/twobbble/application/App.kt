@@ -1,6 +1,7 @@
 package com.twobbble.application
 
 import android.app.Application
+import com.facebook.drawee.backends.pipeline.Fresco
 import com.twobbble.R
 import com.twobbble.biz.assist.RetrofitFactory
 import com.twobbble.tools.delegates.NotNullSingleValueVar
@@ -29,5 +30,6 @@ class App : Application() {
 
     private fun init() {
         instance = this
+        Fresco.initialize(this)
     }
 }

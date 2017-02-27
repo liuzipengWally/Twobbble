@@ -13,4 +13,6 @@
     <dimen name="list_height_small">48dp</dimen>
     <dimen name="list_height_large">56dp</dimen>
     <dimen name="item_image_height">300dp</dimen>
+    <dimen name="circle_progress_size">46dp</dimen>
+    <dimen name="z_card">16dp</dimen>
 </resources>

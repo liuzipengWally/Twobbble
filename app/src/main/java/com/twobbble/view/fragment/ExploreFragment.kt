@@ -24,7 +24,7 @@ class ExploreFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return LayoutInflater.from(mContext).inflate(R.layout.fragment_explore, null)
+        return LayoutInflater.from(activity).inflate(R.layout.fragment_explore, null)
     }
 
     override fun onAttach(context: Context?) {

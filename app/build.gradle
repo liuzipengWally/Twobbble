@@ -46,4 +46,9 @@ dependencies {
     compile 'com.android.support:support-v4:25.2.0'
     compile 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
     compile 'jp.wasabeef:glide-transformations:2.0.1'
+    compile 'com.facebook.fresco:imagepipeline-okhttp3:1.1.0'
+    compile 'com.facebook.fresco:fresco:1.1.0'
+    compile 'com.facebook.fresco:animated-gif:1.1.0'
+    compile 'me.zhanghai.android.materialprogressbar:library:1.3.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha3'
 }

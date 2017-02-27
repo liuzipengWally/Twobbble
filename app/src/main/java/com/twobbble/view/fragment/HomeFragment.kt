@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.twobbble.R
+import com.twobbble.application.App
 import com.twobbble.event.OpenDrawerEvent
 import com.twobbble.tools.log
 
@@ -24,7 +25,6 @@ import org.greenrobot.eventbus.EventBus
  * Created by liuzipeng on 2017/2/17.
  */
 class HomeFragment : BaseFragment() {
-    private var mContext: Context? = null
     private var mRecentFragment: HomeShotsFragment? = null
     private var mPopularFragment: HomeShotsFragment? = null
     private var mFollowingFragment: FollowingFragment? = null
@@ -40,11 +40,11 @@ class HomeFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        initView()
-        return LayoutInflater.from(mContext).inflate(R.layout.fragment_home, null)
+        init()
+        return LayoutInflater.from(activity).inflate(R.layout.fragment_home, null)
     }
 
-    private fun initView() {
+    private fun init() {
         mRecentFragment = HomeShotsFragment.newInstance(HomeShotsFragment.RECENT)
         mPopularFragment = HomeShotsFragment.newInstance()
         mFollowingFragment = FollowingFragment()
@@ -53,12 +53,16 @@ class HomeFragment : BaseFragment() {
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        initView()
         loadPager()
+    }
+
+    private fun initView() {
+        Toolbar.inflateMenu(R.menu.search_menu)
     }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        mContext = context
     }
 
     override fun onStart() {
@@ -79,6 +83,14 @@ class HomeFragment : BaseFragment() {
     private fun bindEvent() {
         Toolbar.setNavigationOnClickListener {
             EventBus.getDefault().post(OpenDrawerEvent())
+        }
+
+        Toolbar.setOnMenuItemClickListener { menu ->
+            when (menu.itemId) {
+                R.id.mSearch -> {
+                }
+            }
+            true
         }
     }
 

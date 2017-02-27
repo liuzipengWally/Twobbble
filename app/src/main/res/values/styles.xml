@@ -37,4 +37,9 @@
         <item name="fontPath">fonts/yuehei.ttf</item>
         <item name="android:textSize">@dimen/text14</item>
     </style>
+
+    <style name="progress_color" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:progressBackgroundTint">@color/colorPrimary</item>
+    </style>
 </resources>

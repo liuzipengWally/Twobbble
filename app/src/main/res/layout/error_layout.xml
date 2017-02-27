@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mErrorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:visibility="gone">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="78dp"
+        android:padding="@dimen/dp16">
+
+        <ImageView
+            android:id="@+id/mErrorImg"
+            android:layout_width="207dp"
+            android:layout_height="204dp"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/img_empty_shots" />
+
+        <TextView
+            android:id="@+id/mTryText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mErrorImg"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp4"
+            android:text="@string/click_retry"
+            android:textColor="@color/black100"
+            android:textSize="@dimen/text16" />
+
+        <TextView
+            android:id="@+id/mErrorText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mTryText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp4"
+            android:text="@string/no_shot"
+            android:textColor="@color/caption" />
+    </RelativeLayout>
+</LinearLayout>
