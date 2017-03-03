@@ -10,7 +10,7 @@ import android.view.ViewConfiguration;
  * Created by liuzipeng on 2016/11/11.
  */
 
-public class MyScrollview extends NestedScrollView {
+public class MyScrollView extends NestedScrollView {
     private int downX;
     private int downY;
     private int mTouchSlop;
@@ -24,17 +24,17 @@ public class MyScrollview extends NestedScrollView {
         this.mListener = listener;
     }
 
-    public MyScrollview(Context context) {
+    public MyScrollView(Context context) {
         super(context);
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
     }
 
-    public MyScrollview(Context context, AttributeSet attrs) {
+    public MyScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
     }
 
-    public MyScrollview(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MyScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
     }

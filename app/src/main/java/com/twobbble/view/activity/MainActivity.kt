@@ -21,7 +21,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private var mExploreFragment: ExploreFragment? = null
     private var mBucketsFragment: BucketsFragment? = null
     private var mLikesFragment: LikesFragment? = null
-    private var mShotFragment: ShotFragment? = null
+    private var mMyShotFragment: MyShotFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,21 +50,15 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         mExploreFragment = ExploreFragment()
         mBucketsFragment = BucketsFragment()
         mLikesFragment = LikesFragment()
-        mShotFragment = ShotFragment()
-        val transaction = fragmentManager.beginTransaction()
-        transaction.add(R.id.mContentLayout, mHomeFragment)
-        transaction.add(R.id.mContentLayout, mExploreFragment)
-        transaction.add(R.id.mContentLayout, mBucketsFragment)
-        transaction.add(R.id.mContentLayout, mLikesFragment)
-        transaction.add(R.id.mContentLayout, mShotFragment)
-        transaction.hide(mBucketsFragment).hide(mExploreFragment).hide(mLikesFragment).hide(mShotFragment).show(mHomeFragment).commit()
+        mMyShotFragment = MyShotFragment()
+        addFragment(mHomeFragment)
         mNavigation.setCheckedItem(R.id.mHomeMenu)
     }
 
     private fun replaceFragment(fragment: Fragment?, addBackStack: Boolean = false) {
         if (fragment != null && !fragment.isVisible) {
             val transaction = fragmentManager.beginTransaction().setCustomAnimations(R.anim.fragment_enter, R.anim.fragment_exit, R.anim.fragment_enter, R.anim.fragment_exit)
-            transaction.hide(mBucketsFragment).hide(mExploreFragment).hide(mLikesFragment).hide(mShotFragment).hide(mHomeFragment).show(fragment)
+            transaction.hide(mBucketsFragment).hide(mExploreFragment).hide(mLikesFragment).hide(mMyShotFragment).hide(mHomeFragment).show(fragment)
             if (addBackStack) transaction.addToBackStack(fragment.javaClass.simpleName).commit() else transaction.commit()
         }
     }
@@ -87,16 +81,39 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         mDrawerLayout.closeDrawer(GravityCompat.START)
         when (item.itemId) {
-            R.id.mHomeMenu -> replaceFragment(mHomeFragment)
-            R.id.mExploreMenu -> replaceFragment(mExploreFragment)
-            R.id.mBucketMenu -> replaceFragment(mBucketsFragment)
-            R.id.mLikesMenu -> replaceFragment(mLikesFragment)
-            R.id.mShotMenu -> replaceFragment(mShotFragment)
+            R.id.mHomeMenu -> if (!mHomeFragment!!.isAdded) {
+                addFragment(mHomeFragment)
+            } else replaceFragment(mHomeFragment)
+            R.id.mExploreMenu -> if (!mExploreFragment!!.isAdded) {
+                addFragment(mExploreFragment)
+            } else replaceFragment(mExploreFragment)
+            R.id.mBucketMenu -> if (!mBucketsFragment!!.isAdded) {
+                addFragment(mBucketsFragment)
+            } else replaceFragment(mBucketsFragment)
+            R.id.mLikesMenu -> if (!mLikesFragment!!.isAdded) {
+                addFragment(mLikesFragment)
+            } else replaceFragment(mLikesFragment)
+            R.id.mShotMenu -> if (!mMyShotFragment!!.isAdded) {
+                addFragment(mMyShotFragment)
+            } else replaceFragment(mMyShotFragment)
             R.id.mSettingsMenu -> {
                 startActivity(Intent(this, SettingsActivity::class.java))
                 return false
             }
         }
         return true
+    }
+
+    fun addFragment(fragment: Fragment?) {
+        fragmentManager.beginTransaction().setCustomAnimations(R.anim.fragment_enter,
+                R.anim.fragment_exit, R.anim.fragment_enter, R.anim.fragment_exit)
+                .hide(mBucketsFragment)
+                .hide(mExploreFragment)
+                .hide(mLikesFragment)
+                .hide(mMyShotFragment)
+                .hide(mHomeFragment)
+                .add(R.id.mContentLayout, fragment)
+                .show(fragment)
+                .commit()
     }
 }

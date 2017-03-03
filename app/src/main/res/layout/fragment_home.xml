@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:navigationIcon="@drawable/ic_menu_black_24dp"
+            app:navigationIcon="@drawable/ic_menu_light_24dp"
             app:title="@string/app_name" />
 
         <com.flyco.tablayout.SlidingTabLayout
@@ -31,10 +31,14 @@
             app:tl_tab_space_equal="true" />
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/mViewPager"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <android.support.v4.view.ViewPager
+            android:id="@+id/mViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

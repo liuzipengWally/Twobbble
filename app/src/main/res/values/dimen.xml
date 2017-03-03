@@ -4,15 +4,20 @@
     <dimen name="dp8">8dp</dimen>
     <dimen name="dp4">4dp</dimen>
     <dimen name="text20">20sp</dimen>
+    <dimen name="text24">24sp</dimen>
     <dimen name="text11">11sp</dimen>
     <dimen name="text14">14sp</dimen>
     <dimen name="text16">16sp</dimen>
     <dimen name="status_bar_height">24dp</dimen>
     <dimen name="dp56">56dp</dimen>
-    <dimen name="content_avatar_siz">36dp</dimen>
+    <dimen name="content_avatar_size">36dp</dimen>
     <dimen name="list_height_small">48dp</dimen>
     <dimen name="list_height_large">56dp</dimen>
     <dimen name="item_image_height">300dp</dimen>
+    <dimen name="details_app_bar_height">350dp</dimen>
     <dimen name="circle_progress_size">46dp</dimen>
     <dimen name="z_card">16dp</dimen>
+    <dimen name="details_app_bar_height_small">180dp</dimen>
+    <dimen name="comment_input_radius">50dp</dimen>
+    <dimen name="details_avatar_size">48dp</dimen>
 </resources>

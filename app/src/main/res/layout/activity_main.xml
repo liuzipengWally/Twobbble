@@ -5,6 +5,7 @@
     android:id="@+id/mDrawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg"
     tools:context="com.twobbble.view.activity.MainActivity"
     tools:openDrawer="start">
 

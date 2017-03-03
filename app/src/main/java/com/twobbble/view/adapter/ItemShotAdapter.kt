@@ -13,7 +13,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import com.twobbble.R
 import com.twobbble.application.App
-import com.twobbble.entity.ShotList
+import com.twobbble.entity.Shot
 import com.twobbble.tools.ImageLoad
 import com.twobbble.tools.Utils
 import com.twobbble.tools.log
@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.pull_up_load_layout.view.*
 /**
  * Created by liuzipeng on 2017/2/22.
  */
-class ItemShotAdapter(var mShotList: MutableList<ShotList>, val listener: (View, Int) -> Unit) : RecyclerView.Adapter<ItemShotAdapter.ViewHolder>() {
+class ItemShotAdapter(var mShot: MutableList<Shot>, val listener: (View, Int) -> Unit) : RecyclerView.Adapter<ItemShotAdapter.ViewHolder>() {
     val NORMAL = 0
     val LOAD_MORE = 1
     val CARD_TAP_DURATION: Long = 300
@@ -40,10 +40,10 @@ class ItemShotAdapter(var mShotList: MutableList<ShotList>, val listener: (View,
         }
     }
 
-    override fun getItemCount(): Int = mShotList.size + 1
+    override fun getItemCount(): Int = mShot.size + 1
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        if (position == mShotList.size) {
+        if (position == mShot.size) {
             if (Utils.hasNavigationBar(App.instance)) {
                 holder?.itemView?.mNavigationBar?.visibility = View.VISIBLE
             } else {
@@ -51,7 +51,7 @@ class ItemShotAdapter(var mShotList: MutableList<ShotList>, val listener: (View,
             }
             mLastViewHolder = holder
         } else {
-            holder?.bindShots(mShotList[position])
+            holder?.bindShots(mShot[position])
             holder?.itemView?.mItemCard?.setOnClickListener {
                 listener.invoke(holder.itemView.mItemCard!!, position)
             }
@@ -94,37 +94,37 @@ class ItemShotAdapter(var mShotList: MutableList<ShotList>, val listener: (View,
         }
     }
 
-    fun getSize(): Int = mShotList.size
+    fun getSize(): Int = mShot.size
 
-    fun addItems(shots: MutableList<ShotList>) {
-        val position = mShotList.size
-        mShotList.addAll(shots)
+    fun addItems(shots: MutableList<Shot>) {
+        val position = mShot.size
+        mShot.addAll(shots)
         notifyItemInserted(position)
     }
 
-    override fun getItemViewType(position: Int): Int = if (position == mShotList.size) LOAD_MORE else NORMAL
+    override fun getItemViewType(position: Int): Int = if (position == mShot.size) LOAD_MORE else NORMAL
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bindShots(shotList: ShotList) {
-            with(shotList) {
-                ImageLoad.frescoLoadCircle(itemView.mAvatarImg, shotList.user?.avatar_url.toString())
-                ImageLoad.frescoLoadNormal(itemView.mContentImg, itemView.mImgProgress, shotList.images?.normal.toString(), shotList.images?.teaser.toString())
-                itemView.mTitleText.text = shotList.title
-                itemView.mAuthorText.text = shotList.user?.name
-                itemView.mLikeCountText.text = shotList.likes_count.toString()
-                itemView.mCommentCountText.text = shotList.comments_count.toString()
-                itemView.mViewsCountText.text = shotList.views_count.toString()
+        fun bindShots(shot: Shot) {
+            with(shot) {
+                ImageLoad.frescoLoadCircle(itemView.mAvatarImg, shot.user?.avatar_url.toString())
+                ImageLoad.frescoLoadNormal(itemView.mContentImg, itemView.mImgProgress, shot.images?.normal.toString(), shot.images?.teaser.toString())
+                itemView.mTitleText.text = shot.title
+                itemView.mAuthorText.text = shot.user?.name
+                itemView.mLikeCountText.text = shot.likes_count.toString()
+                itemView.mCommentCountText.text = shot.comments_count.toString()
+                itemView.mViewsCountText.text = shot.views_count.toString()
                 itemView.mImgProgress.visibility = View.VISIBLE
-                if (shotList.animated) itemView.mGifTag.visibility = View.VISIBLE else itemView.mGifTag.visibility = View.GONE
+                if (shot.animated) itemView.mGifTag.visibility = View.VISIBLE else itemView.mGifTag.visibility = View.GONE
 
-                if (shotList.rebounds_count > 0) {
+                if (shot.rebounds_count > 0) {
                     itemView.mReboundLayout.visibility = View.VISIBLE
-                    itemView.mReboundCountText.text = shotList.rebounds_count.toString()
+                    itemView.mReboundCountText.text = shot.rebounds_count.toString()
                 } else itemView.mReboundLayout.visibility = View.GONE
 
-                if (shotList.attachments_count > 0) {
+                if (shot.attachments_count > 0) {
                     itemView.mAttachmentLayout.visibility = View.VISIBLE
-                    itemView.mAttachmentCountText.text = shotList.attachments_count.toString()
+                    itemView.mAttachmentCountText.text = shot.attachments_count.toString()
                 } else itemView.mAttachmentLayout.visibility = View.GONE
             }
         }

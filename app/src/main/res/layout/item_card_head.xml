@@ -10,8 +10,8 @@
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/mAvatarImg"
-        android:layout_width="@dimen/content_avatar_siz"
-        android:layout_height="@dimen/content_avatar_siz"
+        android:layout_width="@dimen/content_avatar_size"
+        android:layout_height="@dimen/content_avatar_size"
         android:layout_centerVertical="true"
         app:placeholderImage="@mipmap/ic_user_placeholder"
         app:roundAsCircle="true" />

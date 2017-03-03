@@ -22,12 +22,16 @@ import android.view.View
 import android.view.ViewConfiguration
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import com.google.gson.internal.bind.util.ISO8601Utils
 
 
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.math.BigDecimal
 import java.text.DecimalFormat
+import java.text.ParseException
+import java.text.ParsePosition
+import java.text.SimpleDateFormat
 
 
 /**
@@ -460,5 +464,19 @@ object Utils {
                 .deviceHasKey(KeyEvent.KEYCODE_BACK)
 
         return !hasMenuKey && !hasBackKey
+    }
+
+    fun formatDateUseCh(ms: Long): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+        return dateFormat.format(ms)
+    }
+
+    fun formatTimeUseCh(ms: Long): String {
+        val dateFormat = SimpleDateFormat("HH:mm:ss")
+        return dateFormat.format(ms)
+    }
+
+    fun parseISO8601(date: String): Long {
+        return ISO8601Utils.parse(date, ParsePosition(0)).time
     }
 }

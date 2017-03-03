@@ -23,13 +23,7 @@ val View.ctx: Context
     get() = context
 
 fun Activity.showSnackBar(view: View, msg: String, time: Int = Snackbar.LENGTH_SHORT) {
-    if (Utils.hasNavigationBar(App.instance)) {
-        val snackBar = Snackbar.make(view, msg, time)
-        snackBar.view.translationY = Utils.dp2px(-48, App.instance.resources.displayMetrics)
-        snackBar.show()
-    } else {
-        Snackbar.make(view, msg, time).show()
-    }
+    Snackbar.make(view, msg, time).show()
 }
 
 fun Activity.showSnackBar(view: View, msg: String, time: Int = Snackbar.LENGTH_SHORT, actionMsg: String = "重试", action: (View) -> Unit) {
@@ -37,13 +31,7 @@ fun Activity.showSnackBar(view: View, msg: String, time: Int = Snackbar.LENGTH_S
 }
 
 fun Fragment.showSnackBar(view: View, msg: String, time: Int = Snackbar.LENGTH_SHORT) {
-    if (Utils.hasNavigationBar(App.instance)) {
-        val snackBar = Snackbar.make(view, msg, time)
-        snackBar.view.translationY = Utils.dp2px(-48, App.instance.resources.displayMetrics)
-        snackBar.show()
-    } else {
-        Snackbar.make(view, msg, time).show()
-    }
+    Snackbar.make(view, msg, time).show()
 }
 
 fun Fragment.showSnackBar(view: View, msg: String, time: Int = Snackbar.LENGTH_SHORT, actionMsg: String = "重试", action: (View) -> Unit) {

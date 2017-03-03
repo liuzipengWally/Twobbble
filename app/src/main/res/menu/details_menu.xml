@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/mShare"
+        android:icon="@drawable/ic_share_black_24dp"
+        android:title="@string/share"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/mDownload"
+        android:title="@string/download" />
+    <item
+        android:id="@+id/mOpenInBrowser"
+        android:title="@string/open_in_browser" />
+    <item
+        android:id="@+id/mAddBucket"
+        android:title="@string/into_the_bucket" />
+</menu>

@@ -1,6 +1,6 @@
 package com.twobbble.biz.api
 
-import com.twobbble.entity.ShotList
+import com.twobbble.entity.Shot
 import com.twobbble.tools.NetSubscriber
 import org.jetbrains.annotations.NotNull
 import rx.Subscriber
@@ -18,12 +18,12 @@ interface IShotsBiz {
      * @param sort 排序 comments评论最多的，recent 最近的，views查看最多的
      * @param timeframe 时间   week一周，month一个月，year一键，ever无论何时
      *
-     * @return List<ShotList>
+     * @return List<Shot>
      */
     fun getShots(@NotNull access_token: String,
                  list: String?,
                  timeframe: String?,
                  sort: String?,
                  page: Int?,
-                 subscriber: NetSubscriber<MutableList<ShotList>>): Subscription
+                 subscriber: NetSubscriber<MutableList<Shot>>): Subscription
 }

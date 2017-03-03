@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bg">
+
+    <ProgressBar
+        android:id="@+id/mCommentProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/dp16" />
+
+    <TextView
+        android:id="@+id/mCommentHintText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/dp16"
+        android:text="@string/no_comment"
+        android:textSize="@dimen/text16"
+        android:visibility="gone" />
+</FrameLayout>

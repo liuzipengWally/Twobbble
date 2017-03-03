@@ -4,14 +4,17 @@ import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.DisplayMetrics
+import com.twobbble.tools.QuickSimpleIO
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 open class BaseActivity : AppCompatActivity() {
     var screenWidth: Int = 0
     var screenHeight: Int = 0
+    var mSimpleIo: QuickSimpleIO? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mSimpleIo = QuickSimpleIO.instance
         getScreenPixel()
     }
 

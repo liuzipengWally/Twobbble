@@ -3,6 +3,7 @@ package com.twobbble.view.fragment
 import android.app.Fragment
 import android.app.FragmentManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.TabLayout
@@ -10,13 +11,12 @@ import android.support.v13.app.FragmentPagerAdapter
 import android.support.v13.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.twobbble.R
 import com.twobbble.application.App
 import com.twobbble.event.OpenDrawerEvent
 import com.twobbble.tools.log
+import com.twobbble.view.activity.SearchActivity
 
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.greenrobot.eventbus.EventBus
@@ -25,8 +25,8 @@ import org.greenrobot.eventbus.EventBus
  * Created by liuzipeng on 2017/2/17.
  */
 class HomeFragment : BaseFragment() {
-    private var mRecentFragment: HomeShotsFragment? = null
-    private var mPopularFragment: HomeShotsFragment? = null
+    private var mRecentFragment: ShotsFragment? = null
+    private var mPopularFragment: ShotsFragment? = null
     private var mFollowingFragment: FollowingFragment? = null
     var mFragments: List<Fragment>? = null
     val TITLE_RECENT = "RECENT"
@@ -45,8 +45,8 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun init() {
-        mRecentFragment = HomeShotsFragment.newInstance(HomeShotsFragment.RECENT)
-        mPopularFragment = HomeShotsFragment.newInstance()
+        mRecentFragment = ShotsFragment.newInstance(ShotsFragment.RECENT)
+        mPopularFragment = ShotsFragment.newInstance()
         mFollowingFragment = FollowingFragment()
         mFragments = arrayListOf(mPopularFragment!!, mRecentFragment!!)
         mTitles = arrayListOf(TITLE_POPULAR, TITLE_RECENT)
@@ -87,8 +87,7 @@ class HomeFragment : BaseFragment() {
 
         Toolbar.setOnMenuItemClickListener { menu ->
             when (menu.itemId) {
-                R.id.mSearch -> {
-                }
+                R.id.mSearch -> startActivity(Intent(activity, SearchActivity::class.java))
             }
             true
         }

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dp16">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/mCommentAvatarImg"
+        android:layout_width="@dimen/content_avatar_size"
+        android:layout_height="@dimen/content_avatar_size"
+        app:placeholderImage="@mipmap/ic_user_placeholder"
+        app:roundAsCircle="true" />
+
+    <TextView
+        android:id="@+id/mNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp16"
+        android:layout_toRightOf="@id/mCommentAvatarImg"
+        android:text="tracy"
+        android:textColor="@color/black100" />
+
+    <TextView
+        android:id="@+id/mCommentText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mNameText"
+        android:layout_marginLeft="@dimen/dp16"
+        android:layout_toRightOf="@id/mCommentAvatarImg"
+        android:autoLink="all"
+        android:text="这里是评论"
+        android:textIsSelectable="true" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mCommentText"
+        android:layout_marginBottom="@dimen/dp16"
+        android:layout_marginLeft="@dimen/dp16"
+        android:layout_toRightOf="@id/mCommentAvatarImg">
+
+        <TextView
+            android:id="@+id/mTimeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2017年3月1日 "
+            android:textSize="@dimen/text11" />
+
+        <android.support.v7.widget.ButtonBarLayout
+            android:id="@+id/mCommentLikeBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="?android:attr/selectableItemBackgroundBorderless">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_favorite_black_18dp" />
+
+            <TextView
+                android:id="@+id/mCommentLikeCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp8"
+                android:text="11" />
+        </android.support.v7.widget.ButtonBarLayout>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.2dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/dp16"
+        android:layout_toRightOf="@id/mCommentAvatarImg"
+        android:alpha="0.5"
+        android:background="@color/icon" />
+</RelativeLayout>

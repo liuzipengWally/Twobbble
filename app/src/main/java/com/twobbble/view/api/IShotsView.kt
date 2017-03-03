@@ -1,6 +1,6 @@
 package com.twobbble.view.api
 
-import com.twobbble.entity.ShotList
+import com.twobbble.entity.Shot
 import org.jetbrains.annotations.NotNull
 
 /**
@@ -9,10 +9,10 @@ import org.jetbrains.annotations.NotNull
 interface IShotsView : IBaseView {
     /**
      * 获取shots成功
-     * @param shotList shot列表
+     * @param shots shot列表
      * @param isLoadMore 是否是上拉加载
      */
-    fun getShotSuccess(shotList: MutableList<ShotList>?, isLoadMore: Boolean)
+    fun getShotSuccess(shots: MutableList<Shot>?, isLoadMore: Boolean)
 
     /**
      * 获取shots失败

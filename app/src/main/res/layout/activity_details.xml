@@ -1,8 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mRootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="com.twobbble.view.activity.DetailsActivity">
 
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/mAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/details_app_bar_height"
+        android:elevation="0dp"
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/mCollapsing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minHeight="150dp"
+            app:layout_collapseMode="none"
+            app:layout_scrollFlags="exitUntilCollapsed|scroll|snap"
+            app:statusBarScrim="@android:color/transparent"
+            app:titleEnabled="false">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
+                app:layout_collapseMode="parallax">
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/mContentImg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:fitsSystemWindows="true"
+                    app:layout_collapseMode="parallax" />
+
+                <ProgressBar
+                    android:id="@+id/mProgress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:theme="@style/progress_color" />
+            </RelativeLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/toolbar_gradient"
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/ic_arrow_back_light_24dp"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/mRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/mFavoriteBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        app:fabSize="normal"
+        app:layout_anchor="@id/mAppBar"
+        app:layout_anchorGravity="bottom|end"
+        app:srcCompat="@drawable/ic_favorite_black_24dp" />
+
+    <include layout="@layout/comment_layout" />
 </android.support.design.widget.CoordinatorLayout>

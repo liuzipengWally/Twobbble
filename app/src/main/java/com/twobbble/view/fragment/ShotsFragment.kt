@@ -2,42 +2,45 @@ package com.twobbble.view.fragment
 
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.twobbble.R
 import com.twobbble.application.App
-import com.twobbble.entity.ShotList
+import com.twobbble.entity.Shot
 import com.twobbble.presenter.service.ShotsPresenter
 import com.twobbble.tools.*
+import com.twobbble.view.activity.DetailsActivity
 import com.twobbble.view.adapter.ItemShotAdapter
 import com.twobbble.view.api.IShotsView
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.fragment_shots.*
+import kotlinx.android.synthetic.main.list_shot.*
+import org.greenrobot.eventbus.EventBus
 
 /**
  * Created by liuzipeng on 2017/2/17.
  */
-class HomeShotsFragment : BaseFragment(), IShotsView {
+class ShotsFragment : BaseFragment(), IShotsView {
     private var mPresenter: ShotsPresenter? = null
     private var mSort: String? = null
     private var mSortList: String? = null
     private var mTimeFrame: String? = null
     private var mPage: Int = 1
-    private var mShots: MutableList<ShotList>? = null
+    private var mShots: MutableList<Shot>? = null
     private var mListAdapter: ItemShotAdapter? = null
     private var isLoading: Boolean = false
 
     companion object {
         val SORT = "sort"
         val RECENT = "recent"
-        fun newInstance(sort: String? = null): HomeShotsFragment {
-            val fragment = HomeShotsFragment()
+        fun newInstance(sort: String? = null): ShotsFragment {
+            val fragment = ShotsFragment()
             val args = Bundle()
             args.putString(SORT, sort)
             fragment.arguments = args
@@ -139,13 +142,13 @@ class HomeShotsFragment : BaseFragment(), IShotsView {
         mRefresh.isRefreshing = false
     }
 
-    override fun getShotSuccess(shotList: MutableList<ShotList>?, isLoadMore: Boolean) {
+    override fun getShotSuccess(shots: MutableList<Shot>?, isLoadMore: Boolean) {
         isLoading = false
-        if (shotList != null && shotList.isNotEmpty()) {
+        if (shots != null && shots.isNotEmpty()) {
             if (!isLoadMore) {
-                mountList(shotList)
+                mountList(shots)
             } else {
-                mListAdapter?.addItems(shotList)
+                mListAdapter?.addItems(shots)
             }
         } else {
             if (!isLoadMore) {
@@ -158,10 +161,11 @@ class HomeShotsFragment : BaseFragment(), IShotsView {
         }
     }
 
-    private fun mountList(shotList: MutableList<ShotList>) {
-        mShots = shotList
+    private fun mountList(shots: MutableList<Shot>) {
+        mShots = shots
         mListAdapter = ItemShotAdapter(mShots!!, { view, position ->
-            toast("点击了$position")
+            EventBus.getDefault().postSticky(mShots!![position])
+            startActivity(Intent(activity, DetailsActivity::class.java))
         })
         mRecyclerView.adapter = mListAdapter
     }

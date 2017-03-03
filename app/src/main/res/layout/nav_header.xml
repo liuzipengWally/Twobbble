@@ -8,7 +8,8 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="220dp"
-        android:background="@mipmap/pic_head_safe" />
+        android:background="@mipmap/head_pic"
+        android:scaleType="centerCrop" />
 
     <RelativeLayout
         android:layout_width="match_parent"

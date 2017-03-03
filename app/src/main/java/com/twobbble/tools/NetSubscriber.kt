@@ -16,7 +16,7 @@ abstract class NetSubscriber<T>(val baseView: IBaseView? = null) : Subscriber<T>
         if (!Utils.isNetworkAvailable(App.instance)) {
             baseView?.hideProgress()
             onFailed(App.instance.resources.getString(R.string.net_disable))
-            unsubscribe()
+            onCompleted()
         } else {
             baseView?.showProgress()
         }

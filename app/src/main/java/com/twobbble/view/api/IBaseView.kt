@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull
  * Created by liuzipeng on 2017/2/22.
  */
 interface IBaseView {
-    fun showProgress()
+    fun showProgress() {}
 
-    fun hideProgress()
+    fun hideProgress() {}
 }

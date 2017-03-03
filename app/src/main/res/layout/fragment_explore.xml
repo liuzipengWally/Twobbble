@@ -16,8 +16,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            app:navigationIcon="@drawable/ic_menu_black_24dp"
+            app:layout_scrollFlags="scroll|snap"
+            app:navigationIcon="@drawable/ic_menu_light_24dp"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
             app:title="@string/explore" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/list_height_large"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp8"
+            android:paddingRight="@dimen/dp8">
+
+            <Spinner
+                android:id="@+id/mSortSpinner"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+            <Spinner
+                android:id="@+id/mSortListSpinner"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+        </LinearLayout>
+
     </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/list_shot" />
+
+    <include layout="@layout/error_layout" />
 
 </android.support.design.widget.CoordinatorLayout>

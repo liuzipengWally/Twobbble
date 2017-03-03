@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".application.App"
@@ -25,7 +27,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.activity.SettingsActivity" />
-        <activity android:name=".view.activity.DetailsActivity"></activity>
+        <activity
+            android:name=".view.activity.DetailsActivity"
+            android:theme="@style/TransparentStatusTheme" />
+        <activity
+            android:name=".view.activity.ImageFullActivity"
+            android:theme="@style/ImageFullTheme" />
+        <activity android:name=".view.activity.SearchActivity"></activity>
     </application>
 
 </manifest>

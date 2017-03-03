@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black100"
+    tools:context="com.twobbble.view.activity.ImageFullActivity">
+
+    <ProgressBar
+        android:id="@+id/mProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <me.relex.photodraweeview.PhotoDraweeView
+        android:id="@+id/mImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:fitsSystemWindows="true" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/status_bar_height"
+        android:background="@drawable/toolbar_gradient"
+        app:navigationIcon="@drawable/ic_close_black_24dp"
+        app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+</android.support.design.widget.CoordinatorLayout>

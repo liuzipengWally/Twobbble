@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mAuthorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:padding="@dimen/dp16">
+
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/mAvatarImg"
+        android:layout_width="@dimen/details_avatar_size"
+        android:layout_height="@dimen/details_avatar_size"
+        android:layout_centerVertical="true"
+        app:placeholderImage="@mipmap/ic_user_placeholder"
+        app:roundAsCircle="true" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp16"
+        android:layout_toRightOf="@id/mAvatarImg">
+
+        <TextView
+            android:id="@+id/mTitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="this is title"
+            android:textColor="@color/black100"
+            android:textSize="@dimen/text16" />
+
+        <TextView
+            android:id="@+id/mAuthorText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mTitleText"
+            android:text="this is Author"
+            android:textColor="@color/google_blue"
+            android:textSize="@dimen/text16" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

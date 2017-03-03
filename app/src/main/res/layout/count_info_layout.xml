@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dp8"
+    android:layout_marginTop="@dimen/dp8"
+    android:baselineAligned="false"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/dp16"
+    android:paddingRight="@dimen/dp16">
+
+    <android.support.v7.widget.ButtonBarLayout
+        android:id="@+id/mLikeCountBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:gravity="center"
+        android:paddingBottom="@dimen/dp8"
+        android:paddingTop="@dimen/dp8">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_favorite_black_18dp" />
+
+        <TextView
+            android:id="@+id/mLikeCountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp8"
+            android:text="184" />
+    </android.support.v7.widget.ButtonBarLayout>
+
+    <android.support.v7.widget.ButtonBarLayout
+        android:id="@+id/mViewsCountBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:gravity="center"
+        android:paddingBottom="@dimen/dp8"
+        android:paddingTop="@dimen/dp8">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_remove_red_eye_black_18dp" />
+
+        <TextView
+            android:id="@+id/mViewsCountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp8"
+            android:text="200" />
+
+    </android.support.v7.widget.ButtonBarLayout>
+
+    <android.support.v7.widget.ButtonBarLayout
+        android:id="@+id/mBucketCountBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:gravity="center"
+        android:paddingBottom="@dimen/dp8"
+        android:paddingTop="@dimen/dp8">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_bucket_18dp" />
+
+        <TextView
+            android:id="@+id/mBucketCountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp8"
+            android:text="5" />
+
+    </android.support.v7.widget.ButtonBarLayout>
+
+    <android.support.v7.widget.ButtonBarLayout
+        android:id="@+id/mCommentCountBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:gravity="center"
+        android:paddingBottom="@dimen/dp8"
+        android:paddingTop="@dimen/dp8">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_forum_black_18dp" />
+
+        <TextView
+            android:id="@+id/mCommentCountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp8"
+            android:text="10" />
+
+    </android.support.v7.widget.ButtonBarLayout>
+
+    <android.support.v7.widget.ButtonBarLayout
+        android:id="@+id/mAttachmentCountBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:gravity="center"
+        android:paddingBottom="@dimen/dp8"
+        android:paddingTop="@dimen/dp8">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_attachment_black_18dp" />
+
+        <TextView
+            android:id="@+id/mAttachmentCountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp8"
+            android:text="1" />
+
+    </android.support.v7.widget.ButtonBarLayout>
+
+</LinearLayout>

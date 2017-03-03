@@ -40,7 +40,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/dp8"
         android:layout_toLeftOf="@id/mCommentCountText"
-        android:src="@drawable/ic_forum_black_24dp" />
+        android:src="@drawable/ic_forum_black_18dp" />
 
     <TextView
         android:id="@+id/mLikeCountText"
@@ -73,7 +73,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_attachment_black_24dp" />
+            android:src="@drawable/ic_attachment_black_18dp" />
 
         <TextView
             android:id="@+id/mAttachmentCountText"

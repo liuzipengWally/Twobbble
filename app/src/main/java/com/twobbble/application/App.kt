@@ -2,11 +2,12 @@ package com.twobbble.application
 
 import android.app.Application
 import com.facebook.drawee.backends.pipeline.Fresco
+import com.liulishuo.filedownloader.FileDownloader
 import com.twobbble.R
-import com.twobbble.biz.assist.RetrofitFactory
 import com.twobbble.tools.delegates.NotNullSingleValueVar
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig
-import kotlin.properties.ReadWriteProperty
+import kotlin.concurrent.thread
+
 
 /**
  * Created by liuzipeng on 2017/2/15.
@@ -20,7 +21,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         init()
-        initFont()
+//        initFont()
     }
 
     private fun initFont() {
@@ -30,6 +31,9 @@ class App : Application() {
 
     private fun init() {
         instance = this
-        Fresco.initialize(this)
+        FileDownloader.init(applicationContext)
+        thread {
+            Fresco.initialize(this)
+        }.start()
     }
 }
