@@ -9,11 +9,15 @@ import android.view.ViewGroup
 import com.twobbble.R
 import com.twobbble.application.App
 import kotlinx.android.synthetic.main.fragment_following.*
+import kotlinx.android.synthetic.main.search_layout.*
 
 /**
  * Created by liuzipeng on 2017/2/17.
  */
 class FollowingFragment : BaseFragment() {
+    override fun onBackPressed() {
+        hideSearchView()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,5 +38,10 @@ class FollowingFragment : BaseFragment() {
 
     private fun bindEvent() {
 
+    }
+
+
+    private fun hideSearchView() {
+        mSearchLayout.hideSearchView { isShowSearchBar = false }
     }
 }

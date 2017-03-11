@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/mSearch"
-        android:icon="@drawable/ic_search_black_24dp"
-        android:title="@string/search"
-        app:showAsAction="always" />
+    <!--<item-->
+    <!--android:id="@+id/mSearch"-->
+    <!--android:icon="@drawable/ic_search_light_24dp"-->
+    <!--android:title="@string/search"-->
+    <!--app:showAsAction="always" />-->
 
-
     <item
-        android:icon="@drawable/ic_filter_list_black_24dp"
+        android:icon="@drawable/ic_filter_list_light_24dp"
         android:title="@string/sort"
-        app:showAsAction="ifRoom">
+        app:showAsAction="always">
         <menu>
             <item
                 android:id="@+id/mNow"

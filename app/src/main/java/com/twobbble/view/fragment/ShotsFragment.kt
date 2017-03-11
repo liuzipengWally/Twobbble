@@ -1,12 +1,15 @@
 package com.twobbble.view.fragment
 
 
+import android.animation.Animator
+import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Pair
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +23,9 @@ import com.twobbble.view.adapter.ItemShotAdapter
 import com.twobbble.view.api.IShotsView
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.fragment_shots.*
-import kotlinx.android.synthetic.main.list_shot.*
+import kotlinx.android.synthetic.main.item_card_head.*
+import kotlinx.android.synthetic.main.item_shots.*
+import kotlinx.android.synthetic.main.list.*
 import org.greenrobot.eventbus.EventBus
 
 /**
@@ -79,7 +84,7 @@ class ShotsFragment : BaseFragment(), IShotsView {
     fun getShots(isLoadMore: Boolean = false) {
         isLoading = true
         val token = mSimpleIo?.getString(Constant.KEY_TOKEN)
-        if (token == null) {
+        if (token == null || token == "") {
             mPresenter?.getShots(sort = mSort,
                     list = mSortList,
                     timeframe = mTimeFrame,
@@ -165,7 +170,7 @@ class ShotsFragment : BaseFragment(), IShotsView {
         mShots = shots
         mListAdapter = ItemShotAdapter(mShots!!, { view, position ->
             EventBus.getDefault().postSticky(mShots!![position])
-            startActivity(Intent(activity, DetailsActivity::class.java))
+            startDetailsActivity()
         })
         mRecyclerView.adapter = mListAdapter
     }

@@ -1,5 +1,6 @@
 package com.twobbble.tools
 
+import com.twobbble.view.api.IBaseView
 import rx.Observable
 import rx.Scheduler
 import rx.android.schedulers.AndroidSchedulers

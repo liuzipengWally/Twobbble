@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.pull_up_load_layout.view.*
 class ItemShotAdapter(var mShot: MutableList<Shot>, val listener: (View, Int) -> Unit) : RecyclerView.Adapter<ItemShotAdapter.ViewHolder>() {
     val NORMAL = 0
     val LOAD_MORE = 1
-    val CARD_TAP_DURATION: Long = 300
+    val CARD_TAP_DURATION: Long = 100
     private var mLastViewHolder: ViewHolder? = null
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
@@ -76,7 +76,7 @@ class ItemShotAdapter(var mShot: MutableList<Shot>, val listener: (View, Int) ->
     private fun addCardZAnimation(mItemCard: CardView?) {
         mItemCard?.setOnTouchListener { view, motionEvent ->
             when (motionEvent.action) {
-                MotionEvent.ACTION_DOWN -> mItemCard.animate().translationZ(Utils.dp2px(16, App.instance.resources.displayMetrics)).duration = CARD_TAP_DURATION
+                MotionEvent.ACTION_DOWN -> mItemCard.animate().translationZ(Utils.dp2px(24, App.instance.resources.displayMetrics)).duration = CARD_TAP_DURATION
                 MotionEvent.ACTION_UP -> mItemCard.animate().translationZ(0f).duration = CARD_TAP_DURATION
                 MotionEvent.ACTION_CANCEL -> mItemCard.animate().translationZ(0f).duration = CARD_TAP_DURATION
             }

@@ -1,11 +1,14 @@
 package com.twobbble.view.customview.behavior;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
 
 
 /**
@@ -14,6 +17,7 @@ import android.view.View;
  */
 public class AutoFabBehavior extends CoordinatorLayout.Behavior<View> {
     private FloatingActionButton mAutoHideFab;
+    private boolean mStatus;
 
     public AutoFabBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -33,9 +37,43 @@ public class AutoFabBehavior extends CoordinatorLayout.Behavior<View> {
         }
 
         if (dy > 10) {
-            mAutoHideFab.hide();
+            hide();
         } else if (dy < -10) {
-            mAutoHideFab.show();
+            show();
+        }
+    }
+
+    public void show() {
+        if (!mStatus) {
+            ObjectAnimator scaleX = ObjectAnimator.ofFloat(mAutoHideFab, "scaleX", 0f, 1f);
+            ObjectAnimator scaleY = ObjectAnimator.ofFloat(mAutoHideFab, "scaleY", 0f, 1f);
+            ObjectAnimator alpha = ObjectAnimator.ofFloat(mAutoHideFab, "alpha", 0f, 1f);
+
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.playTogether(scaleX, scaleY, alpha);
+            animatorSet.setDuration(300);
+            animatorSet.setInterpolator(new OvershootInterpolator());
+
+            animatorSet.start();
+
+            mStatus = true;
+        }
+    }
+
+    public void hide() {
+        if (mStatus) {
+            ObjectAnimator scaleX = ObjectAnimator.ofFloat(mAutoHideFab, "scaleX", 1f, 0f);
+            ObjectAnimator scaleY = ObjectAnimator.ofFloat(mAutoHideFab, "scaleY", 1f, 0f);
+            ObjectAnimator alpha = ObjectAnimator.ofFloat(mAutoHideFab, "alpha", 1f, 0f);
+
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.playTogether(scaleX, scaleY, alpha);
+            animatorSet.setDuration(300);
+            animatorSet.setInterpolator(new OvershootInterpolator());
+
+            animatorSet.start();
+
+            mStatus = false;
         }
     }
 }

@@ -1,12 +1,13 @@
 package com.twobbble.view.fragment
 
-import android.app.Fragment
-import android.content.Context
+import android.animation.ObjectAnimator
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,19 +19,23 @@ import com.twobbble.event.OpenDrawerEvent
 import com.twobbble.presenter.service.ShotsPresenter
 import com.twobbble.tools.*
 import com.twobbble.view.activity.DetailsActivity
+import com.twobbble.view.activity.SearchActivity
 import com.twobbble.view.adapter.ItemShotAdapter
-import com.twobbble.view.adapter.ToolbarSpinnerAdapter
 import com.twobbble.view.api.IShotsView
 import kotlinx.android.synthetic.main.error_layout.*
-
 import kotlinx.android.synthetic.main.fragment_explore.*
-import kotlinx.android.synthetic.main.list_shot.*
+import kotlinx.android.synthetic.main.list.*
+import kotlinx.android.synthetic.main.search_layout.*
 import org.greenrobot.eventbus.EventBus
 
 /**
  * Created by liuzipeng on 2017/2/17.
  */
 class ExploreFragment : BaseFragment(), IShotsView {
+    override fun onBackPressed() {
+        hideSearchView()
+    }
+
     private var mPresenter: ShotsPresenter? = null
     private var mSort: String? = null
     private var mSortList: String? = null
@@ -69,8 +74,6 @@ class ExploreFragment : BaseFragment(), IShotsView {
         val layoutManager = LinearLayoutManager(App.instance, LinearLayoutManager.VERTICAL, false)
         mRecyclerView.layoutManager = layoutManager
         mRecyclerView.itemAnimator = DefaultItemAnimator()
-        mSortSpinner.adapter = ToolbarSpinnerAdapter(activity, resources.getStringArray(R.array.sorts))
-        mSortListSpinner.adapter = ToolbarSpinnerAdapter(activity, resources.getStringArray(R.array.sort_list))
         mSortSpinner.setSelection(0, true)
         mSortListSpinner.setSelection(0, true)
     }
@@ -78,7 +81,7 @@ class ExploreFragment : BaseFragment(), IShotsView {
     fun getShots(isLoadMore: Boolean = false) {
         isLoading = true
         val token = mSimpleIo?.getString(Constant.KEY_TOKEN)
-        if (token == null) {
+        if (token == null || token == "") {
             mPresenter?.getShots(sort = mSort,
                     list = mSortList,
                     timeframe = mTimeFrame,
@@ -99,6 +102,21 @@ class ExploreFragment : BaseFragment(), IShotsView {
     }
 
     private fun bindEvent() {
+        mSearchEdit.setOnKeyListener { view, keycode, keyEvent ->
+            if (keyEvent.action == KeyEvent.ACTION_DOWN) {//判断是否为点按下去触发的事件，如果不写，会导致该案件的事件被执行两次
+                when (keycode) {
+                    KeyEvent.KEYCODE_ENTER -> search()
+                }
+            }
+            false
+        }
+
+        mBackBtn.setOnClickListener { hideSearchView() }
+
+        mSearchBtn.setOnClickListener { search() }
+
+        mVoiceBtn.setOnClickListener { startSpeak() }
+
         Toolbar.setNavigationOnClickListener {
             EventBus.getDefault().post(OpenDrawerEvent())
         }
@@ -153,6 +171,7 @@ class ExploreFragment : BaseFragment(), IShotsView {
                 R.id.mMonth -> timeFrameUpdate(Parameters.MONTH)
                 R.id.mYear -> timeFrameUpdate(Parameters.YEAR)
                 R.id.mAllTime -> timeFrameUpdate(Parameters.EVER)
+                R.id.mSearch -> mSearchLayout.showSearchView(Toolbar.width, { isShowSearchBar = true })
             }
             true
         }
@@ -200,7 +219,7 @@ class ExploreFragment : BaseFragment(), IShotsView {
         mShots = shots
         mListAdapter = ItemShotAdapter(mShots!!, { view, position ->
             EventBus.getDefault().postSticky(mShots!![position])
-            startActivity(Intent(activity, DetailsActivity::class.java))
+            startDetailsActivity()
         })
         mRecyclerView.adapter = mListAdapter
     }
@@ -216,5 +235,18 @@ class ExploreFragment : BaseFragment(), IShotsView {
                 getShots(true)
             }
         }
+    }
+
+    private fun search() {
+        if (mSearchEdit.text != null && mSearchEdit.text.toString() != "") {
+            val intent = Intent(activity, SearchActivity::class.java)
+            intent.putExtra(SearchActivity.KEY_KEYWORD, mSearchEdit.text.toString())
+            startActivity(intent, ActivityOptions.
+                    makeSceneTransitionAnimation(activity, mSearchLayout, "searchBar").toBundle())
+        }
+    }
+
+    private fun hideSearchView() {
+        mSearchLayout.hideSearchView { isShowSearchBar = false }
     }
 }

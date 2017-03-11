@@ -6,7 +6,7 @@
     android:clipToPadding="true"
     tools:context="com.twobbble.view.fragment.ShotsFragment">
 
-    <include layout="@layout/list_shot" />
+    <include layout="@layout/list" />
 
     <include layout="@layout/error_layout" />
 </android.support.design.widget.CoordinatorLayout>

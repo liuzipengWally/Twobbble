@@ -11,13 +11,26 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/Toolbar"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            app:navigationIcon="@drawable/ic_menu_light_24dp"
-            app:title="@string/likes" />
+            app:layout_scrollFlags="scroll|enterAlways">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/Toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                app:navigationIcon="@drawable/ic_menu_light_24dp"
+                app:title="@string/likes" />
+
+            <include layout="@layout/search_layout" />
+        </FrameLayout>
     </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/list" />
+
+    <include layout="@layout/error_layout" />
+
 
 </android.support.design.widget.CoordinatorLayout>

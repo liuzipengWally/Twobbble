@@ -2,13 +2,12 @@ package com.twobbble.view.customview.behavior
 
 import android.content.Context
 import android.support.design.widget.CoordinatorLayout
-import android.support.design.widget.FloatingActionButton
+import android.support.design.widget.Snackbar
 import android.support.v4.view.ViewCompat
 import android.util.AttributeSet
 import android.view.View
 import com.twobbble.application.App
 import com.twobbble.tools.Utils
-import com.twobbble.tools.log
 
 /**
  * Created by liuzipeng on 2017/2/28.
@@ -25,6 +24,26 @@ class BehaviorComment(context: Context, attrs: AttributeSet) : CoordinatorLayout
             hideChild(child)
         } else if (dy < -2) {
             showChild(child)
+        }
+    }
+
+    override fun layoutDependsOn(parent: CoordinatorLayout?, child: View?, dependency: View?): Boolean {
+        return dependency is Snackbar.SnackbarLayout
+    }
+
+    override fun onDependentViewChanged(parent: CoordinatorLayout?, child: View?, dependency: View?): Boolean {
+        if (dependency is Snackbar.SnackbarLayout) {
+            updateTranslate(dependency, child)
+        }
+        return false
+    }
+
+    private fun updateTranslate(dependency: Snackbar.SnackbarLayout, child: View?) {
+        val y = Utils.dp2px(48, App.instance.resources.displayMetrics) - dependency.translationY
+        if (dependency.left >= dependency.width) {
+            child?.animate()?.translationY(0f)?.duration = 200
+        } else {
+            child?.translationY = -y
         }
     }
 

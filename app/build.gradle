@@ -51,4 +51,5 @@ dependencies {
     compile 'com.liulishuo.filedownloader:library:1.4.1'
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar'
     compile 'me.relex:photodraweeview:1.1.2'
+    compile 'com.jakewharton.rxbinding:rxbinding:1.0.1'
 }

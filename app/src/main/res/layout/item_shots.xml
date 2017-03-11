@@ -36,7 +36,8 @@
             <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/mContentImg"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/item_image_height" />
+                android:layout_height="@dimen/item_image_height"
+                android:transitionName="contentImg" />
 
             <TextView
                 android:id="@+id/mGifTag"

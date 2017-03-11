@@ -38,6 +38,35 @@
     <string name="into_the_bucket">Into the bucket</string>
     <string name="input_keyword">Input keyword</string>
     <string name="start_speak">Please say the keywords</string>
+    <string name="login">Login</string>
+    <string name="login_failed">Login failed</string>
+    <string name="login_success">Login success</string>
+    <string name="please_wait">Please wait..</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+    <string name="logout_hint_title">You are logging out</string>
+    <string name="logout_hint">Are you sure you want to log out? This will make you lose some functionality</string>
+    <string name="not_logged">This feature requires login to use, please login first :）</string>
+    <string name="like_success">Like success</string>
+    <string name="like_failed">Like failed</string>
+    <string name="unlike_success">Unlike success</string>
+    <string name="unlike_failed">Unlike failed</string>
+    <string name="account_not_player">Your account may not be player T^T</string>
+    <string name="no_likes">You have no liked works ┐(ﾟ～ﾟ)┌ </string>
+    <string name="input_bucket_name">Enter the name of the bucket</string>
+    <string name="input_bucket_description">Enter the description of this bucket</string>
+    <string name="create_bucket">Create a bucket</string>
+    <string name="create">create</string>
+    <string name="bucket_name_null">Buckets name can not be empty</string>
+    <string name="no_bucket">You have no bucket for the time being</string>
+    <string name="delete_bucket">Delete bucket</string>
+    <string name="delete">Delete</string>
+    <string name="whether_to_delete">Are you sure you want to delete this bucket?</string>
+    <string name="delete_success">Delete success</string>
+    <string name="delete_failed">Delete failed</string>
+    <string name="modify_bucket">Modify bucket</string>
+    <string name="modify_success">Modify success</string>
+    <string name="modify_failed">Modify failed</string>
 
     <string-array name="sorts">
         <!--最受欢迎的-->

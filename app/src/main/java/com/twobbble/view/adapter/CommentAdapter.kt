@@ -103,7 +103,7 @@ class CommentAdapter(val mShot: Shot,
         }
 
         holder?.itemView?.mCommentLikeBtn?.setOnClickListener {
-            likeClick.invoke(it, position)
+            likeClick.invoke(holder.itemView.mLikeImg, position)
         }
     }
 

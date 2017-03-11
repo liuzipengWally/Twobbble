@@ -19,7 +19,8 @@ import java.util.concurrent.TimeUnit
  * Created by liuzipeng on 2017/2/20.
  */
 class RetrofitFactory private constructor() {
-    val BASE_URL = "https://api.dribbble.com/v1/"
+    val API_BASE_URL = "https://api.dribbble.com/v1/"
+    val WEBSITE_BASE_URL = "https://dribbble.com/"
     val TIMEOUT: Long = 20
     private var mRetrofit: Retrofit? = null
     private var mNetService: NetService? = null
@@ -40,14 +41,20 @@ class RetrofitFactory private constructor() {
 
     /**
      * 配置OkHttpClient、Retrofit、NetService三个关键对象
-
      * @param context
      */
     fun createRetrofit(context: Context) {
-        mRetrofit = Retrofit.Builder().client(constructClient(context)).baseUrl(BASE_URL)
+        mRetrofit = Retrofit.Builder().client(constructClient(context)).baseUrl(API_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create()).build()
         mNetService = mRetrofit?.create(NetService::class.java)
+    }
+
+    fun createWebsiteRetrofit(): NetService {
+        return Retrofit.Builder().client(constructClient(App.instance)).baseUrl(WEBSITE_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create()).build()
+                .create(NetService::class.java)
     }
 
     /**

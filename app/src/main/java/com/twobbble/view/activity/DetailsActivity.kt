@@ -1,36 +1,31 @@
 package com.twobbble.view.activity
 
+import android.animation.Animator
+import android.app.ActivityOptions
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
-import android.text.Html
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
+import android.view.animation.OvershootInterpolator
+import com.jakewharton.rxbinding.view.RxView
+import com.jakewharton.rxbinding.widget.RxTextView
 import com.twobbble.R
-import com.twobbble.R.id.mTitleText
-import com.twobbble.entity.Shot
 import com.twobbble.entity.Comment
+import com.twobbble.entity.Shot
 import com.twobbble.presenter.DetailsPresenter
 import com.twobbble.tools.*
 import com.twobbble.view.adapter.CommentAdapter
 import com.twobbble.view.api.IDetailsView
-import com.twobbble.view.customview.CommentDivider
-import com.zhy.view.flowlayout.FlowLayout
-import com.zhy.view.flowlayout.TagAdapter
 import kotlinx.android.synthetic.main.activity_details.*
 import kotlinx.android.synthetic.main.comment_layout.*
 import kotlinx.android.synthetic.main.count_info_layout.*
-import kotlinx.android.synthetic.main.details_user.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.jetbrains.annotations.NotNull
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 @Suppress("DEPRECATION")
 class DetailsActivity : BaseActivity(), IDetailsView {
@@ -39,6 +34,7 @@ class DetailsActivity : BaseActivity(), IDetailsView {
     private var mAdapter: CommentAdapter? = null
     private var mComments: MutableList<Comment>? = null
     private var mShot: Shot? = null
+    private var mLiked: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,10 +49,19 @@ class DetailsActivity : BaseActivity(), IDetailsView {
     }
 
     private fun initView() {
+        if (singleData.isLogin()) {
+            mCommentEdit.isFocusableInTouchMode = true
+            mCommentEdit.isFocusable = true
+        }
         toolbar.inflateMenu(R.menu.details_menu)
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         mRecycler.layoutManager = layoutManager
         mRecycler.itemAnimator = DefaultItemAnimator()
+    }
+
+    override fun onBackPressed() {
+        mFavoriteBtn.visibility = View.GONE
+        super.onBackPressed()
     }
 
     override fun onStart() {
@@ -67,25 +72,31 @@ class DetailsActivity : BaseActivity(), IDetailsView {
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
+        mPresenter?.unSubscriber()
     }
 
     private fun bindEvent() {
-        toolbar.setNavigationOnClickListener { finish() }
+        toolbar.setNavigationOnClickListener { onBackPressed() }
 
         mContentImg.setOnClickListener {
             val intent = Intent(this, ImageFullActivity::class.java)
             intent.putExtra(ImageFullActivity.KEY_TITLE, mShot?.title)
             val urlNormal: String = mShot?.images?.hidpi ?: mShot?.images?.normal!!
             intent.putExtra(ImageFullActivity.KEY_URL_NORMAL, urlNormal)
-            intent.putExtra(ImageFullActivity.KEY_URL_LOW, mShot?.images?.teaser)
-            startActivity(intent)
+            if (mShot?.images?.hidpi != null) {
+                intent.putExtra(ImageFullActivity.KEY_URL_LOW, mShot?.images?.normal)
+            } else {
+                intent.putExtra(ImageFullActivity.KEY_URL_LOW, mShot?.images?.teaser)
+            }
+            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
         }
 
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.mDownload -> {
-                    val urls = mShot?.images?.hidpi?.split(".")
-                    DownloadUtils.DownloadImg(mShot?.images?.hidpi.toString(),
+                    val url = mShot?.images?.hidpi ?: mShot?.images?.normal
+                    val urls = url?.split(".")
+                    DownloadUtils.DownloadImg(url.toString(),
                             "${Constant.IMAGE_DOWNLOAD_PATH}${File.separator}${mShot?.title}.${urls!![urls.size - 1]}")
                 }
                 R.id.mOpenInBrowser -> openLink(mShot?.html_url!!)
@@ -95,6 +106,66 @@ class DetailsActivity : BaseActivity(), IDetailsView {
             }
             true
         }
+
+        mFavoriteBtn.setOnClickListener {
+            if (singleData.isLogin()) {
+                if (!mLiked) {
+                    mPresenter?.likeShot(mShot?.id!!, singleData.token!!)
+                    mLiked = true
+                } else {
+                    mPresenter?.unlikeShot(mShot?.id!!, singleData.token!!)
+                    mLiked = false
+                }
+
+                FavoriteAnimation()
+            } else showSnackBar(mRootLayout, resources.getString(R.string.not_logged))
+        }
+
+        //未登录的时候不允许用户在评论输入框输入内容，并弹出提示
+        mCommentEdit.setOnClickListener { view ->
+            if (!singleData.isLogin()) {
+                showSnackBar(mRootLayout, resources.getString(R.string.not_logged))
+            }
+        }
+
+        RxTextView.textChanges(mCommentEdit).subscribe({ text ->
+            if (text.isNotEmpty()) {
+                mSendBtn.setImageResource(R.drawable.ic_send_enable_24dp)
+                mSendBtn.isClickable = true
+            } else {
+                mSendBtn.setImageResource(R.drawable.ic_send_disable_24dp)
+                mSendBtn.isClickable = false
+            }
+        })
+
+        RxView.clicks(mSendBtn).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe {
+            Utils.hideKeyboard(mCommentEdit)
+            mPresenter?.createComment(mShot!!.id, singleData.token!!, mCommentEdit.text.toString())
+        }
+    }
+
+    private fun FavoriteAnimation() {
+        mFavoriteBtn.animate()
+                .scaleY(2f)
+                .setDuration(300)
+                .setInterpolator(OvershootInterpolator())
+                .setListener(object : Animator.AnimatorListener {
+                    override fun onAnimationRepeat(p0: Animator?) {}
+                    override fun onAnimationEnd(p0: Animator?) {
+                        if (mLiked) {
+                            mFavoriteBtn.setImageResource(R.drawable.ic_favorite_black_24dp)
+                        } else {
+                            mFavoriteBtn.setImageResource(R.drawable.ic_favorite_border_light_24dp)
+                        }
+
+                        mFavoriteBtn.animate()
+                                .scaleY(1f)
+                                .duration = 300
+                    }
+
+                    override fun onAnimationCancel(p0: Animator?) {}
+                    override fun onAnimationStart(p0: Animator?) {}
+                })
     }
 
     private fun openLink(url: String) {
@@ -108,21 +179,27 @@ class DetailsActivity : BaseActivity(), IDetailsView {
         val sendIntent = Intent()
         sendIntent.action = Intent.ACTION_SEND
         sendIntent.type = "text/plain"
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "我分享了${mShot?.user?.name}的作品《${mShot?.title}》\n ${mShot?.html_url}\n来自@${resources.getString(R.string.app_name)}")
+        sendIntent.putExtra(Intent.EXTRA_TEXT,
+                "我分享了${mShot?.user?.name}的作品《${mShot?.title}》\n ${mShot?.html_url}\n来自@${resources.getString(R.string.app_name)}")
         sendIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(Intent.createChooser(sendIntent, resources.getString(R.string.share)))
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true) fun obtainShot(shot: Shot) {
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun obtainShot(shot: Shot) {
         mId = shot.id
         mShot = shot
+        if (singleData.isLogin()) {
+            mPresenter?.checkIfLikeShot(shot.id, singleData.token.toString())
+        }
         mountData(shot)
         getComments()
+        ImageLoad.frescoLoadCircle(mCommentAvatarImg, singleData.avatar.toString())
 //        EventBus.getDefault().removeStickyEvent(shot)
     }
 
     private fun getComments() {
-        val token = mSimpleIo?.getString(Constant.KEY_TOKEN) ?: Constant.ACCESS_TOKEN
+        val token = singleData.token ?: Constant.ACCESS_TOKEN
         mPresenter?.getComments(mId!!, token, null)
     }
 
@@ -152,6 +229,10 @@ class DetailsActivity : BaseActivity(), IDetailsView {
         mRecycler.adapter = mAdapter
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
+
     override fun showProgress() {
         mAdapter?.showProgress()
     }
@@ -168,8 +249,20 @@ class DetailsActivity : BaseActivity(), IDetailsView {
         }
     }
 
-    override fun addCommentSuccess(Comments: MutableList<Comment>) {
+    override fun addCommentSuccess(comment: Comment?) {
+        if (comment != null) {
+            mAdapter?.addItem(mComments?.size!!, comment)
+        }
+    }
 
+    override fun showSendProgress() {
+        mSendBtn.animate().scaleX(0f).scaleY(0f).duration = 100
+        mSendProgress.animate().scaleX(1f).scaleY(1f).duration = 200
+    }
+
+    override fun hideSendProgress() {
+        mSendProgress.animate().scaleX(0f).scaleY(0f).duration = 100
+        mSendBtn.animate().scaleX(1f).scaleY(1f).duration = 200
     }
 
     override fun getCommentsFailed(msg: String) {
@@ -179,5 +272,42 @@ class DetailsActivity : BaseActivity(), IDetailsView {
 
     override fun addCommentFailed(msg: String) {
         showSnackBar(mRootLayout, msg)
+    }
+
+    override fun likeShotSuccess() {
+        showSnackBar(mRootLayout, resources.getString(R.string.like_success))
+        mLikeCountText.text = "${mLikeCountText.text.toString().toInt() + 1}"
+    }
+
+    override fun likeShotFailed(msg: String) {
+        showSnackBar(mRootLayout, msg)
+    }
+
+    override fun checkIfLikeSuccess() {
+        mLiked = true
+        mFavoriteBtn.setImageResource(R.drawable.ic_favorite_black_24dp)
+//        showFab()
+    }
+
+    override fun checkIfLikeFailed() {
+        mFavoriteBtn.setImageResource(R.drawable.ic_favorite_border_light_24dp)
+//        showFab()
+    }
+
+    override fun unLikeShotSuccess() {
+        showSnackBar(mRootLayout, resources.getString(R.string.unlike_success))
+        mLikeCountText.text = "${mLikeCountText.text.toString().toInt() - 1}"
+    }
+
+    override fun unLikeShotFailed(msg: String) {
+        showSnackBar(mRootLayout, msg)
+    }
+
+    private fun showFab() {
+        mFavoriteBtn.visibility = View.VISIBLE
+        mFavoriteBtn.animate()
+                .scaleX(1f)
+                .scaleY(1f)
+                .setDuration(300).interpolator = OvershootInterpolator()
     }
 }

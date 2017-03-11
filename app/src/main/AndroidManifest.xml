@@ -18,22 +18,41 @@
         <activity android:name=".view.activity.BaseActivity" />
         <activity
             android:name=".view.activity.MainActivity"
-            android:launchMode="singleTask"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:theme="@style/TransparentTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <data
+                    android:host="towbbble.app"
+                    android:pathPrefix="/openwith"
+                    android:scheme="com" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
         </activity>
         <activity android:name=".view.activity.SettingsActivity" />
         <activity
             android:name=".view.activity.DetailsActivity"
-            android:theme="@style/TransparentStatusTheme" />
+            android:theme="@style/DetailsTheme" />
         <activity
             android:name=".view.activity.ImageFullActivity"
             android:theme="@style/ImageFullTheme" />
-        <activity android:name=".view.activity.SearchActivity"></activity>
+        <activity
+            android:name=".view.activity.SearchActivity"
+            android:theme="@style/TransparentTheme" />
+        <activity android:name=".view.activity.LoginActivity" />
+        <activity
+            android:name=".view.activity.InputDialogActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme_Dialog" />
     </application>
 
 </manifest>

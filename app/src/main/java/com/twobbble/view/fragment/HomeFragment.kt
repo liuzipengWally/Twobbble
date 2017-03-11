@@ -1,24 +1,24 @@
 package com.twobbble.view.fragment
 
+import android.app.ActivityOptions
 import android.app.Fragment
 import android.app.FragmentManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.CoordinatorLayout
-import android.support.design.widget.TabLayout
-import android.support.v13.app.FragmentPagerAdapter
 import android.support.v13.app.FragmentStatePagerAdapter
-import android.support.v4.view.ViewPager
-import android.util.Log
-import android.view.*
+import android.view.KeyEvent
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.twobbble.R
-import com.twobbble.application.App
 import com.twobbble.event.OpenDrawerEvent
 import com.twobbble.tools.log
+import com.twobbble.tools.startSpeak
+import com.twobbble.tools.toast
 import com.twobbble.view.activity.SearchActivity
-
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.search_layout.*
 import org.greenrobot.eventbus.EventBus
 
 /**
@@ -44,6 +44,10 @@ class HomeFragment : BaseFragment() {
         return LayoutInflater.from(activity).inflate(R.layout.fragment_home, null)
     }
 
+    override fun onBackPressed() {
+        hideSearchView()
+    }
+
     private fun init() {
         mRecentFragment = ShotsFragment.newInstance(ShotsFragment.RECENT)
         mPopularFragment = ShotsFragment.newInstance()
@@ -58,7 +62,7 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun initView() {
-        Toolbar.inflateMenu(R.menu.search_menu)
+//        Toolbar.inflateMenu(R.menu.search_menu)
     }
 
     override fun onAttach(context: Context?) {
@@ -87,9 +91,43 @@ class HomeFragment : BaseFragment() {
 
         Toolbar.setOnMenuItemClickListener { menu ->
             when (menu.itemId) {
-                R.id.mSearch -> startActivity(Intent(activity, SearchActivity::class.java))
+                R.id.mSearch -> mSearchLayout.showSearchView(Toolbar.width, {
+                    isShowSearchBar = true
+                })
             }
             true
+        }
+
+        mBackBtn.setOnClickListener {
+            hideSearchView()
+        }
+
+        mSearchBtn.setOnClickListener {
+            search()
+        }
+
+        mVoiceBtn.setOnClickListener { startSpeak() }
+
+        mSearchEdit.setOnKeyListener { view, keycode, keyEvent ->
+            if (keyEvent.action == KeyEvent.ACTION_DOWN) {//判断是否为点按下去触发的事件，如果不写，会导致该案件的事件被执行两次
+                when (keycode) {
+                    KeyEvent.KEYCODE_ENTER -> search()
+                }
+            }
+            false
+        }
+    }
+
+    private fun hideSearchView() {
+        mSearchLayout.hideSearchView { isShowSearchBar = false }
+    }
+
+    private fun search() {
+        if (mSearchEdit.text != null && mSearchEdit.text.toString() != "") {
+            val intent = Intent(activity, SearchActivity::class.java)
+            intent.putExtra(SearchActivity.KEY_KEYWORD, mSearchEdit.text.toString())
+            startActivity(intent, ActivityOptions.
+                    makeSceneTransitionAnimation(activity, mSearchLayout, "searchBar").toBundle())
         }
     }
 

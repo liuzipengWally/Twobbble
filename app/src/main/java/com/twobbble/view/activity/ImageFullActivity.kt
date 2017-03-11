@@ -3,6 +3,8 @@ package com.twobbble.view.activity
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.facebook.drawee.drawable.ScalingUtils
+import com.facebook.drawee.view.DraweeTransition
 
 import com.twobbble.R
 import com.twobbble.tools.Constant
@@ -44,7 +46,7 @@ class ImageFullActivity : AppCompatActivity() {
 
     private fun bindEvent() {
         toolbar.setNavigationOnClickListener {
-            finish()
+            onBackPressed()
         }
 
         toolbar.setOnMenuItemClickListener { item ->

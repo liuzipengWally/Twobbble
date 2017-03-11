@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mItemBucket"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:padding="@dimen/dp16">
+
+    <TextView
+        android:id="@+id/mBucketNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="test"
+        android:textColor="@color/black100"
+        android:textSize="@dimen/text16" />
+
+    <TextView
+        android:id="@+id/mTimeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mBucketNameText"
+        android:text="Updated February 27, 2017"
+        android:textSize="@dimen/text14" />
+
+    <TextView
+        android:id="@+id/mShotCountText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:text="10 shot"
+        android:textColor="@color/caption"
+        android:textSize="@dimen/text14" />
+</RelativeLayout>

@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
     android:layout_margin="@dimen/dp8"
     android:background="@drawable/comment_bg"
-    android:elevation="4dp"
+    android:elevation="@dimen/dp8"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:gravity="center_vertical"
-    app:layout_behavior="com.twobbble.view.customview.behavior.BehaviorComment">
+    app:layout_behavior="com.twobbble.view.customview.behavior.BehaviorComment"
+    tools:showIn="@layout/activity_details">
     <!--app:layout_behavior="com.twobbble.view.customview.behavior.BehaviorComment"-->
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/mCommentAvatarImg"
@@ -36,24 +38,32 @@
             android:id="@+id/mSendProgress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone" />
+            android:layout_gravity="center"
+            android:layout_marginRight="@dimen/dp8"
+            android:scaleX="0"
+            android:scaleY="0" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/mSendBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="@dimen/dp8"
             android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:clickable="false"
             android:padding="@dimen/dp8"
-            android:src="@drawable/ic_send_black_24dp" />
+            android:src="@drawable/ic_send_disable_24dp" />
     </FrameLayout>
 
     <EditText
+        android:id="@+id/mCommentEdit"
         android:layout_width="match_parent"
         android:layout_height="@dimen/list_height_small"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@id/mSendLayout"
         android:layout_toRightOf="@id/mCommentAvatarImg"
         android:background="@null"
+        android:focusable="false"
         android:gravity="center_vertical"
         android:hint="@string/add_comment_hint"
         android:inputType="textMultiLine"

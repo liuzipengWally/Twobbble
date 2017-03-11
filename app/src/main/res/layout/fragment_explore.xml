@@ -11,15 +11,23 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/Toolbar"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            app:layout_scrollFlags="scroll|snap"
-            app:navigationIcon="@drawable/ic_menu_light_24dp"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="@string/explore" />
+            app:layout_scrollFlags="scroll|enterAlways">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/Toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                app:layout_scrollFlags="scroll|snap"
+                app:navigationIcon="@drawable/ic_menu_light_24dp"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:title="@string/explore" />
+
+            <include layout="@layout/search_layout" />
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,19 +41,21 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                android:entries="@array/sorts"
+                android:popupTheme="@style/AppTheme.PopupOverlay" />
 
             <Spinner
                 android:id="@+id/mSortListSpinner"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                android:entries="@array/sort_list"
+                android:popupTheme="@style/AppTheme.PopupOverlay" />
         </LinearLayout>
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/list_shot" />
+    <include layout="@layout/list" />
 
     <include layout="@layout/error_layout" />
 
