@@ -60,13 +60,29 @@
     <string name="bucket_name_null">Buckets name can not be empty</string>
     <string name="no_bucket">You have no bucket for the time being</string>
     <string name="delete_bucket">Delete bucket</string>
+    <string name="delete_shot">Delete shot</string>
+    <string name="whether_to_delete_shot_from_bucket">Are you sure you want to delete this shot from bucket?</string>
     <string name="delete">Delete</string>
-    <string name="whether_to_delete">Are you sure you want to delete this bucket?</string>
+    <string name="whether_to_delete_bucket">Are you sure you want to delete this bucket?</string>
     <string name="delete_success">Delete success</string>
     <string name="delete_failed">Delete failed</string>
     <string name="modify_bucket">Modify bucket</string>
     <string name="modify_success">Modify success</string>
     <string name="modify_failed">Modify failed</string>
+    <string name="add_to_bucket">Add to bucket</string>
+    <string name="add_success">Add success</string>
+    <string name="add_failed">Add failed</string>
+    <string name="follow">Follow</string>
+    <string name="shots">Shots</string>
+    <string name="buckets">Buckets</string>
+    <string name="comments">Comments</string>
+    <string name="followers">Followers</string>
+    <string name="followings">Followings</string>
+    <string name="get_liked">Get liked</string>
+    <string name="projects">Projects</string>
+    <string name="teams">Teams</string>
+    <string name="no_personal_introduction">No personal introduction</string>
+    <string name="no_shots">No shots</string>
 
     <string-array name="sorts">
         <!--最受欢迎的-->

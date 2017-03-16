@@ -5,19 +5,27 @@ import android.app.ActivityOptions
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.BottomSheetBehavior
+import android.support.design.widget.BottomSheetDialog
+import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewAnimationUtils
+import android.view.animation.AccelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import com.jakewharton.rxbinding.view.RxView
 import com.jakewharton.rxbinding.widget.RxTextView
 import com.twobbble.R
 import com.twobbble.entity.Comment
 import com.twobbble.entity.Shot
+import com.twobbble.event.HideBucketEvent
 import com.twobbble.presenter.DetailsPresenter
 import com.twobbble.tools.*
 import com.twobbble.view.adapter.CommentAdapter
 import com.twobbble.view.api.IDetailsView
+import com.twobbble.view.fragment.BucketsFragment
 import kotlinx.android.synthetic.main.activity_details.*
 import kotlinx.android.synthetic.main.comment_layout.*
 import kotlinx.android.synthetic.main.count_info_layout.*
@@ -27,7 +35,6 @@ import org.greenrobot.eventbus.ThreadMode
 import java.io.File
 import java.util.concurrent.TimeUnit
 
-@Suppress("DEPRECATION")
 class DetailsActivity : BaseActivity(), IDetailsView {
     private var mPresenter: DetailsPresenter? = null
     private var mId: Long? = null
@@ -35,6 +42,8 @@ class DetailsActivity : BaseActivity(), IDetailsView {
     private var mComments: MutableList<Comment>? = null
     private var mShot: Shot? = null
     private var mLiked: Boolean = false
+    private var mBucketFragment: BucketsFragment? = null
+    private var bucketIsShowing = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,8 +69,12 @@ class DetailsActivity : BaseActivity(), IDetailsView {
     }
 
     override fun onBackPressed() {
-        mFavoriteBtn.visibility = View.GONE
-        super.onBackPressed()
+        if (bucketIsShowing) {
+            hideBuckets()
+        } else {
+            mFavoriteBtn.visibility = View.GONE
+            super.onBackPressed()
+        }
     }
 
     override fun onStart() {
@@ -101,8 +114,7 @@ class DetailsActivity : BaseActivity(), IDetailsView {
                 }
                 R.id.mOpenInBrowser -> openLink(mShot?.html_url!!)
                 R.id.mShare -> share()
-                R.id.mAddBucket -> {
-                }
+                R.id.mAddBucket -> showBuckets()
             }
             true
         }
@@ -142,6 +154,43 @@ class DetailsActivity : BaseActivity(), IDetailsView {
             Utils.hideKeyboard(mCommentEdit)
             mPresenter?.createComment(mShot!!.id, singleData.token!!, mCommentEdit.text.toString())
         }
+    }
+
+    private fun showBuckets() {
+        val cx = screenWidth / 2
+        val cy = screenHeight / 2
+        val dx = Math.max(cx, screenWidth - cx)
+        val dy = Math.max(cy, screenHeight - cy)
+        val finalRadius = Math.hypot(dx.toDouble(), dy.toDouble()).toFloat()
+        val animator = ViewAnimationUtils.createCircularReveal(mAddLayout, cx, cy, 0f, finalRadius)
+        animator.interpolator = AccelerateInterpolator()
+        animator.duration = 300
+        mAddLayout.visibility = View.VISIBLE
+        mAddLayout.alpha = 1F
+        animator.start()
+        bucketIsShowing = true
+    }
+
+    private fun hideBuckets() {
+        val cx = screenWidth / 2
+        val cy = screenHeight / 2
+        val dx = Math.max(cx, screenWidth - cx)
+        val dy = Math.max(cy, screenHeight - cy)
+        val finalRadius = Math.hypot(dx.toDouble(), dy.toDouble()).toFloat()
+        val animator = ViewAnimationUtils.createCircularReveal(mAddLayout, cx, cy, finalRadius, 0f)
+        animator.interpolator = AccelerateInterpolator()
+        animator.duration = 300
+        animator.start()
+        animator.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationRepeat(p0: Animator?) {}
+            override fun onAnimationCancel(p0: Animator?) {}
+            override fun onAnimationStart(p0: Animator?) {}
+            override fun onAnimationEnd(p0: Animator?) {
+                mAddLayout.visibility = View.GONE
+                mAddLayout.alpha = 0f
+                bucketIsShowing = false
+            }
+        })
     }
 
     private fun FavoriteAnimation() {
@@ -196,6 +245,15 @@ class DetailsActivity : BaseActivity(), IDetailsView {
         getComments()
         ImageLoad.frescoLoadCircle(mCommentAvatarImg, singleData.avatar.toString())
 //        EventBus.getDefault().removeStickyEvent(shot)
+        if (mBucketFragment == null) {
+            mBucketFragment = BucketsFragment.newInstance(BucketsFragment.ADD_SHOT, mShot!!.id)
+            fragmentManager.beginTransaction().add(R.id.mAddLayout, mBucketFragment).commit()
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun hideBucketEvent(hideBucketEvent: HideBucketEvent) {
+        hideBuckets()
     }
 
     private fun getComments() {
@@ -211,11 +269,13 @@ class DetailsActivity : BaseActivity(), IDetailsView {
 
         mComments = mutableListOf(Comment())
         mAdapter = CommentAdapter(shot, mComments!!, userClick = { view, i ->
-            //TODO 评论中的用户头像点击事件
+            EventBus.getDefault().postSticky(mComments!![i].user)
+            startActivity(Intent(this, UserActivity::class.java))
         }, likeClick = { view, i ->
             //TODO 评论中的喜欢点击事件
         }, authorClick = {
-            //TODO 作者栏点击事件
+            EventBus.getDefault().postSticky(shot.user)
+            startActivity(Intent(this, UserActivity::class.java))
         }, commentHintClick = {
             // 评论中加载状态提示的点击事件
             mAdapter?.hideCommentHint()

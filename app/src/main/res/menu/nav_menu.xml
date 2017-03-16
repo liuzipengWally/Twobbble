@@ -9,10 +9,10 @@
             android:id="@+id/mExploreMenu"
             android:icon="@drawable/ic_explore_black_24dp"
             android:title="@string/explore" />
-        <item
-            android:id="@+id/mShotMenu"
-            android:icon="@drawable/ic_color_lens_black_24dp"
-            android:title="@string/my_shots" />
+        <!--<item-->
+        <!--android:id="@+id/mShotMenu"-->
+        <!--android:icon="@drawable/ic_color_lens_black_24dp"-->
+        <!--android:title="@string/my_shots" />-->
         <item
             android:id="@+id/mBucketMenu"
             android:icon="@drawable/ic_bucket_24dp"

@@ -29,4 +29,8 @@ interface IMyBucketsView : IBaseView {
     fun modifyBucketSuccess(bucket: Bucket?, position: Int)
 
     fun modifyBucketFailed(msg: String)
+
+    fun addShotSuccess()
+
+    fun addShotFailed(msg: String)
 }

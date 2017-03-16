@@ -20,6 +20,7 @@ import com.twobbble.presenter.service.ShotsPresenter
 import com.twobbble.tools.*
 import com.twobbble.view.activity.DetailsActivity
 import com.twobbble.view.activity.SearchActivity
+import com.twobbble.view.activity.UserActivity
 import com.twobbble.view.adapter.ItemShotAdapter
 import com.twobbble.view.api.IShotsView
 import kotlinx.android.synthetic.main.error_layout.*
@@ -220,6 +221,9 @@ class ExploreFragment : BaseFragment(), IShotsView {
         mListAdapter = ItemShotAdapter(mShots!!, { view, position ->
             EventBus.getDefault().postSticky(mShots!![position])
             startDetailsActivity()
+        }, { view, position ->
+            EventBus.getDefault().postSticky(shots[position].user)
+            startActivity(Intent(activity, UserActivity::class.java))
         })
         mRecyclerView.adapter = mListAdapter
     }

@@ -8,6 +8,7 @@
     android:fitsSystemWindows="true"
     tools:context="com.twobbble.view.activity.DetailsActivity">
 
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/mAppBar"
         android:layout_width="match_parent"
@@ -80,4 +81,14 @@
         app:layout_anchorGravity="bottom|end" />
 
     <include layout="@layout/comment_layout" />
+
+    <FrameLayout
+        android:id="@+id/mAddLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        android:background="@color/light"
+        android:elevation="@dimen/dp16"
+        android:fitsSystemWindows="true"
+        android:visibility="gone" />
 </android.support.design.widget.CoordinatorLayout>

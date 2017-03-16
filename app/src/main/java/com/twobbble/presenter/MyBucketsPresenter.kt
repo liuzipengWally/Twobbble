@@ -3,7 +3,9 @@ package com.twobbble.presenter
 import com.twobbble.biz.api.IMyBucketsBiz
 import com.twobbble.biz.impl.MyBucketsBiz
 import com.twobbble.entity.Bucket
+import com.twobbble.entity.Shot
 import com.twobbble.tools.NetSubscriber
+import com.twobbble.tools.singleData
 import com.twobbble.view.api.IMyBucketsView
 import org.jetbrains.annotations.NotNull
 
@@ -95,6 +97,29 @@ class MyBucketsPresenter(val mMyBucketsView: IMyBucketsView) : BasePresenter() {
             override fun onFailed(msg: String) {
                 mMyBucketsView.hideProgressDialog()
                 mMyBucketsView.modifyBucketFailed(msg)
+            }
+        })
+    }
+
+    fun addShot2Bucket(@NotNull id: Long, @NotNull token: String = singleData.token!!, @NotNull shotId: Long) {
+        mMyBucketsBiz?.addShot2Bucket(id, token, shotId, object : NetSubscriber<Shot>() {
+            override fun onStart() {
+                mMyBucketsView.showProgressDialog()
+                super.onStart()
+            }
+
+            override fun onCompleted() {
+                super.onCompleted()
+                mMyBucketsView.hideProgressDialog()
+            }
+
+            override fun onNext(t: Shot?) {
+                mMyBucketsView.addShotSuccess()
+            }
+
+            override fun onFailed(msg: String) {
+                mMyBucketsView.hideProgressDialog()
+                mMyBucketsView.addShotFailed(msg)
             }
         })
     }

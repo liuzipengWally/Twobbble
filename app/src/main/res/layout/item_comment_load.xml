@@ -1,23 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mLoadLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/bg">
+    android:background="@color/bg"
+    android:clickable="true"
+    android:orientation="vertical">
 
-    <ProgressBar
-        android:id="@+id/mCommentProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="@dimen/dp16" />
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/mCommentHintText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="@dimen/dp16"
-        android:text="@string/no_comment"
-        android:textSize="@dimen/text16"
+        <ProgressBar
+            android:id="@+id/mCommentProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/dp16" />
+
+        <TextView
+            android:id="@+id/mCommentHintText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/dp16"
+            android:text="@string/no_comment"
+            android:textSize="@dimen/text16"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <View
+        android:id="@+id/mNavigationBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_height_small"
         android:visibility="gone" />
-</FrameLayout>
+</LinearLayout>

@@ -50,9 +50,11 @@
             android:theme="@style/TransparentTheme" />
         <activity android:name=".view.activity.LoginActivity" />
         <activity
-            android:name=".view.activity.InputDialogActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme_Dialog" />
+            android:name=".view.activity.BucketShotsActivity"
+            android:theme="@style/TransparentTheme" />
+        <activity
+            android:name=".view.activity.UserActivity"
+            android:theme="@style/UserCenterTheme" />
     </application>
 
 </manifest>

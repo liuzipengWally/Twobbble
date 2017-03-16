@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dp16"
+    android:background="#509b9b9b"
+    android:scrollbars="none"
+    tools:showIn="@layout/activity_user">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/mShotsBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp8"
+            android:paddingBottom="@dimen/dp8"
+           >
+
+            <TextView
+                android:id="@+id/mShotText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/text20" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp4"
+                android:text="@string/shots"
+                android:textColor="@color/caption" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mBucketsBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp8"
+            android:paddingBottom="@dimen/dp8">
+
+            <TextView
+                android:id="@+id/mBucketsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/text20" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp4"
+                android:text="@string/buckets"
+                android:textColor="@color/caption" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mFollowersBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp8"
+            android:paddingBottom="@dimen/dp8">
+
+            <TextView
+                android:id="@+id/mFollowersText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/text20" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp4"
+                android:text="@string/followers"
+                android:textColor="@color/caption" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mFollowingsBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp8"
+            android:paddingBottom="@dimen/dp8">
+
+            <TextView
+                android:id="@+id/mFollowingsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/text20" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp4"
+                android:text="@string/followings"
+                android:textColor="@color/caption" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mLikesBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp8"
+            android:paddingBottom="@dimen/dp8">
+
+            <TextView
+                android:id="@+id/mLikesText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/text20" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp4"
+                android:text="@string/likes"
+                android:textColor="@color/caption" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mGetLikedBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp8"
+            android:paddingBottom="@dimen/dp8">
+
+            <TextView
+                android:id="@+id/mGetLikedText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/text20" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp4"
+                android:text="@string/get_liked"
+                android:textColor="@color/caption" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mProjectsBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp8"
+            android:paddingBottom="@dimen/dp8">
+
+            <TextView
+                android:id="@+id/mProjectsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/text20" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp4"
+                android:text="@string/projects"
+                android:textColor="@color/caption" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mTeamsBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp8"
+            android:paddingBottom="@dimen/dp8">
+
+            <TextView
+                android:id="@+id/mTeamsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/text20" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp4"
+                android:text="@string/teams"
+                android:textColor="@color/caption" />
+        </LinearLayout>
+    </LinearLayout>
+
+</HorizontalScrollView>

@@ -1,9 +1,11 @@
 package com.twobbble.biz.api
 
+import com.twobbble.entity.Shot
 import com.twobbble.entity.Token
 import com.twobbble.entity.User
 import com.twobbble.tools.NetSubscriber
 import org.jetbrains.annotations.NotNull
+import retrofit2.http.Path
 import retrofit2.http.Query
 import rx.Subscription
 
@@ -22,4 +24,17 @@ interface IUserBiz {
      * @param access_token 用户登录后获得的token
      */
     fun getMyInfo(@NotNull access_token: String, netSubscriber: NetSubscriber<User>): Subscription
+
+    /**
+     * 获取一个用户的shot
+     * @param user 用户类型   user是自己   users是其它用户
+     * @param id 用户id   如果是自己的  给null
+     * @param access_token
+     * @param page 页码
+     */
+    fun getUserShot(@NotNull user: String,
+                    id: String?,
+                    @NotNull access_token: String,
+                    page: Int?,
+                    netSubscriber: NetSubscriber<MutableList<Shot>>): Subscription
 }

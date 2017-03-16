@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/mBioText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp4"
+        android:layout_marginRight="@dimen/dp4"
+        android:layout_marginTop="@dimen/dp16"
+        android:text="Born with design passion in France. Engineering "
+        android:textColor="@color/primary_text" />
+
+    <TextView
+        android:id="@+id/mShotsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp4"
+        android:layout_marginLeft="@dimen/dp4"
+        android:layout_marginTop="@dimen/dp16"
+        android:text="@string/shots" />
+</LinearLayout>

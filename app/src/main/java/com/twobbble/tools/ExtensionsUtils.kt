@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat.startActivityForResult
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -56,26 +57,51 @@ fun Any.toast(msg: Int?, length: Int? = Toast.LENGTH_SHORT) {
 /**
  * 显示错误图片
  */
-fun Fragment.showErrorImg(@NotNull linearLayout: LinearLayout, @NotNull msgResId: Int = R.string.no_shot, imgResID: Int = R.mipmap.img_empty_shots) {
-    linearLayout.visibility = View.VISIBLE
-    linearLayout.find<ImageView>(R.id.mErrorImg).setImageResource(imgResID)
-    linearLayout.find<TextView>(R.id.mErrorText).setText(msgResId)
+fun Fragment.showErrorImg(@NotNull viewGroup: ViewGroup, @NotNull msgResId: Int = R.string.no_shot, imgResID: Int = R.mipmap.img_empty_shots) {
+    viewGroup.visibility = View.VISIBLE
+    viewGroup.find<ImageView>(R.id.mErrorImg).setImageResource(imgResID)
+    viewGroup.find<TextView>(R.id.mErrorText).setText(msgResId)
 }
 
 /**
  * 显示错误图片
  */
-fun Fragment.showErrorImg(@NotNull linearLayout: LinearLayout, @NotNull msg: String, imgResID: Int = R.mipmap.img_empty_shots) {
-    linearLayout.visibility = View.VISIBLE
-    linearLayout.find<ImageView>(R.id.mErrorImg).setImageResource(imgResID)
-    linearLayout.find<TextView>(R.id.mErrorText).text = msg
+fun Fragment.showErrorImg(@NotNull viewGroup: ViewGroup, @NotNull msg: String, imgResID: Int = R.mipmap.img_empty_shots) {
+    viewGroup.visibility = View.VISIBLE
+    viewGroup.find<ImageView>(R.id.mErrorImg).setImageResource(imgResID)
+    viewGroup.find<TextView>(R.id.mErrorText).text = msg
+}
+
+/**
+ * 显示错误图片
+ */
+fun Activity.showErrorImg(@NotNull viewGroup: ViewGroup, @NotNull msgResId: Int = R.string.no_shot, imgResID: Int = R.mipmap.img_empty_shots) {
+    viewGroup.visibility = View.VISIBLE
+    viewGroup.find<ImageView>(R.id.mErrorImg).setImageResource(imgResID)
+    viewGroup.find<TextView>(R.id.mErrorText).setText(msgResId)
+}
+
+/**
+ * 显示错误图片
+ */
+fun Activity.showErrorImg(@NotNull viewGroup: ViewGroup, @NotNull msg: String, imgResID: Int = R.mipmap.img_empty_shots) {
+    viewGroup.visibility = View.VISIBLE
+    viewGroup.find<ImageView>(R.id.mErrorImg).setImageResource(imgResID)
+    viewGroup.find<TextView>(R.id.mErrorText).text = msg
 }
 
 /**
  * 隐藏错无图片
  */
-fun Fragment.hideErrorImg(@NotNull linearLayout: LinearLayout) {
-    linearLayout.visibility = View.GONE
+fun Fragment.hideErrorImg(@NotNull viewGroup: ViewGroup) {
+    viewGroup.visibility = View.GONE
+}
+
+/**
+ * 隐藏错无图片
+ */
+fun Activity.hideErrorImg(@NotNull viewGroup: ViewGroup) {
+    viewGroup.visibility = View.GONE
 }
 
 fun Fragment.startSpeak() {

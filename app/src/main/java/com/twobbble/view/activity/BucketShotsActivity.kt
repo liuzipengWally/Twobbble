@@ -1,81 +1,55 @@
-package com.twobbble.view.fragment
+package com.twobbble.view.activity
 
-
-import android.animation.Animator
 import android.app.ActivityOptions
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Pair
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.support.v7.widget.helper.ItemTouchHelper
 import com.twobbble.R
 import com.twobbble.application.App
 import com.twobbble.entity.Shot
-import com.twobbble.presenter.service.ShotsPresenter
-import com.twobbble.tools.*
-import com.twobbble.view.activity.DetailsActivity
-import com.twobbble.view.activity.UserActivity
+import com.twobbble.presenter.BucketShotsPresenter
+import com.twobbble.tools.hideErrorImg
+import com.twobbble.tools.showErrorImg
+import com.twobbble.tools.toast
 import com.twobbble.view.adapter.ItemShotAdapter
-import com.twobbble.view.api.IShotsView
+import com.twobbble.view.api.IBucketShotsView
+import com.twobbble.view.customview.ItemSwipeRemoveCallback
+import kotlinx.android.synthetic.main.activity_bucket_shots.*
 import kotlinx.android.synthetic.main.error_layout.*
-import kotlinx.android.synthetic.main.fragment_shots.*
-import kotlinx.android.synthetic.main.item_card_head.*
-import kotlinx.android.synthetic.main.item_shots.*
 import kotlinx.android.synthetic.main.list.*
 import org.greenrobot.eventbus.EventBus
 
-/**
- * Created by liuzipeng on 2017/2/17.
- */
-class ShotsFragment : BaseFragment(), IShotsView {
-    private var mPresenter: ShotsPresenter? = null
-    private var mSort: String? = null
-    private var mSortList: String? = null
-    private var mTimeFrame: String? = null
+class BucketShotsActivity : BaseActivity(), IBucketShotsView {
+    private var mId: Long = 0
+    private var mTitle: String? = null
+    private var mPresenter: BucketShotsPresenter? = null
+    private var isLoading: Boolean = false
     private var mPage: Int = 1
     private var mShots: MutableList<Shot>? = null
     private var mListAdapter: ItemShotAdapter? = null
-    private var isLoading: Boolean = false
+    private var mDelPosition: Int = 0
+    private var mDelShot: Shot? = null
 
     companion object {
-        val SORT = "sort"
-        val RECENT = "recent"
-        fun newInstance(sort: String? = null): ShotsFragment {
-            val fragment = ShotsFragment()
-            val args = Bundle()
-            args.putString(SORT, sort)
-            fragment.arguments = args
-            return fragment
-        }
+        val KEY_ID = "id"
+        val KEY_TITLE = "title"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (arguments != null) {
-            mSort = arguments.getString(SORT)
-        }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return LayoutInflater.from(activity).inflate(R.layout.fragment_shots, null)
+        setContentView(R.layout.activity_bucket_shots)
+        mId = intent.getLongExtra(KEY_ID, 0)
+        mTitle = intent.getStringExtra(KEY_TITLE)
+        init()
+        getShots()
     }
 
     private fun init() {
-        mPresenter = ShotsPresenter(this)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        init()  //init放在onCreate中是因为  lazyLoad比onCreateView先走，所以懒加载的操作会因为很多对象还没初始化而不走
-        initView()
-        getShots(false)
-    }
-
-    private fun initView() {
+        Toolbar.title = mTitle
+        mPresenter = BucketShotsPresenter(this)
         mRefresh.setColorSchemeResources(R.color.google_red, R.color.google_yellow, R.color.google_green, R.color.google_blue)
         val layoutManager = LinearLayoutManager(App.instance, LinearLayoutManager.VERTICAL, false)
         mRecyclerView.layoutManager = layoutManager
@@ -84,17 +58,7 @@ class ShotsFragment : BaseFragment(), IShotsView {
 
     fun getShots(isLoadMore: Boolean = false) {
         isLoading = true
-        val token = singleData.token ?: Constant.ACCESS_TOKEN
-        mPresenter?.getShots(access_token = token,
-                sort = mSort,
-                list = mSortList,
-                timeframe = mTimeFrame,
-                page = mPage,
-                isLoadMore = isLoadMore)
-    }
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
+        mPresenter?.getBucketShots(id = mId, page = mPage, isLoadMore = isLoadMore)
     }
 
     override fun onStart() {
@@ -102,12 +66,9 @@ class ShotsFragment : BaseFragment(), IShotsView {
         bindEvent()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        mPresenter?.unSubscriber()
-    }
-
     private fun bindEvent() {
+        Toolbar.setNavigationOnClickListener { onBackPressed() }
+
         mRefresh.setOnRefreshListener {
             mPage = 1
             getShots(false)
@@ -130,6 +91,28 @@ class ShotsFragment : BaseFragment(), IShotsView {
                 }
             }
         })
+
+        val itemTouchHelper = ItemTouchHelper(ItemSwipeRemoveCallback { delPosition, view ->
+            mDelShot = mShots!![delPosition]
+            mListAdapter?.deleteItem(delPosition)
+            mDelPosition = delPosition
+            mDialogManager?.showOptionDialog(
+                    resources.getString(R.string.delete_shot),
+                    resources.getString(R.string.whether_to_delete_shot_from_bucket),
+                    confirmText = resources.getString(R.string.delete),
+                    onConfirm = {
+                        mPresenter?.removeShotFromBucket(id = mId, shot_id = mDelShot!!.id)
+                    }, onCancel = {
+                mListAdapter?.addItem(delPosition, mDelShot!!)
+                mRecyclerView.scrollToPosition(delPosition)
+            })
+        })
+        itemTouchHelper.attachToRecyclerView(mRecyclerView)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mPresenter?.unSubscriber()
     }
 
     override fun showProgress() {
@@ -138,6 +121,14 @@ class ShotsFragment : BaseFragment(), IShotsView {
 
     override fun hideProgress() {
         mRefresh.isRefreshing = false
+    }
+
+    override fun showProgressDialog() {
+        mDialogManager?.showCircleProgressDialog()
+    }
+
+    override fun hideProgressDialog() {
+        mDialogManager?.dismissAll()
     }
 
     override fun getShotSuccess(shots: MutableList<Shot>?, isLoadMore: Boolean) {
@@ -150,11 +141,9 @@ class ShotsFragment : BaseFragment(), IShotsView {
             }
         } else {
             if (!isLoadMore) {
-                showErrorImg(mErrorLayout)
+                showErrorImg(mErrorLayout, imgResID = R.mipmap.img_empty_buckets)
             } else {
-                mListAdapter?.loadError {
-                    getShots(true)
-                }
+                mListAdapter?.hideProgress()
             }
         }
     }
@@ -163,10 +152,11 @@ class ShotsFragment : BaseFragment(), IShotsView {
         mShots = shots
         mListAdapter = ItemShotAdapter(mShots!!, { view, position ->
             EventBus.getDefault().postSticky(mShots!![position])
-            startDetailsActivity()
+            startActivity(Intent(this, DetailsActivity::class.java),
+                    ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
         }, { view, position ->
             EventBus.getDefault().postSticky(shots[position].user)
-            startActivity(Intent(activity, UserActivity::class.java))
+            startActivity(Intent(applicationContext, UserActivity::class.java))
         })
         mRecyclerView.adapter = mListAdapter
     }
@@ -182,5 +172,15 @@ class ShotsFragment : BaseFragment(), IShotsView {
                 getShots(true)
             }
         }
+    }
+
+    override fun removeShotSuccess() {
+        toast(R.string.delete_success)
+    }
+
+    override fun removeShotFailed(msg: String) {
+        toast("${resources.getString(R.string.delete_success)}:$msg")
+        mListAdapter?.addItem(mDelPosition, mDelShot!!)
+        mRecyclerView.scrollToPosition(mDelPosition)
     }
 }

@@ -12,9 +12,9 @@ import rx.Subscription
  */
 class LikeBiz : ILikeBiz, BaseBiz() {
     override fun getMyLike(access_token: String, page: Int?, subscriber: NetSubscriber<MutableList<Like>>): Subscription {
-        mNetService?.getMyLikes(access_token, page)
-                ?.compose(RxHelper.listModeThread())
-                ?.subscribe(subscriber)
+        getNetService().getMyLikes(access_token, page)
+                .compose(RxHelper.listModeThread())
+                .subscribe(subscriber)
 
         return subscriber
     }

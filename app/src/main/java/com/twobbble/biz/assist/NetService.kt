@@ -132,4 +132,57 @@ interface NetService {
                                           @NotNull @Field("access_token") access_token: String,
                                           @NotNull @Field("name") name: String,
                                           @NotNull @Field("description") description: String?): Observable<Bucket>
+
+
+    /**
+     * 获取一个bucket中的shot列表
+     *
+     * @param access_token token  默认值为公用token
+     * @param id 这个bucket的id
+     * @param page 获取哪一页
+     *
+     * @return MutableList<Shot>
+     */
+    @GET("buckets/{id}/shots") fun getBucketShots(@NotNull @Path("id") id: Long,
+                                                  @NotNull @Query("access_token") access_token: String,
+                                                  @Query("page") page: Int?): Observable<MutableList<Shot>>
+
+    /**
+     * 删除bucket中的一个shot
+     *
+     * @param access_token token  默认值为公用token
+     * @param id 这个bucket的id
+     * @param shot_id 要删除的shot的id
+     *
+     * @return
+     */
+    @DELETE("buckets/{id}/shots") fun removeShotFromBucket(@NotNull @Path("id") id: Long,
+                                                           @NotNull @Query("access_token") access_token: String,
+                                                           @Query("shot_id") shot_id: Long?): Observable<Shot>
+
+    /**
+     * 添加一个shot到一个bucket
+     *
+     * @param access_token token  默认值为公用token
+     * @param id 这个bucket的id
+     * @param shot_id 要添加的shot的id
+     *
+     * @return
+     */
+    @FormUrlEncoded
+    @PUT("buckets/{id}/shots") fun addShot2Bucket(@NotNull @Path("id") id: Long,
+                                                  @NotNull @Field("access_token") access_token: String,
+                                                  @Field("shot_id") shot_id: Long?): Observable<Shot>
+
+    /**
+     * 获取一个用户的shot
+     * @param user 用户类型   user是自己   users是其它用户
+     * @param id 用户id   如果是自己的  给null
+     * @param access_token
+     * @param page 页码
+     */
+    @GET("{user}/{id}/shots") fun getUserShot(@NotNull @Path("user") user: String,
+                                              @Path("id") id: String?,
+                                              @NotNull @Query("access_token") access_token: String,
+                                              @Query("page") page: Int?): Observable<MutableList<Shot>>
 }

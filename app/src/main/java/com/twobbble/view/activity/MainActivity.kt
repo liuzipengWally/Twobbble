@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
+import com.google.gson.Gson
 import com.twobbble.R
 import com.twobbble.entity.Token
 import com.twobbble.entity.User
@@ -33,8 +34,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private var mExploreFragment: ExploreFragment? = null
     private var mBucketsFragment: BucketsFragment? = null
     private var mLikesFragment: LikesFragment? = null
-    private var mMyShotFragment: MyShotFragment? = null
+    //    private var mMyShotFragment: MyShotFragment? = null
     private var mPresenter: MainPresenter? = null
+    private var mUser: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +59,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         mExploreFragment?.onKeyDown(keyCode, event)
         mBucketsFragment?.onKeyDown(keyCode, event)
         mLikesFragment?.onKeyDown(keyCode, event)
-        mMyShotFragment?.onKeyDown(keyCode, event)
+//        mMyShotFragment?.onKeyDown(keyCode, event)
         return super.onKeyDown(keyCode, event)
     }
 
@@ -83,10 +85,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             return
         }
 
-        if (mMyShotFragment?.isVisible!! && mMyShotFragment?.isShowSearchBar!!) {
-            mMyShotFragment?.onBackPressed()
-            return
-        }
+//        if (mMyShotFragment?.isVisible!! && mMyShotFragment?.isShowSearchBar!!) {
+//            mMyShotFragment?.onBackPressed()
+//            return
+//        }
 
         finish()
     }
@@ -94,7 +96,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
-        mDialogManager?.dismissAll()
     }
 
     private fun bindEvent() {
@@ -124,6 +125,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 mUserHead?.setOnClickListener {
                     if (!singleData.isLogin()) {
                         login()
+                    } else {
+                        EventBus.getDefault().postSticky(mUser)
+                        startActivity(Intent(applicationContext, UserActivity::class.java))
                     }
                 }
             }
@@ -132,8 +136,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private fun logout() {
         mSimpleIo?.remove(Constant.KEY_TOKEN)
-        mSimpleIo?.remove(Constant.KEY_NAME)
-        mSimpleIo?.remove(Constant.KEY_AVATAR)
+        mSimpleIo?.remove(Constant.KEY_USER)
         singleData.username = null
         singleData.avatar = null
         singleData.token = null
@@ -144,7 +147,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     /**
-     * 用流浪器打开验证连接，通过我们的CLIENT_ID去获取一个code码用来获取用户的token
+     * 用浏览器打开验证连接，通过我们的CLIENT_ID去获取一个code码用来获取用户的token
      */
     private fun login() {
         mDrawerLayout.closeDrawer(GravityCompat.START)
@@ -155,9 +158,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private fun initFragment() {
         mHomeFragment = HomeFragment()
         mExploreFragment = ExploreFragment()
-        mBucketsFragment = BucketsFragment()
+        mBucketsFragment = BucketsFragment.newInstance(BucketsFragment.LOCK_BUCKET)
         mLikesFragment = LikesFragment()
-        mMyShotFragment = MyShotFragment()
+//        mMyShotFragment = MyShotFragment()
         addFragment(mHomeFragment)
         mNavigation.setCheckedItem(R.id.mHomeMenu)
     }
@@ -170,7 +173,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                     .hide(mBucketsFragment)
                     .hide(mExploreFragment)
                     .hide(mLikesFragment)
-                    .hide(mMyShotFragment)
+//                    .hide(mMyShotFragment)
                     .hide(mHomeFragment)
                     .show(fragment)
             if (addBackStack) transaction.addToBackStack(fragment.javaClass.simpleName).commit() else transaction.commit()
@@ -187,8 +190,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         params.width = screenWidth - screenWidth / 4
         mNavigation.layoutParams = params
         singleData.token = mSimpleIo?.getString(Constant.KEY_TOKEN)
-        singleData.avatar = mSimpleIo?.getString(Constant.KEY_AVATAR)
-        singleData.username = mSimpleIo?.getString(Constant.KEY_NAME)
+        mUser = Gson().fromJson(mSimpleIo?.getString(Constant.KEY_USER), User::class.java)
+        singleData.avatar = mUser?.avatar_url
+        singleData.username = mUser?.name
         initUser()
     }
 
@@ -218,9 +222,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             R.id.mLikesMenu -> if (!mLikesFragment!!.isAdded) {
                 addFragment(mLikesFragment)
             } else replaceFragment(mLikesFragment)
-            R.id.mShotMenu -> if (!mMyShotFragment!!.isAdded) {
-                addFragment(mMyShotFragment)
-            } else replaceFragment(mMyShotFragment)
+//            R.id.mShotMenu -> if (!mMyShotFragment!!.isAdded) {
+//                addFragment(mMyShotFragment)
+//            } else replaceFragment(mMyShotFragment)
             R.id.mSettingsMenu -> {
                 startActivity(Intent(this, SettingsActivity::class.java))
                 return false
@@ -235,7 +239,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 .hide(mBucketsFragment)
                 .hide(mExploreFragment)
                 .hide(mLikesFragment)
-                .hide(mMyShotFragment)
+//                .hide(mMyShotFragment)
                 .hide(mHomeFragment)
                 .add(R.id.mContentLayout, fragment)
                 .show(fragment)
@@ -249,7 +253,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         mExploreFragment?.onActivityResult(requestCode, resultCode, data)
         mBucketsFragment?.onActivityResult(requestCode, resultCode, data)
         mLikesFragment?.onActivityResult(requestCode, resultCode, data)
-        mMyShotFragment?.onActivityResult(requestCode, resultCode, data)
+//        mMyShotFragment?.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -288,12 +292,14 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun getUserSuccess(user: User?) {
         if (user != null) {
-            mSimpleIo?.setString(Constant.KEY_AVATAR, user.avatar_url!!)
-            mSimpleIo?.setString(Constant.KEY_NAME, user.name!!)
+//            mSimpleIo?.setString(Constant.KEY_AVATAR, user.avatar_url!!)
+//            mSimpleIo?.setString(Constant.KEY_NAME, user.name!!)
             singleData.avatar = user.avatar_url
             singleData.username = user.name
             mNameText.text = user.name
             ImageLoad.frescoLoadCircle(mUserAvatar, singleData.avatar.toString())
+            val userJson = Gson().toJson(user)
+            mSimpleIo?.setString(Constant.KEY_USER, userJson)
         }
     }
 }

@@ -16,6 +16,7 @@ class Constant {
         val KEY_TOKEN = "key_token"
         val KEY_AVATAR = "key_avatar"
         val KEY_NAME = "key_name"
+        val KEY_USER = "key_user"
         val DRIBBBLE_DATE_FORMAT = "YYYY-MM-DDTHH:MM:SSZ"
 
         val DETAILS_EVENT_LIKE_COUNT = 0

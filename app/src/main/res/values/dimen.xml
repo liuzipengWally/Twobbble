@@ -21,4 +21,7 @@
     <dimen name="details_app_bar_height_small">180dp</dimen>
     <dimen name="comment_input_radius">50dp</dimen>
     <dimen name="details_avatar_size">48dp</dimen>
+    <dimen name="user_center_avatar_size">80dp</dimen>
+    <dimen name="dp36">36dp</dimen>
+    <dimen name="square_img_height">100dp</dimen>
 </resources>

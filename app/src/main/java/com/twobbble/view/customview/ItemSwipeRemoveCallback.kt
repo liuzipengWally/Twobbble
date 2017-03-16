@@ -9,7 +9,7 @@ import android.view.View
 /**
  * Created by liuzipeng on 2017/3/10.
  */
-class ItemTouchHelperCallback(val onDelete: (Int, View) -> Unit) : ItemTouchHelper.Callback() {
+class ItemSwipeRemoveCallback(val onDelete: (Int, View) -> Unit) : ItemTouchHelper.Callback() {
     override fun getMovementFlags(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?): Int {
         if (recyclerView?.layoutManager is GridLayoutManager || recyclerView?.layoutManager is StaggeredGridLayoutManager) {
             val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT

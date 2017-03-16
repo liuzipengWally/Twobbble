@@ -26,11 +26,12 @@ import kotlinx.android.synthetic.main.pull_up_load_layout.view.*
 /**
  * Created by liuzipeng on 2017/2/22.
  */
-class ItemShotAdapter(var mShot: MutableList<Shot>, val listener: (View, Int) -> Unit) : RecyclerView.Adapter<ItemShotAdapter.ViewHolder>() {
+class ItemShotAdapter(var mShots: MutableList<Shot>, val itemClick: (View, Int) -> Unit, val userClick: (View, Int) -> Unit) : RecyclerView.Adapter<ItemShotAdapter.ViewHolder>() {
     val NORMAL = 0
     val LOAD_MORE = 1
     val CARD_TAP_DURATION: Long = 100
     private var mLastViewHolder: ViewHolder? = null
+    private var mOldPosition = 0
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         if (viewType == NORMAL) {
@@ -40,10 +41,10 @@ class ItemShotAdapter(var mShot: MutableList<Shot>, val listener: (View, Int) ->
         }
     }
 
-    override fun getItemCount(): Int = mShot.size + 1
+    override fun getItemCount(): Int = mShots.size + 1
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        if (position == mShot.size) {
+        if (position == mShots.size) {
             if (Utils.hasNavigationBar(App.instance)) {
                 holder?.itemView?.mNavigationBar?.visibility = View.VISIBLE
             } else {
@@ -51,26 +52,32 @@ class ItemShotAdapter(var mShot: MutableList<Shot>, val listener: (View, Int) ->
             }
             mLastViewHolder = holder
         } else {
-            holder?.bindShots(mShot[position])
+            holder?.bindShots(mShots[position])
             holder?.itemView?.mItemCard?.setOnClickListener {
-                listener.invoke(holder.itemView.mItemCard!!, position)
+                itemClick.invoke(holder.itemView.mItemCard!!, position)
             }
 
+            holder?.itemView?.mHeadLayout?.setOnClickListener {
+                userClick.invoke(holder.itemView?.mHeadLayout!!, position)
+            }
             addCardZAnimation(holder?.itemView?.mItemCard)
         }
     }
 
     override fun onViewAttachedToWindow(holder: ViewHolder?) {
-        addItemAnimation(holder?.itemView?.mItemCard)
+        if (holder?.layoutPosition!! > mOldPosition) {
+            addItemAnimation(holder.itemView.mItemCard)
+            mOldPosition = holder.layoutPosition
+        }
     }
 
     private fun addItemAnimation(mItemCard: CardView?) {
-        val scaleX = ObjectAnimator.ofFloat(mItemCard, "scaleX", 0.5f, 1f)
-        val scaleY = ObjectAnimator.ofFloat(mItemCard, "scaleY", 0.5f, 1f)
-        val set = AnimatorSet()
-        set.playTogether(scaleX, scaleY)
-        set.duration = 500
-        set.start()
+        val scaleX = ObjectAnimator.ofFloat(mItemCard, "translationY", 500f, 0f)
+//        val scaleY = ObjectAnimator.ofFloat(mItemCard, "scaleY", 0.5f, 1f)
+//        val set = AnimatorSet()
+//        set.playTogether(scaleX, scaleY)
+        scaleX.duration = 500
+        scaleX.start()
     }
 
     private fun addCardZAnimation(mItemCard: CardView?) {
@@ -84,6 +91,10 @@ class ItemShotAdapter(var mShot: MutableList<Shot>, val listener: (View, Int) ->
         }
     }
 
+    fun hideProgress() {
+        mLastViewHolder?.itemView?.mLoadLayout?.visibility = View.GONE
+    }
+
     fun loadError(retryListener: () -> Unit) {
         mLastViewHolder?.itemView?.mRetryLoadProgress?.visibility = View.GONE
         mLastViewHolder?.itemView?.mReTryText?.visibility = View.VISIBLE
@@ -94,15 +105,25 @@ class ItemShotAdapter(var mShot: MutableList<Shot>, val listener: (View, Int) ->
         }
     }
 
-    fun getSize(): Int = mShot.size
+    fun getSize(): Int = mShots.size
 
     fun addItems(shots: MutableList<Shot>) {
-        val position = mShot.size
-        mShot.addAll(shots)
+        val position = mShots.size
+        mShots.addAll(shots)
         notifyItemInserted(position)
     }
 
-    override fun getItemViewType(position: Int): Int = if (position == mShot.size) LOAD_MORE else NORMAL
+    fun addItem(position: Int, shot: Shot) {
+        mShots.add(position, shot)
+        notifyItemInserted(position)
+    }
+
+    fun deleteItem(position: Int) {
+        mShots.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    override fun getItemViewType(position: Int): Int = if (position == mShots.size) LOAD_MORE else NORMAL
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindShots(shot: Shot) {

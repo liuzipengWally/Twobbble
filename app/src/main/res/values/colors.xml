@@ -10,6 +10,7 @@
     <color name="divider">#BDBDBD</color>
     <color name="caption">#54000000</color>
     <color name="black100">#000000</color>
+    <color name="user_bg">#50000000</color>
 
     <color name="google_red">#ea4235</color>
     <color name="google_yellow">#fabc05</color>
@@ -17,6 +18,6 @@
     <color name="google_blue">#4286f5</color>
     <color name="gif_bg">#57979797</color>
     <!--<color name="bg">#EFEFF4</color>-->
-    <color name="bg">#ffffff</color>
+    <color name="bg">#EFEFF4</color>
     <color name="icon">#6B6B76</color>
 </resources>

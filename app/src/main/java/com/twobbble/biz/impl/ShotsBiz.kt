@@ -19,8 +19,8 @@ class ShotsBiz : IShotsBiz, BaseBiz() {
                           sort: String?,
                           page: Int?,
                           subscriber: NetSubscriber<MutableList<Shot>>): Subscription {
-        mNetService?.getShots(access_token, list, timeframe, sort, page)?.
-                compose(RxHelper.listModeThread())?.
+        getNetService().getShots(access_token, list, timeframe, sort, page).
+                compose(RxHelper.listModeThread()).
                 subscribe(subscriber)
 
         return subscriber
