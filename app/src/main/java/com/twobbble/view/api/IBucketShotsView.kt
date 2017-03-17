@@ -24,8 +24,4 @@ interface IBucketShotsView : IBaseView {
     fun removeShotSuccess()
 
     fun removeShotFailed(msg: String)
-
-    fun showProgressDialog()
-
-    fun hideProgressDialog()
 }

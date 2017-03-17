@@ -83,6 +83,17 @@
     <string name="teams">Teams</string>
     <string name="no_personal_introduction">No personal introduction</string>
     <string name="no_shots">No shots</string>
+    <string name="follow_success">Follow success</string>
+    <string name="follow_failed">Follow failed</string>
+    <string name="un_follow_success">Unfollow success</string>
+    <string name="un_follow_failed">Unfollow failed</string>
+    <string name="Unfollow">Unfollow</string>
+    <string name="other">Other</string>
+    <string name="version">Version</string>
+    <string name="clear_cache">Clear cache</string>
+    <string name="license">License</string>
+    <string name="clear_success">Clear cache success</string>
+
 
     <string-array name="sorts">
         <!--最受欢迎的-->

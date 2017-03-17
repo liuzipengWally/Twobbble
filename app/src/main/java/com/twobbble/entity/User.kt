@@ -38,7 +38,7 @@ class User {
      * updated_at : 2014-02-22T17:10:33Z
      */
 
-    var id: Int = 0
+    var id: Long = 0
     var name: String? = null
     var username: String? = null
     var html_url: String? = null

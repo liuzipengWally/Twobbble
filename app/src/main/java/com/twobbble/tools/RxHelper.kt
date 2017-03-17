@@ -48,5 +48,22 @@ class RxHelper {
                         observeOn(observeThread)
             }
         }
+
+        /**
+         * 输入输出都为单个对象的observable模板
+         *
+         * @param subscribeThread 订阅的线程
+         * @param unSubscribeThread 解除订阅的线程
+         * @param observeThread 结果返回的线程
+         */
+        fun <T> singleModeThreadNormal(subscribeThread: Scheduler? = Schedulers.io(),
+                                       unSubscribeThread: Scheduler? = Schedulers.io(),
+                                       observeThread: Scheduler? = AndroidSchedulers.mainThread()): Observable.Transformer<T, T> {
+            return Observable.Transformer { observable ->
+                observable.subscribeOn(subscribeThread).
+                        unsubscribeOn(unSubscribeThread).
+                        observeOn(observeThread)
+            }
+        }
     }
 }

@@ -123,7 +123,7 @@ class BucketShotsActivity : BaseActivity(), IBucketShotsView {
         mRefresh.isRefreshing = false
     }
 
-    override fun showProgressDialog() {
+    override fun showProgressDialog(msg: String?) {
         mDialogManager?.showCircleProgressDialog()
     }
 

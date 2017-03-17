@@ -32,6 +32,7 @@ import java.text.DecimalFormat
 import java.text.ParseException
 import java.text.ParsePosition
 import java.text.SimpleDateFormat
+import kotlin.concurrent.thread
 
 
 /**
@@ -366,29 +367,30 @@ object Utils {
      * @return
      */
     fun deleteFolderFile(filePath: String, deleteThisPath: Boolean) {
-        if (!TextUtils.isEmpty(filePath)) {
-            try {
-                val file = File(filePath)
-                if (file.isDirectory) {// 如果下面还有文件
-                    val files = file.listFiles()
-                    for (i in files.indices) {
-                        deleteFolderFile(files[i].absolutePath, true)
-                    }
-                }
-                if (deleteThisPath) {
-                    if (!file.isDirectory) {// 如果是文件，删除
-                        file.delete()
-                    } else {// 目录
-                        if (file.listFiles().size == 0) {// 目录下没有文件或者目录，删除
-                            file.delete()
+        thread {
+            if (!TextUtils.isEmpty(filePath)) {
+                try {
+                    val file = File(filePath)
+                    if (file.isDirectory) {// 如果下面还有文件
+                        val files = file.listFiles()
+                        for (i in files.indices) {
+                            deleteFolderFile(files[i].absolutePath, true)
                         }
                     }
+                    if (deleteThisPath) {
+                        if (!file.isDirectory) {// 如果是文件，删除
+                            file.delete()
+                        } else {// 目录
+                            if (file.listFiles().isEmpty()) {// 目录下没有文件或者目录，删除
+                                file.delete()
+                            }
+                        }
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
             }
-
-        }
+        }.start()
     }
 
     /**

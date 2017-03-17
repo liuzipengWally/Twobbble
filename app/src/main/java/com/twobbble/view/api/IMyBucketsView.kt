@@ -14,10 +14,6 @@ interface IMyBucketsView : IBaseView {
 
     fun getBucketsFailed(msg: String)
 
-    fun showProgressDialog(msg: String? = null)
-
-    fun hideProgressDialog()
-
     fun createBucketSuccess(bucket: Bucket?)
 
     fun createBucketFailed(msg: String)

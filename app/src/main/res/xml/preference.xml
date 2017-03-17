@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/other">
+        <PreferenceScreen
+            android:key="version"
+            android:title="@string/version" />
+        <PreferenceScreen
+            android:key="license"
+            android:title="@string/license" />
+        <PreferenceScreen
+            android:key="clearCache"
+            android:title="@string/clear_cache" />
+    </PreferenceCategory>
+</PreferenceScreen>

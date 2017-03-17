@@ -17,11 +17,6 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder
 import com.twobbble.R
 import com.twobbble.application.App
 import me.relex.photodraweeview.PhotoDraweeView
-import jp.wasabeef.glide.transformations.CropCircleTransformation
-import jp.wasabeef.glide.transformations.BlurTransformation
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 
 
 /**
@@ -127,13 +122,5 @@ object ImageLoad {
                 .setOldController(drawees.controller)
                 .build()
         drawees.controller = controller
-    }
-
-    fun loadBlurImgFromLocal(context: Context, imageView: ImageView, resId: Int) {
-        Glide.with(context).load(resId)
-                .bitmapTransform(BlurTransformation(context, 50), CenterCrop(context))
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .crossFade()
-                .into(imageView)
     }
 }

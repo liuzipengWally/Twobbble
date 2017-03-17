@@ -50,4 +50,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
+
+    <!--<View-->
+    <!--android:id="@+id/mRevealView"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:alpha="0"-->
+    <!--android:background="@color/black100"-->
+    <!--android:elevation="@dimen/dp16"-->
+    <!--android:fitsSystemWindows="true"-->
+    <!--android:visibility="gone" />-->
 </android.support.design.widget.CoordinatorLayout>

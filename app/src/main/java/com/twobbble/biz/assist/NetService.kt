@@ -185,4 +185,30 @@ interface NetService {
                                               @Path("id") id: String?,
                                               @NotNull @Query("access_token") access_token: String,
                                               @Query("page") page: Int?): Observable<MutableList<Shot>>
+
+
+    /**
+     * 检查是否已关注这个用户
+     * @param access_token
+     * @param id  要检查的用户的id
+     */
+    @GET("user/following/{id}") fun checkIfFollowingUser(@NotNull @Path("id") id: Long,
+                                                         @NotNull @Query("access_token") access_token: String): Observable<NullResponse>
+
+    /**
+     * 关注一个用户
+     * @param access_token
+     * @param id  要关注的用户的id
+     */
+    @FormUrlEncoded
+    @PUT("users/{id}/follow") fun followUser(@NotNull @Path("id") id: Long,
+                                             @NotNull @Field("access_token") access_token: String): Observable<NullResponse>
+
+    /**
+     * 取消关注一个用户
+     * @param access_token
+     * @param id  要取关的用户的id
+     */
+    @DELETE("users/{id}/follow") fun unFollowUser(@NotNull @Path("id") id: Long,
+                                                  @NotNull @Query("access_token") access_token: String): Observable<NullResponse>
 }

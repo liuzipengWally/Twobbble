@@ -3,34 +3,23 @@ package com.twobbble.view.activity
 import android.animation.ValueAnimator
 import android.app.ActivityOptions
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.renderscript.Allocation
-import android.renderscript.RenderScript
-import android.renderscript.ScriptIntrinsicBlur
-import android.support.v7.graphics.Palette
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.Gravity
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
-
 import com.twobbble.R
-import com.twobbble.application.App
 import com.twobbble.entity.Shot
 import com.twobbble.entity.User
 import com.twobbble.presenter.UserPresenter
-import com.twobbble.tools.*
+import com.twobbble.tools.ImageLoad
+import com.twobbble.tools.singleData
+import com.twobbble.tools.toast
 import com.twobbble.view.adapter.UserShotAdapter
 import com.twobbble.view.api.IUserView
 import kotlinx.android.synthetic.main.activity_user.*
-import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.user_center_counts.*
 import kotlinx.android.synthetic.main.user_center_top.*
 import org.greenrobot.eventbus.EventBus
@@ -45,11 +34,18 @@ class UserActivity : BaseActivity(), IUserView {
     private val OTHERS = 1
     private val PATH_USER = "user"
     private val PATH_USERS = "users"
+
+    val EXPANDED = 0x02
+    val COLLAPSED = 0x03
+    val INTERNEDIATE = 0x04
+    private var mAppBarState = EXPANDED
+
     private var mWho = MYSELF
     private var mUser: User? = null
     private var isLoading: Boolean = false
     private var mPage: Int = 1
     private var mAdapter: UserShotAdapter? = null
+    private var isFollowing: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,7 +84,11 @@ class UserActivity : BaseActivity(), IUserView {
             countAnimation(mGetLikedText, likes_received_count)
             countAnimation(mProjectsText, projects_count)
             countAnimation(mTeamsText, teams_count)
-
+            if (mWho == MYSELF || !singleData.isLogin()) {
+                hideFollowMenu()
+            } else {
+                mPresenter?.checkIfFollowingUser(mUser!!.id)
+            }
             mAdapter = UserShotAdapter(mShots!!, bio, { view, i ->
                 val shot = mShots!![i]
                 shot.user = mUser
@@ -97,13 +97,6 @@ class UserActivity : BaseActivity(), IUserView {
                         ActivityOptions.makeSceneTransitionAnimation(this@UserActivity).toBundle())
             })
             mRecyclerView.adapter = mAdapter
-
-            if (mWho == MYSELF) {
-                hideFollowMenu()
-            } else {
-
-            }
-
             getShot(false)
         }
     }
@@ -151,6 +144,52 @@ class UserActivity : BaseActivity(), IUserView {
                 }
             }
         })
+
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.mShare -> share()
+                R.id.mFollow -> follow()
+            }
+
+            true
+        }
+
+        mAppBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+            if (verticalOffset == 0) {
+                mAppBarState = EXPANDED
+                toolbar.title = ""
+            } else if (Math.abs(verticalOffset) >= appBarLayout.totalScrollRange) {
+                if (mAppBarState != COLLAPSED) {
+                    mAppBarState = COLLAPSED
+                    toolbar.title = mUser?.name
+                }
+            } else {
+                if (mAppBarState != INTERNEDIATE) {
+                    if (mAppBarState == COLLAPSED) {
+                        toolbar.title = ""
+                    }
+                    mAppBarState = INTERNEDIATE
+                }
+            }
+        }
+    }
+
+    private fun share() {
+        val sendIntent = Intent()
+        sendIntent.action = Intent.ACTION_SEND
+        sendIntent.type = "text/plain"
+        sendIntent.putExtra(Intent.EXTRA_TEXT,
+                "我分享了设计师${mUser?.name}的主页,快去看看他的作品吧\n ${mUser?.html_url}\n来自@${resources.getString(R.string.app_name)}")
+        sendIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(Intent.createChooser(sendIntent, resources.getString(R.string.share)))
+    }
+
+    private fun follow() {
+        if (isFollowing) {
+            mPresenter?.unFollowUser(mUser!!.id)
+        } else {
+            mPresenter?.followUser(mUser!!.id)
+        }
     }
 
     override fun onDestroy() {
@@ -168,6 +207,8 @@ class UserActivity : BaseActivity(), IUserView {
                 mAdapter?.loadError(R.string.no_shots) {
                     getShot(true)
                 }
+            } else {
+                isLoading = true
             }
         }
     }
@@ -186,5 +227,44 @@ class UserActivity : BaseActivity(), IUserView {
 
     override fun hideProgress() {
         mAdapter?.hideProgress()
+    }
+
+    override fun followUserSuccess() {
+        isFollowing = true
+        mFollowersText.text = "${mUser?.followers_count!! + 1}"
+        toolbar.menu.findItem(R.id.mFollow).setTitle(R.string.Unfollow)
+        toast(R.string.follow_success)
+    }
+
+    override fun followUserFailed(msg: String) {
+        toast("${resources.getString(R.string.follow_failed)}:$msg")
+    }
+
+    override fun unFollowUserSuccess() {
+        isFollowing = false
+        mFollowersText.text = "${mUser?.followers_count!! - 1}"
+        toolbar.menu.findItem(R.id.mFollow).setTitle(R.string.follow)
+        toast(R.string.un_follow_success)
+    }
+
+    override fun unFollowUserFailed(msg: String) {
+        toast("${resources.getString(R.string.un_follow_failed)}:$msg")
+    }
+
+    override fun following() {
+        isFollowing = true
+        toolbar.menu.findItem(R.id.mFollow).setTitle(R.string.Unfollow)
+    }
+
+    override fun notFollowing() {
+        isFollowing = false
+    }
+
+    override fun showProgressDialog(msg: String?) {
+        mDialogManager?.showCircleProgressDialog()
+    }
+
+    override fun hideProgressDialog() {
+        mDialogManager?.dismissAll()
     }
 }

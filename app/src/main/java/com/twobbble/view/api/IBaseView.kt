@@ -10,4 +10,8 @@ interface IBaseView {
     fun showProgress() {}
 
     fun hideProgress() {}
+
+    fun showProgressDialog(msg: String? = null) {}
+
+    fun hideProgressDialog() {}
 }

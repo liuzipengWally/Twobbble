@@ -2,6 +2,7 @@ package com.twobbble.view.fragment
 
 import android.app.Fragment
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ import com.twobbble.event.OpenDrawerEvent
 import com.twobbble.presenter.LikePresenter
 import com.twobbble.presenter.service.ShotsPresenter
 import com.twobbble.tools.*
+import com.twobbble.view.activity.UserActivity
 import com.twobbble.view.adapter.ItemShotAdapter
 import com.twobbble.view.adapter.LikesAdapter
 import com.twobbble.view.api.ILikeView
@@ -138,6 +140,9 @@ class LikesFragment : BaseFragment(), ILikeView {
         mListAdapter = LikesAdapter(mLikes!!, { view, position ->
             EventBus.getDefault().postSticky(mLikes!![position].shot)
             startDetailsActivity()
+        }, { view, position ->
+            EventBus.getDefault().postSticky(likes[position].shot?.user)
+            startActivity(Intent(activity, UserActivity::class.java))
         })
         mRecyclerView.adapter = mListAdapter
     }
