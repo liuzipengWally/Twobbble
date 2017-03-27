@@ -1,10 +1,15 @@
 package com.twobbble.application
 
 import android.app.Application
+import android.os.Environment
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.liulishuo.filedownloader.FileDownloader
+import com.tencent.bugly.Bugly
+import com.tencent.bugly.beta.Beta
 import com.twobbble.R
+import com.twobbble.tools.Constant
 import com.twobbble.tools.delegates.NotNullSingleValueVar
+import com.twobbble.view.activity.MainActivity
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig
 import kotlin.concurrent.thread
 
@@ -32,8 +37,19 @@ class App : Application() {
     private fun init() {
         instance = this
         FileDownloader.init(applicationContext)
-        thread {
+        Thread() {
             Fresco.initialize(this)
         }.start()
+        initBugLy()
+    }
+
+    fun initBugLy() {
+        Beta.initDelay = 3000
+        Beta.largeIconId = R.mipmap.ic_launcher
+        Beta.canShowUpgradeActs.add(MainActivity::class.java)
+        Beta.smallIconId = R.drawable.ic_update_black_24dp
+        Beta.upgradeDialogLayoutId = R.layout.upgrade_dialog
+        Beta.storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        Bugly.init(applicationContext, Constant.BUGLY_ID, true)
     }
 }

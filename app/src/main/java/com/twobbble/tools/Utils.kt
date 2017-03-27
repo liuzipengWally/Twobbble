@@ -367,7 +367,7 @@ object Utils {
      * @return
      */
     fun deleteFolderFile(filePath: String, deleteThisPath: Boolean) {
-        thread {
+        Thread() {
             if (!TextUtils.isEmpty(filePath)) {
                 try {
                     val file = File(filePath)

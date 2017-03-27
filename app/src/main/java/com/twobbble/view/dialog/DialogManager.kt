@@ -39,9 +39,9 @@ class DialogManager(private val mContext: Context) {
                          onConfirm: () -> Unit,
                          onCancel: () -> Unit) {
         val dialog = AlertDialog.Builder(mContext)
-        dialog.setTitle(title).setMessage(content).setPositiveButton(confirmText) { p0, p1 ->
+        dialog.setTitle(title).setMessage(content).setPositiveButton(confirmText) { _, _ ->
             onConfirm.invoke()
-        }.setNegativeButton(CancelText, { p0, p1 ->
+        }.setNegativeButton(CancelText, { _, _ ->
             onCancel.invoke()
         }).setCancelable(false)
 
@@ -53,7 +53,7 @@ class DialogManager(private val mContext: Context) {
         val view = LayoutInflater.from(mContext).inflate(R.layout.create_bucket_dialog, null)
         view.mBucketNameEdit.setText(name)
         view.mBucketDescriptionEdit.setText(description)
-        dialog.setTitle(title).setPositiveButton(R.string.create) { p0, p1 ->
+        dialog.setTitle(title).setPositiveButton(R.string.create) { _, _ ->
             if (!view.mBucketNameEdit.text.isNullOrBlank()) {
                 onConfirm.invoke(view.mBucketNameEdit.text.toString(), view.mBucketDescriptionEdit.text.toString())
             } else {

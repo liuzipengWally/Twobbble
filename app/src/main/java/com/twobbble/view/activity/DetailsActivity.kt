@@ -134,7 +134,7 @@ class DetailsActivity : BaseActivity(), IDetailsView {
         }
 
         //未登录的时候不允许用户在评论输入框输入内容，并弹出提示
-        mCommentEdit.setOnClickListener { view ->
+        mCommentEdit.setOnClickListener {
             if (!singleData.isLogin()) {
                 showSnackBar(mRootLayout, resources.getString(R.string.not_logged))
             }
@@ -268,10 +268,11 @@ class DetailsActivity : BaseActivity(), IDetailsView {
                 shot.images?.teaser.toString(), true)
 
         mComments = mutableListOf(Comment())
-        mAdapter = CommentAdapter(shot, mComments!!, userClick = { view, i ->
+        mAdapter = CommentAdapter(shot, mComments!!,
+                userClick = { _, i ->
             EventBus.getDefault().postSticky(mComments!![i].user)
             startActivity(Intent(this, UserActivity::class.java))
-        }, likeClick = { view, i ->
+        }, likeClick = { _, _ ->
             //TODO 评论中的喜欢点击事件
         }, authorClick = {
             EventBus.getDefault().postSticky(shot.user)
@@ -280,9 +281,9 @@ class DetailsActivity : BaseActivity(), IDetailsView {
             // 评论中加载状态提示的点击事件
             mAdapter?.hideCommentHint()
             getComments()
-        }, countClick = { type ->
+        }, countClick = {
             //TODO 数据统计栏的各个按钮的点击事件
-        }, tagClick = { i ->
+        }, tagClick = {
             //TODO 标签的点击事件
         })
 

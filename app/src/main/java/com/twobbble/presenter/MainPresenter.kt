@@ -44,5 +44,7 @@ class MainPresenter(val mMainView: IMainView) : BasePresenter() {
                 mMainView.getUserSuccess(t)
             }
         })
+
+        mSubscription?.add(subscriber)
     }
 }

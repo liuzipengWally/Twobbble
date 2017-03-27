@@ -2,24 +2,15 @@ package com.twobbble.view.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.preference.Preference
 import android.preference.PreferenceFragment
 import android.preference.PreferenceScreen
+import com.tencent.bugly.beta.Beta
 import com.twobbble.R
-import com.twobbble.application.App
 import com.twobbble.tools.RxHelper
 import com.twobbble.tools.Utils
-import com.twobbble.tools.showSnackBar
 import com.twobbble.tools.toast
 import com.twobbble.view.activity.LicenseActivity
-import de.psdev.licensesdialog.LicensesDialogFragment
-import de.psdev.licensesdialog.licenses.ApacheSoftwareLicense20
-import de.psdev.licensesdialog.model.Notice
-import de.psdev.licensesdialog.model.Notices
 import rx.Observable
-import rx.Scheduler
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 import java.io.File
 
 /**
@@ -83,7 +74,7 @@ class SettingsFragment : PreferenceFragment() {
 
     private fun bindEvent() {
         mVersionItem?.setOnPreferenceClickListener {
-
+            Beta.checkUpgrade(true, false)
             true
         }
 

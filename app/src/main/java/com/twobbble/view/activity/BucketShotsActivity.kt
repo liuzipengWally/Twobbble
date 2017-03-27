@@ -92,7 +92,7 @@ class BucketShotsActivity : BaseActivity(), IBucketShotsView {
             }
         })
 
-        val itemTouchHelper = ItemTouchHelper(ItemSwipeRemoveCallback { delPosition, view ->
+        val itemTouchHelper = ItemTouchHelper(ItemSwipeRemoveCallback { delPosition, _ ->
             mDelShot = mShots!![delPosition]
             mListAdapter?.deleteItem(delPosition)
             mDelPosition = delPosition
@@ -150,11 +150,11 @@ class BucketShotsActivity : BaseActivity(), IBucketShotsView {
 
     private fun mountList(shots: MutableList<Shot>) {
         mShots = shots
-        mListAdapter = ItemShotAdapter(mShots!!, { view, position ->
+        mListAdapter = ItemShotAdapter(mShots!!, { _, position ->
             EventBus.getDefault().postSticky(mShots!![position])
             startActivity(Intent(this, DetailsActivity::class.java),
                     ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
-        }, { view, position ->
+        }, { _, position ->
             EventBus.getDefault().postSticky(shots[position].user)
             startActivity(Intent(applicationContext, UserActivity::class.java))
         })

@@ -103,7 +103,7 @@ class ExploreFragment : BaseFragment(), IShotsView {
     }
 
     private fun bindEvent() {
-        mSearchEdit.setOnKeyListener { view, keycode, keyEvent ->
+        mSearchEdit.setOnKeyListener { _, keycode, keyEvent ->
             if (keyEvent.action == KeyEvent.ACTION_DOWN) {//判断是否为点按下去触发的事件，如果不写，会导致该案件的事件被执行两次
                 when (keycode) {
                     KeyEvent.KEYCODE_ENTER -> search()
@@ -218,10 +218,10 @@ class ExploreFragment : BaseFragment(), IShotsView {
 
     private fun mountList(shots: MutableList<Shot>) {
         mShots = shots
-        mListAdapter = ItemShotAdapter(mShots!!, { view, position ->
+        mListAdapter = ItemShotAdapter(mShots!!, { _, position ->
             EventBus.getDefault().postSticky(mShots!![position])
             startDetailsActivity()
-        }, { view, position ->
+        }, { _, position ->
             EventBus.getDefault().postSticky(shots[position].user)
             startActivity(Intent(activity, UserActivity::class.java))
         })

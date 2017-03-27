@@ -77,7 +77,7 @@ class LikesAdapter(var mLikes: MutableList<Like>, val itemClick: (View, Int) -> 
     }
 
     private fun addCardZAnimation(mItemCard: CardView?) {
-        mItemCard?.setOnTouchListener { view, motionEvent ->
+        mItemCard?.setOnTouchListener { _, motionEvent ->
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> mItemCard.animate().translationZ(Utils.dp2px(24, App.instance.resources.displayMetrics)).duration = CARD_TAP_DURATION
                 MotionEvent.ACTION_UP -> mItemCard.animate().translationZ(0f).duration = CARD_TAP_DURATION

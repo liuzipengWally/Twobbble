@@ -27,7 +27,7 @@ class DownloadUtils {
         }
 
         private fun download(url: String, path: String) {
-            log(path)
+            toast("开始下载")
             FileDownloader.getImpl().create(url)
                     .setPath(path)
                     .setListener(object : FileDownloadListener() {

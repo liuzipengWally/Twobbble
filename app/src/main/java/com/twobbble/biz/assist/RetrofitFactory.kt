@@ -67,8 +67,7 @@ class RetrofitFactory private constructor() {
     private fun constructClient(context: Context): OkHttpClient {
         val cacheSize: Long = 10 * 1024 * 1024
         val file = context.externalCacheDir
-        var client: OkHttpClient? = null
-        client = OkHttpClient.Builder()
+        val client = OkHttpClient.Builder()
                 .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
                 .writeTimeout(TIMEOUT, TimeUnit.SECONDS).readTimeout(TIMEOUT, TimeUnit.SECONDS)
                 .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))

@@ -149,7 +149,7 @@ class BucketsFragment : BaseFragment(), IMyBucketsView {
             getBuckets()
         }
 
-        val itemTouchHelper = ItemTouchHelper(ItemSwipeRemoveCallback { delPosition, view ->
+        val itemTouchHelper = ItemTouchHelper(ItemSwipeRemoveCallback { delPosition, _ ->
             mDelBucket = mBuckets!![delPosition]
             mDelPosition = delPosition
             mAdapter?.deleteItem(delPosition)

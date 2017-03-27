@@ -108,7 +108,7 @@ class HomeFragment : BaseFragment() {
 
         mVoiceBtn.setOnClickListener { startSpeak() }
 
-        mSearchEdit.setOnKeyListener { view, keycode, keyEvent ->
+        mSearchEdit.setOnKeyListener { _, keycode, keyEvent ->
             if (keyEvent.action == KeyEvent.ACTION_DOWN) {//判断是否为点按下去触发的事件，如果不写，会导致该案件的事件被执行两次
                 when (keycode) {
                     KeyEvent.KEYCODE_ENTER -> search()

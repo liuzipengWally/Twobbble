@@ -113,8 +113,8 @@ object ImageLoad {
                     override fun onFinalImageSet(id: String?, imageInfo: ImageInfo?, animatable: Animatable?) {
                         super.onFinalImageSet(id, imageInfo, animatable)
                         progressBar.visibility = View.GONE
-                        if (imageInfo == null || drawees == null) {
-                            return;
+                        if (imageInfo == null) {
+                            return
                         }
                         drawees.update(imageInfo.width, imageInfo.height);
                     }

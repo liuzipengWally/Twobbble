@@ -7,7 +7,7 @@ import kotlin.reflect.KProperty
  * Created by liuzipeng on 2017/2/15.
  * 这个代理的用处是为了保护被代理对象，不会重复被实例化
  */
-class NotNullSingleValueVar<T>() : ReadWriteProperty<Any?, T> {
+class NotNullSingleValueVar<T> : ReadWriteProperty<Any?, T> {
     private var value: T? = null
 
     //Getter函数 如果已经被初始化，则会返回一个值，否则会抛异常。

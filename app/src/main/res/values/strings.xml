@@ -93,6 +93,7 @@
     <string name="clear_cache">Clear cache</string>
     <string name="license">License</string>
     <string name="clear_success">Clear cache success</string>
+    <string name="update">Update</string>
 
 
     <string-array name="sorts">

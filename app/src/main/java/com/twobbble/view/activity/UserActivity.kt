@@ -89,7 +89,7 @@ class UserActivity : BaseActivity(), IUserView {
             } else {
                 mPresenter?.checkIfFollowingUser(mUser!!.id)
             }
-            mAdapter = UserShotAdapter(mShots!!, bio, { view, i ->
+            mAdapter = UserShotAdapter(mShots!!, bio, { _, i ->
                 val shot = mShots!![i]
                 shot.user = mUser
                 EventBus.getDefault().postSticky(shot)
@@ -106,7 +106,7 @@ class UserActivity : BaseActivity(), IUserView {
      */
     private fun countAnimation(textView: TextView, max: Int) {
         val anim = ValueAnimator.ofInt(0, max)
-        anim.addUpdateListener { animation ->
+        anim.addUpdateListener {
             textView.text = "${anim.animatedValue}"
         }
         anim.duration = 1000

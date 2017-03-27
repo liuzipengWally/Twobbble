@@ -118,13 +118,13 @@ class LikesFragment : BaseFragment(), ILikeView {
     }
 
 
-    override fun getLikeSuccess(shots: MutableList<Like>?, isLoadMore: Boolean) {
+    override fun getLikeSuccess(likes: MutableList<Like>?, isLoadMore: Boolean) {
         isLoading = false
-        if (shots != null && shots.isNotEmpty()) {
+        if (likes != null && likes.isNotEmpty()) {
             if (!isLoadMore) {
-                mountList(shots)
+                mountList(likes)
             } else {
-                mListAdapter?.addItems(shots)
+                mListAdapter?.addItems(likes)
             }
         } else {
             if (!isLoadMore) {
@@ -137,10 +137,10 @@ class LikesFragment : BaseFragment(), ILikeView {
 
     private fun mountList(likes: MutableList<Like>) {
         mLikes = likes
-        mListAdapter = LikesAdapter(mLikes!!, { view, position ->
+        mListAdapter = LikesAdapter(mLikes!!, { _, position ->
             EventBus.getDefault().postSticky(mLikes!![position].shot)
             startDetailsActivity()
-        }, { view, position ->
+        }, { _, position ->
             EventBus.getDefault().postSticky(likes[position].shot?.user)
             startActivity(Intent(activity, UserActivity::class.java))
         })

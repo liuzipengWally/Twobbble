@@ -54,5 +54,7 @@ class BucketShotsPresenter(val mBucketShotsView: IBucketShotsView) : BasePresent
                 mBucketShotsView.removeShotSuccess()
             }
         })
+
+        mSubscription?.add(subscribe)
     }
 }
