@@ -11,7 +11,6 @@ import com.twobbble.tools.Constant
 import com.twobbble.tools.delegates.NotNullSingleValueVar
 import com.twobbble.view.activity.MainActivity
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig
-import kotlin.concurrent.thread
 
 
 /**
@@ -37,7 +36,7 @@ class App : Application() {
     private fun init() {
         instance = this
         FileDownloader.init(applicationContext)
-        Thread() {
+        Thread {
             Fresco.initialize(this)
         }.start()
         initBugLy()

@@ -210,5 +210,5 @@ interface NetService {
      * @param id  要取关的用户的id
      */
     @DELETE("users/{id}/follow") fun unFollowUser(@NotNull @Path("id") id: Long,
-                                                  @NotNull @Query("access_token") access_token: String): Observable<NullResponse>
+                                                      @NotNull @Query("access_token") access_token: String): Observable<NullResponse>
 }
