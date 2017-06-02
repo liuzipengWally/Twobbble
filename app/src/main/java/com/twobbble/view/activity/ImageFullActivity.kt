@@ -1,11 +1,7 @@
 package com.twobbble.view.activity
 
-import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import com.facebook.drawee.drawable.ScalingUtils
-import com.facebook.drawee.view.DraweeTransition
-
+import android.support.v7.app.AppCompatActivity
 import com.twobbble.R
 import com.twobbble.tools.Constant
 import com.twobbble.tools.DownloadUtils
@@ -15,9 +11,9 @@ import java.io.File
 
 class ImageFullActivity : AppCompatActivity() {
     companion object {
-        val KEY_URL_NORMAL: String? = "key_url_normal"
-        val KEY_URL_LOW: String? = "KEY_URL_LOW"
-        val KEY_TITLE: String? = "key_title"
+        val KEY_URL_NORMAL: String = "key_url_normal"
+        val KEY_URL_LOW: String = "KEY_URL_LOW"
+        val KEY_TITLE: String = "key_title"
     }
 
     private var mUrlNormal: String? = null
@@ -54,7 +50,7 @@ class ImageFullActivity : AppCompatActivity() {
                 R.id.mDownload -> {
                     val urls = mUrlNormal?.split(".")
                     DownloadUtils.DownloadImg(mUrlNormal.toString(),
-                            "${Constant.IMAGE_DOWNLOAD_PATH}${File.separator}${mTitle}.${urls!![urls.size - 1]}")
+                            "${Constant.IMAGE_DOWNLOAD_PATH}${File.separator}$mTitle.${urls!![urls.size - 1]}")
                 }
             }
             true

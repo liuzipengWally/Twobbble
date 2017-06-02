@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.item_card_head.*
 import kotlinx.android.synthetic.main.item_shots.*
 import kotlinx.android.synthetic.main.list.*
 import org.greenrobot.eventbus.EventBus
+import org.jetbrains.anko.find
 
 /**
  * Created by liuzipeng on 2017/2/17.

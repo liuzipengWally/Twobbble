@@ -17,10 +17,7 @@ import com.twobbble.entity.Token
 import com.twobbble.entity.User
 import com.twobbble.event.OpenDrawerEvent
 import com.twobbble.presenter.MainPresenter
-import com.twobbble.tools.Constant
-import com.twobbble.tools.ImageLoad
-import com.twobbble.tools.singleData
-import com.twobbble.tools.toast
+import com.twobbble.tools.*
 import com.twobbble.view.api.IMainView
 import com.twobbble.view.fragment.*
 import kotlinx.android.synthetic.main.activity_main.*

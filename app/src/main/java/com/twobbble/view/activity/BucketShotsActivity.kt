@@ -7,6 +7,7 @@ import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.widget.Toast
 import com.twobbble.R
 import com.twobbble.application.App
 import com.twobbble.entity.Shot
