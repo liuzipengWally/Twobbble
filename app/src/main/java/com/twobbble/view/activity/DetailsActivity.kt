@@ -37,7 +37,7 @@ import java.util.concurrent.TimeUnit
 
 class DetailsActivity : BaseActivity(), IDetailsView {
     private var mPresenter: DetailsPresenter? = null
-    private var mId: Long? = null
+    private var mId: Long = 0
     private var mAdapter: CommentAdapter? = null
     private var mComments: MutableList<Comment>? = null
     private var mShot: Shot? = null
@@ -258,7 +258,7 @@ class DetailsActivity : BaseActivity(), IDetailsView {
 
     private fun getComments() {
         val token = singleData.token ?: Constant.ACCESS_TOKEN
-        mPresenter?.getComments(mId!!, token, null)
+        mPresenter?.getComments(mId, token, null)
     }
 
     private fun mountData(shot: Shot) {
@@ -270,9 +270,9 @@ class DetailsActivity : BaseActivity(), IDetailsView {
         mComments = mutableListOf(Comment())
         mAdapter = CommentAdapter(shot, mComments!!,
                 userClick = { _, i ->
-            EventBus.getDefault().postSticky(mComments!![i].user)
-            startActivity(Intent(this, UserActivity::class.java))
-        }, likeClick = { _, _ ->
+                    EventBus.getDefault().postSticky(mComments!![i].user)
+                    startActivity(Intent(this, UserActivity::class.java))
+                }, likeClick = { _, _ ->
             //TODO 评论中的喜欢点击事件
         }, authorClick = {
             EventBus.getDefault().postSticky(shot.user)

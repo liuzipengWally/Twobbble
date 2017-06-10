@@ -32,6 +32,7 @@ class UserActivity : BaseActivity(), IUserView {
 
     private val MYSELF = 0
     private val OTHERS = 1
+
     private val PATH_USER = "user"
     private val PATH_USERS = "users"
 

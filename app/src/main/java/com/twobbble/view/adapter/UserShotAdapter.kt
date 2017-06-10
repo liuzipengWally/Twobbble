@@ -88,7 +88,7 @@ class UserShotAdapter(val mShots: MutableList<Shot>, val bio: String?, val itemC
         mLoadHolder?.itemView?.mLoadLayout?.setOnClickListener {
             mLoadHolder?.itemView?.mCommentProgress?.visibility = View.VISIBLE
             mLoadHolder?.itemView?.mCommentHintText?.visibility = View.GONE
-            retryListener.invoke()
+            retryListener()
         }
     }
 

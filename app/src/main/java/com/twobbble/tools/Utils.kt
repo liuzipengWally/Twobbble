@@ -38,7 +38,6 @@ import kotlin.concurrent.thread
 /**
  * Created by liuzipeng on 16/7/8.
  */
-
 object Utils {
     /**
      * 判断网络可不可用
@@ -95,7 +94,7 @@ object Utils {
         val buffer = StringBuffer()
         for (i in 0..phoneNumber.length - 1) {
             var num = phoneNumber[i]
-            if (i >= 3 && i < 7) {
+            if (i in 3..6) {
                 num = '·'
             }
             buffer.append(num)
@@ -367,7 +366,7 @@ object Utils {
      * @return
      */
     fun deleteFolderFile(filePath: String, deleteThisPath: Boolean) {
-        Thread() {
+        Thread {
             if (!TextUtils.isEmpty(filePath)) {
                 try {
                     val file = File(filePath)
