@@ -131,7 +131,7 @@ class UserActivity : BaseActivity(), IUserView {
     }
 
     private fun bindEvent() {
-        toolbar.setOnClickListener { onBackPressed() }
+        toolbar.setOnClickListener { finish() }
 
         mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {

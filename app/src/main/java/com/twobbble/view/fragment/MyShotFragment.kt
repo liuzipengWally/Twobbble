@@ -17,7 +17,7 @@ import org.greenrobot.eventbus.EventBus
  */
 class MyShotFragment : BaseFragment() {
     override fun onBackPressed() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

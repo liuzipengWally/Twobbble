@@ -19,6 +19,6 @@ class SettingsActivity : BaseActivity() {
     }
 
     private fun bindEvent() {
-        Toolbar.setNavigationOnClickListener { onBackPressed() }
+        Toolbar.setNavigationOnClickListener { finish() }
     }
 }

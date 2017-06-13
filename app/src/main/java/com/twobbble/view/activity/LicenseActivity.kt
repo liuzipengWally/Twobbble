@@ -60,6 +60,6 @@ class LicenseActivity : AppCompatActivity() {
                 .setUseAppCompat(true)
                 .build()
         licensesDialogFragment.show(supportFragmentManager, null)
-        licensesDialogFragment.setOnDismissListener { onBackPressed() }
+        licensesDialogFragment.setOnDismissListener { finish() }
     }
 }

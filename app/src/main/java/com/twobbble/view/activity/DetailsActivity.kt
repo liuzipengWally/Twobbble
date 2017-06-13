@@ -73,7 +73,7 @@ class DetailsActivity : BaseActivity(), IDetailsView {
             hideBuckets()
         } else {
             mFavoriteBtn.visibility = View.GONE
-            super.onBackPressed()
+            finish()
         }
     }
 
@@ -89,7 +89,7 @@ class DetailsActivity : BaseActivity(), IDetailsView {
     }
 
     private fun bindEvent() {
-        toolbar.setNavigationOnClickListener { onBackPressed() }
+        toolbar.setNavigationOnClickListener { finish() }
 
         mContentImg.setOnClickListener {
             val intent = Intent(this, ImageFullActivity::class.java)

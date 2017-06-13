@@ -167,8 +167,4 @@ class LikesFragment : BaseFragment(), ILikeView {
     override fun hideProgress() {
         mRefresh.isRefreshing = false
     }
-
-    override fun onBackPressed() {
-
-    }
 }

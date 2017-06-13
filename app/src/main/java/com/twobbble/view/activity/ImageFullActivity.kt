@@ -42,7 +42,7 @@ class ImageFullActivity : AppCompatActivity() {
 
     private fun bindEvent() {
         toolbar.setNavigationOnClickListener {
-            onBackPressed()
+            finish()
         }
 
         toolbar.setOnMenuItemClickListener { item ->

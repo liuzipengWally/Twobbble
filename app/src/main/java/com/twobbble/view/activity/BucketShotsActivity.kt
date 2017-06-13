@@ -68,7 +68,7 @@ class BucketShotsActivity : BaseActivity(), IBucketShotsView {
     }
 
     private fun bindEvent() {
-        Toolbar.setNavigationOnClickListener { onBackPressed() }
+        Toolbar.setNavigationOnClickListener { finish() }
 
         mRefresh.setOnRefreshListener {
             mPage = 1
