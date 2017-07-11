@@ -14,14 +14,12 @@ import retrofit2.http.Query
  * Created by liuzipeng on 2017/3/5.
  */
 class MainPresenter(val mMainView: IMainView) : BasePresenter() {
-    private var mUserBiz: IUserBiz? = null
-
-    init {
-        mUserBiz = UserBiz()
+    private val mUserBiz: IUserBiz by lazy {
+        UserBiz()
     }
 
     fun getToken(oauthCode: String) {
-        val subscriber = mUserBiz?.getToken(oauthCode, object : NetSubscriber<Token>(mMainView) {
+        val subscriber = mUserBiz.getToken(oauthCode, object : NetSubscriber<Token>(mMainView) {
             override fun onFailed(msg: String) {
                 mMainView.getTokenFailed(msg)
             }
@@ -31,11 +29,11 @@ class MainPresenter(val mMainView: IMainView) : BasePresenter() {
             }
         })
 
-        mSubscription?.add(subscriber)
+        mSubscription.add(subscriber)
     }
 
     fun getMyInfo(@NotNull access_token: String) {
-        val subscriber = mUserBiz?.getMyInfo(access_token, object : NetSubscriber<User>() {
+        val subscriber = mUserBiz.getMyInfo(access_token, object : NetSubscriber<User>() {
             override fun onFailed(msg: String) {
                 log(msg)
             }
@@ -45,6 +43,6 @@ class MainPresenter(val mMainView: IMainView) : BasePresenter() {
             }
         })
 
-        mSubscription?.add(subscriber)
+        mSubscription.add(subscriber)
     }
 }

@@ -102,8 +102,8 @@ class NetExceptionHandler {
     }
 
     open class HttpResponseFunc<T> : Func1<Throwable, Observable<T>> {
-        override fun call(t: Throwable?): Observable<T> {
-            return Observable.error(NetExceptionHandler().handleException(t!!))
+        override fun call(t: Throwable): Observable<T> {
+            return Observable.error(NetExceptionHandler().handleException(t))
         }
     }
 }

@@ -12,14 +12,13 @@ import org.jetbrains.annotations.NotNull
  * Created by liuzipeng on 2017/3/7.
  */
 class LikePresenter(val mLikeView: ILikeView) : BasePresenter() {
-    private var mLikeBiz: ILikeBiz? = null
-
-    init {
-        mLikeBiz = LikeBiz()
+    private val mLikeBiz: ILikeBiz by lazy {
+        LikeBiz()
     }
 
     fun getMyLike(@NotNull access_token: String, page: Int?, isLoadMore: Boolean) {
-        val subscribe = mLikeBiz?.getMyLike(access_token, page
+        val subscribe = mLikeBiz.getMyLike(access_token
+                , page
                 , object : NetSubscriber<MutableList<Like>>(mLikeView) {
             override fun onFailed(msg: String) {
                 mLikeView.getLikeFailed(msg, isLoadMore)
@@ -30,6 +29,6 @@ class LikePresenter(val mLikeView: ILikeView) : BasePresenter() {
             }
         })
 
-        mSubscription?.add(subscribe)
+        mSubscription.add(subscribe)
     }
 }

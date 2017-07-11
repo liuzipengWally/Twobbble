@@ -36,11 +36,17 @@ import org.greenrobot.eventbus.EventBus
  * Created by liuzipeng on 2017/2/17.
  */
 class BucketsFragment : BaseFragment(), IMyBucketsView {
-    private var mDialogManager: DialogManager? = null
-    private var mPresenter: MyBucketsPresenter? = null
+    private val mDialogManager: DialogManager by lazy {
+        DialogManager(activity)
+    }
+    private val mPresenter: MyBucketsPresenter by lazy {
+        MyBucketsPresenter(this)
+    }
     private var mAdapter: MyBucketsAdapter? = null
-    private var mBuckets: MutableList<Bucket>? = null
-    private var mDelBucket: Bucket? = null
+    private val mBuckets: MutableList<Bucket> by lazy {
+        mutableListOf<Bucket>()
+    }
+    private lateinit var mDelBucket: Bucket
     private var mDelPosition: Int = 0
     private var mType: String? = null
     private var mShotId: Long = 0
@@ -79,18 +85,13 @@ class BucketsFragment : BaseFragment(), IMyBucketsView {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        init()
         initView()
         getBuckets()
     }
 
-    private fun init() {
-        mBuckets = mutableListOf()
-    }
-
     fun getBuckets() {
         if (singleData.isLogin()) {
-            mPresenter?.getMyBuckets(
+            mPresenter.getMyBuckets(
                     singleData.token!!)
         } else {
             showErrorImg(mErrorLayout, R.string.not_logged, R.mipmap.img_empty_buckets)
@@ -100,10 +101,9 @@ class BucketsFragment : BaseFragment(), IMyBucketsView {
     private fun initView() {
         if (Utils.hasNavigationBar(activity) && mType != ADD_SHOT) {
             val params = mAddBtn.layoutParams as ViewGroup.MarginLayoutParams
-            params.setMargins(0, 0, Utils.dp2px(16, resources.displayMetrics).toInt(), Utils.dp2px(64, resources.displayMetrics).toInt())
+            params.setMargins(0, 0, Utils.dp2px(16).toInt(), Utils.dp2px(64).toInt())
         }
-        mPresenter = MyBucketsPresenter(this)
-        mDialogManager = DialogManager(activity)
+
         mRefresh.setColorSchemeResources(R.color.google_red, R.color.google_yellow, R.color.google_green, R.color.google_blue)
 
         val layoutManager = LinearLayoutManager(App.instance, LinearLayoutManager.VERTICAL, false)
@@ -150,17 +150,17 @@ class BucketsFragment : BaseFragment(), IMyBucketsView {
         }
 
         val itemTouchHelper = ItemTouchHelper(ItemSwipeRemoveCallback { delPosition, _ ->
-            mDelBucket = mBuckets!![delPosition]
+            mDelBucket = mBuckets[delPosition]
             mDelPosition = delPosition
             mAdapter?.deleteItem(delPosition)
-            mDialogManager?.showOptionDialog(
-                    resources.getString(R.string.delete_bucket),
-                    resources.getString(R.string.whether_to_delete_bucket),
-                    confirmText = resources.getString(R.string.delete),
+            mDialogManager.showOptionDialog(
+                    getString(R.string.delete_bucket),
+                    getString(R.string.whether_to_delete_bucket),
+                    confirmText = getString(R.string.delete),
                     onConfirm = {
-                        mPresenter?.deleteBucket(singleData.token!!, mDelBucket?.id!!)
+                        mPresenter.deleteBucket(singleData.token!!, mDelBucket.id)
                     }, onCancel = {
-                mAdapter?.addItem(delPosition, mDelBucket!!)
+                mAdapter?.addItem(delPosition, mDelBucket)
             })
         })
         itemTouchHelper.attachToRecyclerView(mRecyclerView)
@@ -168,8 +168,8 @@ class BucketsFragment : BaseFragment(), IMyBucketsView {
 
     fun addBucket() {
         if (singleData.isLogin()) {
-            mDialogManager?.showEditBucketDialog { name, description ->
-                mPresenter?.createBucket(singleData.token!!, name, description)
+            mDialogManager.showEditBucketDialog { name, description ->
+                mPresenter.createBucket(singleData.token!!, name, description)
             }
         } else {
             toast(R.string.not_logged)
@@ -178,11 +178,11 @@ class BucketsFragment : BaseFragment(), IMyBucketsView {
 
     override fun getBucketsSuccess(buckets: MutableList<Bucket>?) {
         if (buckets != null) {
-            mBuckets = buckets
-            mRecyclerView?.visibility = View.VISIBLE
-            mRecyclerView?.adapter = getAdapter(mBuckets!!)
+            mBuckets.addAll(buckets)
+            mRecyclerView.visibility = View.VISIBLE
+            mRecyclerView.adapter = getAdapter(mBuckets)
         } else {
-            mRecyclerView?.visibility = View.GONE
+            mRecyclerView.visibility = View.GONE
             showErrorImg(mErrorLayout, R.string.no_bucket, R.mipmap.img_empty_buckets)
         }
     }
@@ -195,19 +195,19 @@ class BucketsFragment : BaseFragment(), IMyBucketsView {
     }
 
     override fun showProgress() {
-        mRefresh?.isRefreshing = true
+        mRefresh.isRefreshing = true
     }
 
     override fun hideProgress() {
-        mRefresh?.isRefreshing = false
+        mRefresh.isRefreshing = false
     }
 
     override fun showProgressDialog(msg: String?) {
-        mDialogManager?.showCircleProgressDialog()
+        mDialogManager.showCircleProgressDialog()
     }
 
     override fun hideProgressDialog() {
-        mDialogManager?.dismissAll()
+        mDialogManager.dismissAll()
     }
 
     override fun createBucketSuccess(bucket: Bucket?) {
@@ -216,8 +216,8 @@ class BucketsFragment : BaseFragment(), IMyBucketsView {
                 mAdapter?.addItem(0, bucket)
                 mRecyclerView.scrollToPosition(0)
             } else {
-                mBuckets?.add(bucket)
-                mRecyclerView.adapter = getAdapter(mBuckets!!)
+                mBuckets.add(bucket)
+                mRecyclerView.adapter = getAdapter(mBuckets)
             }
         }
     }
@@ -226,8 +226,8 @@ class BucketsFragment : BaseFragment(), IMyBucketsView {
         mAdapter = MyBucketsAdapter(buckets, { position ->
             itemClick(position, buckets)
         }, { position ->
-            mDialogManager?.showEditBucketDialog(mBuckets!![position].name!!, mBuckets!![position].description, resources.getString(R.string.modify_bucket)) { name, description ->
-                mPresenter?.modifyBucket(singleData.token!!, mBuckets!![position].id, name, description, position)
+            mDialogManager.showEditBucketDialog(mBuckets[position].name!!, mBuckets[position].description, resources.getString(R.string.modify_bucket)) { name, description ->
+                mPresenter.modifyBucket(singleData.token!!, mBuckets[position].id, name, description, position)
             }
         })
         return mAdapter!!
@@ -241,7 +241,7 @@ class BucketsFragment : BaseFragment(), IMyBucketsView {
                 intent.putExtra(BucketShotsActivity.KEY_TITLE, buckets[position].name)
                 startActivity(intent)
             }
-            ADD_SHOT -> mPresenter?.addShot2Bucket(id = buckets[position].id, shotId = mShotId)
+            ADD_SHOT -> mPresenter.addShot2Bucket(id = buckets[position].id, shotId = mShotId)
         }
     }
 
@@ -255,13 +255,13 @@ class BucketsFragment : BaseFragment(), IMyBucketsView {
 
     override fun deleteBucketFailed(msg: String) {
         toast("${resources.getString(R.string.delete_failed)} :$msg")
-        mAdapter?.addItem(mDelPosition, mDelBucket!!)
+        mAdapter?.addItem(mDelPosition, mDelBucket)
     }
 
     override fun modifyBucketSuccess(bucket: Bucket?, position: Int) {
-        mBuckets!![position].name = bucket?.name
-        mBuckets!![position].description = bucket?.description
-        mBuckets!![position].updated_at = bucket?.updated_at
+        mBuckets[position].name = bucket?.name
+        mBuckets[position].description = bucket?.description
+        mBuckets[position].updated_at = bucket?.updated_at
         mAdapter?.notifyDataSetChanged()
         toast(R.string.modify_success)
     }

@@ -31,29 +31,29 @@ class UserShotAdapter(val mShots: MutableList<Shot>, val bio: String?, val itemC
     private var mLoadHolder: ViewHolder? = null
     private var mOldPosition = 0
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder = when (viewType) {
-        BIO -> ViewHolder(LayoutInflater.from(parent?.context).inflate(R.layout.bio_layout, parent, false))
-        LOAD -> ViewHolder(LayoutInflater.from(parent?.context).inflate(R.layout.item_comment_load, parent, false))
-        else -> ViewHolder(LayoutInflater.from(parent?.context).inflate(R.layout.item_user_shot, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = when (viewType) {
+        BIO -> ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.bio_layout, parent, false))
+        LOAD -> ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_comment_load, parent, false))
+        else -> ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_user_shot, parent, false))
     }
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (getItemViewType(position)) {
-            BIO -> bindBio(holder!!)
+            BIO -> bindBio(holder)
             LOAD -> {
                 if (Utils.hasNavigationBar(App.instance)) {
-                    holder?.itemView?.mNavigationBar?.visibility = View.VISIBLE
+                    holder.itemView.mNavigationBar.visibility = View.VISIBLE
                 }
                 mLoadHolder = holder
             }
-            else -> bindImg(mShots[position], holder!!, position)
+            else -> bindImg(mShots[position], holder, position)
         }
     }
 
     private fun bindImg(shot: Shot, holder: ViewHolder, position: Int) {
         ImageLoad.frescoLoadMini(holder.itemView.mContentImg, shot.images?.teaser)
         holder.itemView.mContentImg.setOnClickListener {
-            itemClick.invoke(holder.itemView.mContentImg, position)
+            itemClick(holder.itemView.mContentImg, position)
         }
     }
 
@@ -92,9 +92,9 @@ class UserShotAdapter(val mShots: MutableList<Shot>, val bio: String?, val itemC
         }
     }
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
-        val manager = recyclerView?.layoutManager
+        val manager = recyclerView.layoutManager
         if (manager is GridLayoutManager) {
             manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int = when (getItemViewType(position)) {
@@ -105,20 +105,22 @@ class UserShotAdapter(val mShots: MutableList<Shot>, val bio: String?, val itemC
         }
     }
 
-    override fun onViewAttachedToWindow(holder: ViewHolder?) {
-        if (holder?.layoutPosition!! > mOldPosition || holder.layoutPosition == 0) {
-            addItemAnimation(holder.itemView?.mContentImg)
+    override fun onViewAttachedToWindow(holder: ViewHolder) {
+        if (holder.layoutPosition > mOldPosition || holder.layoutPosition == 0) {
+            addItemAnimation(holder.itemView.mContentImg)
             mOldPosition = holder.layoutPosition
         }
     }
 
     private fun addItemAnimation(view: View?) {
-        val scaleX = ObjectAnimator.ofFloat(view, "scaleX", 0f, 1f)
-        val scaleY = ObjectAnimator.ofFloat(view, "scaleY", 0f, 1f)
-        val set = AnimatorSet()
-        set.playTogether(scaleX, scaleY)
-        set.duration = 500
-        set.start()
+        view?.let {
+            val scaleX = ObjectAnimator.ofFloat(view, "scaleX", 0f, 1f)
+            val scaleY = ObjectAnimator.ofFloat(view, "scaleY", 0f, 1f)
+            val set = AnimatorSet()
+            set.playTogether(scaleX, scaleY)
+            set.duration = 500
+            set.start()
+        }
     }
 
     fun addItems(shots: MutableList<Shot>) {

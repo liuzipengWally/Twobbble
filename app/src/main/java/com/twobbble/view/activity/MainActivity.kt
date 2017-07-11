@@ -32,13 +32,14 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private var mBucketsFragment: BucketsFragment? = null
     private var mLikesFragment: LikesFragment? = null
     //    private var mMyShotFragment: MyShotFragment? = null
-    private var mPresenter: MainPresenter? = null
+    private val mPresenter: MainPresenter by lazy {
+        MainPresenter(this)
+    }
     private var mUser: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mPresenter = MainPresenter(this)
         init()
         if (savedInstanceState == null) initFragment()
         EventBus.getDefault().register(this)
@@ -106,7 +107,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 if (singleData.isLogin() && mLogoutBtn.visibility == View.GONE) {
                     mLogoutBtn.visibility = View.VISIBLE
                     mLogoutBtn.setOnClickListener {
-                        mDialogManager?.showOptionDialog(
+                        mDialogManager.showOptionDialog(
                                 resources.getString(R.string.logout_hint_title),
                                 resources.getString(R.string.logout_hint), onConfirm = {
                             logout()
@@ -132,8 +133,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private fun logout() {
-        mSimpleIo?.remove(Constant.KEY_TOKEN)
-        mSimpleIo?.remove(Constant.KEY_USER)
+        QuickSimpleIO.remove(Constant.KEY_TOKEN)
+        QuickSimpleIO.remove(Constant.KEY_USER)
         singleData.username = null
         singleData.avatar = null
         singleData.token = null
@@ -186,8 +187,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val params = mNavigation.layoutParams
         params.width = screenWidth - screenWidth / 4
         mNavigation.layoutParams = params
-        singleData.token = mSimpleIo?.getString(Constant.KEY_TOKEN)
-        mUser = Gson().fromJson(mSimpleIo?.getString(Constant.KEY_USER), User::class.java)
+        singleData.token = QuickSimpleIO.getString(Constant.KEY_TOKEN)
+        mUser = Gson().fromJson(QuickSimpleIO.getString(Constant.KEY_USER), User::class.java)
         singleData.avatar = mUser?.avatar_url
         singleData.username = mUser?.name
         initUser()
@@ -196,7 +197,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private fun initUser() {
         //每次打开应用要检查是否已经登录，如果已登录就要检查头像是否存在，如果在已登录的情况下无头像url，那么我们需要去获取一次用户信息
         if (singleData.isLogin() && singleData.avatar.isNullOrBlank()) {
-            mPresenter?.getMyInfo(singleData.token!!)
+            mPresenter.getMyInfo(singleData.token!!)
         }
     }
 
@@ -259,14 +260,14 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private fun checkAuthCallback(paramIntent: Intent?) {
         if (paramIntent != null && paramIntent.data != null && paramIntent.data.authority.isNotEmpty() && "towbbble.app" == paramIntent.data.authority) {
-            mPresenter?.getToken(paramIntent.data.getQueryParameter("code"))
+            mPresenter.getToken(paramIntent.data.getQueryParameter("code"))
             return
         }
     }
 
     override fun getTokenSuccess(token: Token?) {
         if (token != null) {
-            mSimpleIo?.setString(Constant.KEY_TOKEN, token.access_token)
+            QuickSimpleIO.setString(Constant.KEY_TOKEN, token.access_token)
             singleData.token = token.access_token
             toast(resources.getString(R.string.login_success))
             initUser()
@@ -280,11 +281,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun showProgress() {
-        mDialogManager?.showCircleProgressDialog()
+        mDialogManager.showCircleProgressDialog()
     }
 
     override fun hideProgress() {
-        mDialogManager?.dismissAll()
+        mDialogManager.dismissAll()
     }
 
     override fun getUserSuccess(user: User?) {
@@ -296,7 +297,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             mNameText.text = user.name
             ImageLoad.frescoLoadCircle(mUserAvatar, singleData.avatar.toString())
             val userJson = Gson().toJson(user)
-            mSimpleIo?.setString(Constant.KEY_USER, userJson)
+            QuickSimpleIO.setString(Constant.KEY_USER, userJson)
         }
     }
 }

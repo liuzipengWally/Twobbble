@@ -26,11 +26,10 @@ class CommentDivider : RecyclerView.ItemDecoration() {
 
     override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State?) {
         val circle_icon = parent.findViewById(R.id.mCommentAvatarImg)
-        val metrics = parent.context.resources.displayMetrics
         val childCount = parent.childCount
         if (childCount != 0) {
-            val left = (circle_icon.width + Utils.dp2px(32, metrics))
-            val right = (parent.width - Utils.dp2px(16, metrics))
+            val left = (circle_icon.width + Utils.dp2px(32))
+            val right = (parent.width - Utils.dp2px(16))
 
             for (i in 0..childCount - 1) {
                 val child = parent.getChildAt(i)

@@ -13,14 +13,12 @@ import org.jetbrains.annotations.NotNull
  * Created by liuzipeng on 2017/3/12.
  */
 class BucketShotsPresenter(val mBucketShotsView: IBucketShotsView) : BasePresenter() {
-    var mBucketShotBiz: IBucketShotsBiz? = null
-
-    init {
-        mBucketShotBiz = BucketShotsBiz()
+    val mBucketShotBiz: IBucketShotsBiz by lazy {
+        BucketShotsBiz()
     }
 
     fun getBucketShots(id: Long, access_token: String = singleData.token!!, page: Int?, isLoadMore: Boolean) {
-        val subscribe = mBucketShotBiz?.getBucketShots(id, access_token, page, object : NetSubscriber<MutableList<Shot>>(mBucketShotsView) {
+        val subscribe = mBucketShotBiz.getBucketShots(id, access_token, page, object : NetSubscriber<MutableList<Shot>>(mBucketShotsView) {
             override fun onNext(t: MutableList<Shot>?) {
                 mBucketShotsView.getShotSuccess(t, isLoadMore)
             }
@@ -30,11 +28,11 @@ class BucketShotsPresenter(val mBucketShotsView: IBucketShotsView) : BasePresent
             }
         })
 
-        mSubscription?.add(subscribe)
+        mSubscription.add(subscribe)
     }
 
     fun removeShotFromBucket(@NotNull access_token: String = singleData.token!!, @NotNull id: Long, @NotNull shot_id: Long?) {
-        val subscribe = mBucketShotBiz?.removeShotFromBucket(access_token, id, shot_id, object : NetSubscriber<Shot>() {
+        val subscribe = mBucketShotBiz.removeShotFromBucket(access_token, id, shot_id, object : NetSubscriber<Shot>() {
             override fun onStart() {
                 mBucketShotsView.showProgressDialog()
                 super.onStart()
@@ -55,6 +53,6 @@ class BucketShotsPresenter(val mBucketShotsView: IBucketShotsView) : BasePresent
             }
         })
 
-        mSubscription?.add(subscribe)
+        mSubscription.add(subscribe)
     }
 }

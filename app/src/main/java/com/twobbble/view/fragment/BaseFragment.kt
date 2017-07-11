@@ -17,12 +17,10 @@ import kotlinx.android.synthetic.main.search_layout.*
  * Created by liuzipeng on 2017/2/22.
  */
 abstract class BaseFragment : Fragment() {
-    var mSimpleIo: QuickSimpleIO? = null
-    var isShowSearchBar: Boolean? = false
+    var isShowSearchBar: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mSimpleIo = QuickSimpleIO.instance
     }
 
     open fun onBackPressed() {}

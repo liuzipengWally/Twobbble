@@ -39,7 +39,7 @@ class BehaviorComment(context: Context, attrs: AttributeSet) : CoordinatorLayout
     }
 
     private fun updateTranslate(dependency: Snackbar.SnackbarLayout, child: View?) {
-        val y = Utils.dp2px(48, App.instance.resources.displayMetrics) - dependency.translationY
+        val y = Utils.dp2px(48) - dependency.translationY
         if (dependency.left >= dependency.width) {
             child?.animate()?.translationY(0f)?.duration = 200
         } else {
@@ -48,7 +48,7 @@ class BehaviorComment(context: Context, attrs: AttributeSet) : CoordinatorLayout
     }
 
     private fun hideChild(child: View?) {
-        child?.animate()?.translationY(child.height + Utils.dp2px(16, App.instance.resources.displayMetrics))?.duration = 200
+        child?.animate()?.translationY(child.height + Utils.dp2px(16))?.duration = 200
     }
 
     private fun showChild(child: View?) {

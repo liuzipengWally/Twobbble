@@ -42,16 +42,16 @@ fun Fragment.showSnackBar(view: View, msg: String, time: Int = Snackbar.LENGTH_S
     Snackbar.make(view, msg, time).setAction(actionMsg, View.OnClickListener { action.invoke(view) }).show()
 }
 
-fun Any.log(msg: String?) {
+fun Any.log(msg: String) {
     Log.d(this.javaClass.simpleName, msg)
 }
 
-fun Any.toast(msg: String?, length: Int? = Toast.LENGTH_SHORT) {
-    Toast.makeText(App.instance, msg!!, length!!).show()
+fun Any.toast(msg: String, length: Int = Toast.LENGTH_SHORT) {
+    Toast.makeText(App.instance, msg, length).show()
 }
 
-fun Any.toast(msg: Int?, length: Int? = Toast.LENGTH_SHORT) {
-    Toast.makeText(App.instance, msg!!, length!!).show()
+fun Any.toast(msg: Int, length: Int = Toast.LENGTH_SHORT) {
+    Toast.makeText(App.instance, msg, length).show()
 }
 
 /**

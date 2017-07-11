@@ -25,10 +25,11 @@ import kotlinx.android.synthetic.main.user_center_top.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import kotlin.properties.Delegates
 
 class UserActivity : BaseActivity(), IUserView {
-    private var mShots: MutableList<Shot>? = null
-    private var mPresenter: UserPresenter? = null
+    lateinit private var mShots: MutableList<Shot>
+    lateinit private var mPresenter: UserPresenter
 
     private val MYSELF = 0
     private val OTHERS = 1
@@ -42,10 +43,10 @@ class UserActivity : BaseActivity(), IUserView {
     private var mAppBarState = EXPANDED
 
     private var mWho = MYSELF
-    private var mUser: User? = null
+    lateinit private var mUser: User
     private var isLoading: Boolean = false
     private var mPage: Int = 1
-    private var mAdapter: UserShotAdapter? = null
+    lateinit private var mAdapter: UserShotAdapter
     private var isFollowing: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,10 +89,10 @@ class UserActivity : BaseActivity(), IUserView {
             if (mWho == MYSELF || !singleData.isLogin()) {
                 hideFollowMenu()
             } else {
-                mPresenter?.checkIfFollowingUser(mUser!!.id)
+                mPresenter.checkIfFollowingUser(mUser.id)
             }
-            mAdapter = UserShotAdapter(mShots!!, bio, { _, i ->
-                val shot = mShots!![i]
+            mAdapter = UserShotAdapter(mShots, bio, { _, i ->
+                val shot = mShots[i]
                 shot.user = mUser
                 EventBus.getDefault().postSticky(shot)
                 startActivity(Intent(this@UserActivity, DetailsActivity::class.java),
@@ -117,8 +118,8 @@ class UserActivity : BaseActivity(), IUserView {
     fun getShot(isLoadMore: Boolean) {
         isLoading = true
         val userPath = if (mWho == MYSELF) PATH_USER else PATH_USERS
-        val id = if (mWho == MYSELF) "" else mUser?.id.toString()
-        mPresenter?.getUserShot(user = userPath, id = id, page = mPage, isLoadMore = isLoadMore)
+        val id = if (mWho == MYSELF) "" else mUser.id.toString()
+        mPresenter.getUserShot(user = userPath, id = id, page = mPage, isLoadMore = isLoadMore)
     }
 
     private fun hideFollowMenu() {
@@ -137,7 +138,7 @@ class UserActivity : BaseActivity(), IUserView {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 val linearManager = recyclerView?.layoutManager as LinearLayoutManager
                 val position = linearManager.findLastVisibleItemPosition()
-                if (mShots?.isNotEmpty()!! && position == mShots?.size!!) {
+                if (mShots.isNotEmpty() && position == mShots.size) {
                     if (!isLoading) {
                         mPage += 1
                         getShot(true)
@@ -162,7 +163,7 @@ class UserActivity : BaseActivity(), IUserView {
             } else if (Math.abs(verticalOffset) >= appBarLayout.totalScrollRange) {
                 if (mAppBarState != COLLAPSED) {
                     mAppBarState = COLLAPSED
-                    toolbar.title = mUser?.name
+                    toolbar.title = mUser.name
                 }
             } else {
                 if (mAppBarState != INTERNEDIATE) {
@@ -180,32 +181,32 @@ class UserActivity : BaseActivity(), IUserView {
         sendIntent.action = Intent.ACTION_SEND
         sendIntent.type = "text/plain"
         sendIntent.putExtra(Intent.EXTRA_TEXT,
-                "我分享了设计师${mUser?.name}的主页,快去看看他的作品吧\n ${mUser?.html_url}\n来自@${resources.getString(R.string.app_name)}")
+                "我分享了设计师${mUser.name}的主页,快去看看他的作品吧\n ${mUser.html_url}\n来自@${getString(R.string.app_name)}")
         sendIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(Intent.createChooser(sendIntent, resources.getString(R.string.share)))
     }
 
     private fun follow() {
         if (isFollowing) {
-            mPresenter?.unFollowUser(mUser!!.id)
+            mPresenter.unFollowUser(mUser.id)
         } else {
-            mPresenter?.followUser(mUser!!.id)
+            mPresenter.followUser(mUser.id)
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
-        mPresenter?.unSubscriber()
+        mPresenter.unSubscriber()
     }
 
     override fun getShotSuccess(shots: MutableList<Shot>?, isLoadMore: Boolean) {
         isLoading = false
         if (shots != null && shots.isNotEmpty()) {
-            mAdapter?.addItems(shots)
+            mAdapter.addItems(shots)
         } else {
             if (!isLoadMore) {
-                mAdapter?.loadError(R.string.no_shots) {
+                mAdapter.loadError(R.string.no_shots) {
                     getShot(true)
                 }
             } else {
@@ -217,22 +218,22 @@ class UserActivity : BaseActivity(), IUserView {
     override fun getShotFailed(msg: String, isLoadMore: Boolean) {
         isLoading = false
         toast(msg)
-        mAdapter?.loadError(R.string.click_retry) {
+        mAdapter.loadError(R.string.click_retry) {
             getShot(true)
         }
     }
 
     override fun showProgress() {
-        mAdapter?.showProgress()
+        mAdapter.showProgress()
     }
 
     override fun hideProgress() {
-        mAdapter?.hideProgress()
+        mAdapter.hideProgress()
     }
 
     override fun followUserSuccess() {
         isFollowing = true
-        mFollowersText.text = "${mUser?.followers_count!! + 1}"
+        mFollowersText.text = "${mUser.followers_count + 1}"
         toolbar.menu.findItem(R.id.mFollow).setTitle(R.string.Unfollow)
         toast(R.string.follow_success)
     }
@@ -243,7 +244,7 @@ class UserActivity : BaseActivity(), IUserView {
 
     override fun unFollowUserSuccess() {
         isFollowing = false
-        mFollowersText.text = "${mUser?.followers_count!! - 1}"
+        mFollowersText.text = "${mUser.followers_count - 1}"
         toolbar.menu.findItem(R.id.mFollow).setTitle(R.string.follow)
         toast(R.string.un_follow_success)
     }
@@ -262,10 +263,10 @@ class UserActivity : BaseActivity(), IUserView {
     }
 
     override fun showProgressDialog(msg: String?) {
-        mDialogManager?.showCircleProgressDialog()
+        mDialogManager.showCircleProgressDialog()
     }
 
     override fun hideProgressDialog() {
-        mDialogManager?.dismissAll()
+        mDialogManager.dismissAll()
     }
 }

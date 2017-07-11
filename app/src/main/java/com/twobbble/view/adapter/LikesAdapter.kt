@@ -43,43 +43,45 @@ class LikesAdapter(var mLikes: MutableList<Like>, val itemClick: (View, Int) -> 
 
     override fun getItemCount(): Int = mLikes.size + 1
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (position == mLikes.size) {
             if (Utils.hasNavigationBar(App.instance)) {
-                holder?.itemView?.mNavigationBar?.visibility = View.VISIBLE
+                holder.itemView.mNavigationBar.visibility = View.VISIBLE
             } else {
-                holder?.itemView?.mNavigationBar?.visibility = View.GONE
+                holder.itemView.mNavigationBar.visibility = View.GONE
             }
             mLastViewHolder = holder
         } else {
-            holder?.bindShots(mLikes[position].shot!!)
-            holder?.itemView?.mItemCard?.setOnClickListener {
-                itemClick.invoke(holder.itemView.mItemCard!!, position)
+            holder.bindShots(mLikes[position].shot)
+            holder.itemView.mItemCard.setOnClickListener {
+                itemClick.invoke(holder.itemView.mItemCard, position)
             }
-            holder?.itemView?.mHeadLayout?.setOnClickListener {
-                userClick.invoke(holder.itemView?.mHeadLayout!!, position)
+            holder.itemView.mHeadLayout.setOnClickListener {
+                userClick.invoke(holder.itemView.mHeadLayout, position)
             }
-            addCardZAnimation(holder?.itemView?.mItemCard)
+            addCardZAnimation(holder.itemView.mItemCard)
         }
     }
 
-    override fun onViewAttachedToWindow(holder: ViewHolder?) {
-        addItemAnimation(holder?.itemView?.mItemCard)
+    override fun onViewAttachedToWindow(holder: ViewHolder) {
+        addItemAnimation(holder.itemView.mItemCard)
     }
 
     private fun addItemAnimation(mItemCard: CardView?) {
-        val scaleX = ObjectAnimator.ofFloat(mItemCard, "scaleX", 0.5f, 1f)
-        val scaleY = ObjectAnimator.ofFloat(mItemCard, "scaleY", 0.5f, 1f)
-        val set = AnimatorSet()
-        set.playTogether(scaleX, scaleY)
-        set.duration = 500
-        set.start()
+        mItemCard?.let {
+            val scaleX = ObjectAnimator.ofFloat(mItemCard, "scaleX", 0.5f, 1f)
+            val scaleY = ObjectAnimator.ofFloat(mItemCard, "scaleY", 0.5f, 1f)
+            val set = AnimatorSet()
+            set.playTogether(scaleX, scaleY)
+            set.duration = 500
+            set.start()
+        }
     }
 
     private fun addCardZAnimation(mItemCard: CardView?) {
         mItemCard?.setOnTouchListener { _, motionEvent ->
             when (motionEvent.action) {
-                MotionEvent.ACTION_DOWN -> mItemCard.animate().translationZ(Utils.dp2px(24, App.instance.resources.displayMetrics)).duration = CARD_TAP_DURATION
+                MotionEvent.ACTION_DOWN -> mItemCard.animate().translationZ(Utils.dp2px(24)).duration = CARD_TAP_DURATION
                 MotionEvent.ACTION_UP -> mItemCard.animate().translationZ(0f).duration = CARD_TAP_DURATION
                 MotionEvent.ACTION_CANCEL -> mItemCard.animate().translationZ(0f).duration = CARD_TAP_DURATION
             }
@@ -93,7 +95,7 @@ class LikesAdapter(var mLikes: MutableList<Like>, val itemClick: (View, Int) -> 
         mLastViewHolder?.itemView?.mLoadLayout?.setOnClickListener {
             mLastViewHolder?.itemView?.mRetryLoadProgress?.visibility = View.VISIBLE
             mLastViewHolder?.itemView?.mReTryText?.visibility = View.GONE
-            retryListener.invoke()
+            retryListener()
         }
     }
 
@@ -114,24 +116,24 @@ class LikesAdapter(var mLikes: MutableList<Like>, val itemClick: (View, Int) -> 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindShots(shot: Shot) {
             with(shot) {
-                ImageLoad.frescoLoadCircle(itemView.mAvatarImg, shot.user?.avatar_url.toString())
-                ImageLoad.frescoLoadNormal(itemView.mContentImg, itemView.mImgProgress, shot.images?.normal.toString(), shot.images?.teaser.toString())
-                itemView.mTitleText.text = shot.title
-                itemView.mAuthorText.text = shot.user?.name
-                itemView.mLikeCountText.text = shot.likes_count.toString()
-                itemView.mCommentCountText.text = shot.comments_count.toString()
-                itemView.mViewsCountText.text = shot.views_count.toString()
+                ImageLoad.frescoLoadCircle(itemView.mAvatarImg, user?.avatar_url.toString())
+                ImageLoad.frescoLoadNormal(itemView.mContentImg, itemView.mImgProgress, images?.normal.toString(), images?.teaser.toString())
+                itemView.mTitleText.text = title
+                itemView.mAuthorText.text = user?.name
+                itemView.mLikeCountText.text = likes_count.toString()
+                itemView.mCommentCountText.text = comments_count.toString()
+                itemView.mViewsCountText.text = views_count.toString()
                 itemView.mImgProgress.visibility = View.VISIBLE
                 if (shot.animated) itemView.mGifTag.visibility = View.VISIBLE else itemView.mGifTag.visibility = View.GONE
 
                 if (shot.rebounds_count > 0) {
                     itemView.mReboundLayout.visibility = View.VISIBLE
-                    itemView.mReboundCountText.text = shot.rebounds_count.toString()
+                    itemView.mReboundCountText.text = rebounds_count.toString()
                 } else itemView.mReboundLayout.visibility = View.GONE
 
                 if (shot.attachments_count > 0) {
                     itemView.mAttachmentLayout.visibility = View.VISIBLE
-                    itemView.mAttachmentCountText.text = shot.attachments_count.toString()
+                    itemView.mAttachmentCountText.text = attachments_count.toString()
                 } else itemView.mAttachmentLayout.visibility = View.GONE
             }
         }

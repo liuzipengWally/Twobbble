@@ -116,7 +116,7 @@ object ImageLoad {
                         if (imageInfo == null) {
                             return
                         }
-                        drawees.update(imageInfo.width, imageInfo.height);
+                        drawees.update(imageInfo.width, imageInfo.height)
                     }
                 })
                 .setOldController(drawees.controller)

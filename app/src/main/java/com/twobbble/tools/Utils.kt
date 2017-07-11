@@ -23,6 +23,8 @@ import android.view.ViewConfiguration
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import com.google.gson.internal.bind.util.ISO8601Utils
+import com.twobbble.application.App
+import org.jetbrains.anko.displayMetrics
 
 
 import java.io.ByteArrayOutputStream
@@ -62,8 +64,8 @@ object Utils {
      * *
      * @return
      */
-    fun sp2px(sp: Int, metrics: DisplayMetrics): Float {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp.toFloat(), metrics)
+    fun sp2px(sp: Int): Float {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp.toFloat(), App.instance.displayMetrics)
     }
 
 
@@ -75,12 +77,12 @@ object Utils {
      * *
      * @return
      */
-    fun dp2px(dp: Int, metrics: DisplayMetrics): Float {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), metrics)
+    fun dp2px(dp: Int): Float {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), App.instance.displayMetrics)
     }
 
-    fun dp2px(dp: Float, metrics: DisplayMetrics): Float {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics)
+    fun dp2px(dp: Float): Float {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, App.instance.displayMetrics)
     }
 
     /**
@@ -113,18 +115,13 @@ object Utils {
      * @return true代表正在运行，false代表服务没有正在运行
      */
     fun isServiceWork(mContext: Context, serviceName: String): Boolean {
-        var isWorked: Boolean? = false
         val myAM = mContext
                 .getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val myList = myAM.getRunningServices(Integer.MAX_VALUE)
         if (myList.size <= 0) {
             return false
         }
-        for (serviceInfo in myList) {
-            if (serviceName == serviceInfo.service.className) {
-                isWorked = true
-            }
-        }
+        val isWorked: Boolean? = myList.any { serviceName == it.service.className }
         return isWorked!!
     }
 
@@ -156,7 +153,6 @@ object Utils {
             val pi = context.packageManager.getPackageInfo(context.packageName, 0)
             return pi.versionName
         } catch (e: PackageManager.NameNotFoundException) {
-            // TODO Auto-generated catch block
             e.printStackTrace()
             return "版本未知"
         }
@@ -175,11 +171,9 @@ object Utils {
             val pi = context.packageManager.getPackageInfo(context.packageName, 0)
             return pi.versionCode
         } catch (e: PackageManager.NameNotFoundException) {
-            // TODO Auto-generated catch block
             e.printStackTrace()
             return 0
         }
-
     }
 
     //Android获取一个用于打开APK文件的intent

@@ -34,12 +34,16 @@ import org.jetbrains.anko.find
  * Created by liuzipeng on 2017/2/17.
  */
 class ShotsFragment : BaseFragment(), IShotsView {
-    private var mPresenter: ShotsPresenter? = null
+    private val mPresenter: ShotsPresenter by lazy {
+        ShotsPresenter(this)
+    }
     private var mSort: String? = null
     private var mSortList: String? = null
     private var mTimeFrame: String? = null
     private var mPage: Int = 1
-    private var mShots: MutableList<Shot>? = null
+    private val mShots: MutableList<Shot> by lazy {
+        mutableListOf<Shot>()
+    }
     private var mListAdapter: ItemShotAdapter? = null
     private var isLoading: Boolean = false
 
@@ -57,21 +61,14 @@ class ShotsFragment : BaseFragment(), IShotsView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (arguments != null) {
-            mSort = arguments.getString(SORT)
-        }
+        mSort = arguments?.getString(SORT)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return LayoutInflater.from(activity).inflate(R.layout.fragment_shots, null)
     }
 
-    private fun init() {
-        mPresenter = ShotsPresenter(this)
-    }
-
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        init()  //init放在onCreate中是因为  lazyLoad比onCreateView先走，所以懒加载的操作会因为很多对象还没初始化而不走
         initView()
         getShots(false)
     }
@@ -86,7 +83,7 @@ class ShotsFragment : BaseFragment(), IShotsView {
     fun getShots(isLoadMore: Boolean = false) {
         isLoading = true
         val token = singleData.token ?: Constant.ACCESS_TOKEN
-        mPresenter?.getShots(access_token = token,
+        mPresenter.getShots(access_token = token,
                 sort = mSort,
                 list = mSortList,
                 timeframe = mTimeFrame,
@@ -105,7 +102,7 @@ class ShotsFragment : BaseFragment(), IShotsView {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        mPresenter?.unSubscriber()
+        mPresenter.unSubscriber()
     }
 
     private fun bindEvent() {
@@ -123,7 +120,7 @@ class ShotsFragment : BaseFragment(), IShotsView {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 val linearManager = recyclerView?.layoutManager as LinearLayoutManager
                 val position = linearManager.findLastVisibleItemPosition()
-                if (mShots?.isNotEmpty()!! && position == mShots?.size!!) {
+                if (mShots.isNotEmpty() && position == mShots.size) {
                     if (!isLoading) {
                         mPage += 1
                         getShots(true)
@@ -161,12 +158,12 @@ class ShotsFragment : BaseFragment(), IShotsView {
     }
 
     private fun mountList(shots: MutableList<Shot>) {
-        mShots = shots
-        mListAdapter = ItemShotAdapter(mShots!!, { _, position ->
-            EventBus.getDefault().postSticky(mShots!![position])
+        mShots.addAll(shots)
+        mListAdapter = ItemShotAdapter(mShots, {
+            EventBus.getDefault().postSticky(mShots[it])
             startDetailsActivity()
-        }, { _, position ->
-            EventBus.getDefault().postSticky(shots[position].user)
+        }, {
+            EventBus.getDefault().postSticky(shots[it].user)
             startActivity(Intent(activity, UserActivity::class.java))
         })
         mRecyclerView.adapter = mListAdapter

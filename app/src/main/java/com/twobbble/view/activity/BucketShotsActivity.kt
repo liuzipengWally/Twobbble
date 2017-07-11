@@ -7,7 +7,6 @@ import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.widget.Toast
 import com.twobbble.R
 import com.twobbble.application.App
 import com.twobbble.entity.Shot
@@ -22,17 +21,20 @@ import kotlinx.android.synthetic.main.activity_bucket_shots.*
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.list.*
 import org.greenrobot.eventbus.EventBus
+import org.jetbrains.anko.doAsync
 
 class BucketShotsActivity : BaseActivity(), IBucketShotsView {
     private var mId: Long = 0
     private var mTitle: String? = null
-    private var mPresenter: BucketShotsPresenter? = null
+    private val mPresenter: BucketShotsPresenter by lazy {
+        BucketShotsPresenter(this)
+    }
     private var isLoading: Boolean = false
     private var mPage: Int = 1
-    private var mShots: MutableList<Shot>? = null
+    lateinit private var mShots: MutableList<Shot>
     private var mListAdapter: ItemShotAdapter? = null
     private var mDelPosition: Int = 0
-    private var mDelShot: Shot? = null
+    private lateinit var mDelShot: Shot
 
     companion object {
         val KEY_ID = "id"
@@ -50,7 +52,6 @@ class BucketShotsActivity : BaseActivity(), IBucketShotsView {
 
     private fun init() {
         Toolbar.title = mTitle
-        mPresenter = BucketShotsPresenter(this)
         mRefresh.setColorSchemeResources(R.color.google_red, R.color.google_yellow, R.color.google_green, R.color.google_blue)
         val layoutManager = LinearLayoutManager(App.instance, LinearLayoutManager.VERTICAL, false)
         mRecyclerView.layoutManager = layoutManager
@@ -59,7 +60,7 @@ class BucketShotsActivity : BaseActivity(), IBucketShotsView {
 
     fun getShots(isLoadMore: Boolean = false) {
         isLoading = true
-        mPresenter?.getBucketShots(id = mId, page = mPage, isLoadMore = isLoadMore)
+        mPresenter.getBucketShots(id = mId, page = mPage, isLoadMore = isLoadMore)
     }
 
     override fun onStart() {
@@ -84,7 +85,7 @@ class BucketShotsActivity : BaseActivity(), IBucketShotsView {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 val linearManager = recyclerView?.layoutManager as LinearLayoutManager
                 val position = linearManager.findLastVisibleItemPosition()
-                if (mShots?.isNotEmpty()!! && position == mShots?.size!!) {
+                if (mShots.isNotEmpty() && position == mShots.size) {
                     if (!isLoading) {
                         mPage += 1
                         getShots(true)
@@ -94,17 +95,17 @@ class BucketShotsActivity : BaseActivity(), IBucketShotsView {
         })
 
         val itemTouchHelper = ItemTouchHelper(ItemSwipeRemoveCallback { delPosition, _ ->
-            mDelShot = mShots!![delPosition]
+            mDelShot = mShots[delPosition]
             mListAdapter?.deleteItem(delPosition)
             mDelPosition = delPosition
-            mDialogManager?.showOptionDialog(
+            mDialogManager.showOptionDialog(
                     resources.getString(R.string.delete_shot),
                     resources.getString(R.string.whether_to_delete_shot_from_bucket),
                     confirmText = resources.getString(R.string.delete),
                     onConfirm = {
-                        mPresenter?.removeShotFromBucket(id = mId, shot_id = mDelShot!!.id)
+                        mPresenter.removeShotFromBucket(id = mId, shot_id = mDelShot.id)
                     }, onCancel = {
-                mListAdapter?.addItem(delPosition, mDelShot!!)
+                mListAdapter?.addItem(delPosition, mDelShot)
                 mRecyclerView.scrollToPosition(delPosition)
             })
         })
@@ -113,7 +114,7 @@ class BucketShotsActivity : BaseActivity(), IBucketShotsView {
 
     override fun onDestroy() {
         super.onDestroy()
-        mPresenter?.unSubscriber()
+        mPresenter.unSubscriber()
     }
 
     override fun showProgress() {
@@ -125,11 +126,11 @@ class BucketShotsActivity : BaseActivity(), IBucketShotsView {
     }
 
     override fun showProgressDialog(msg: String?) {
-        mDialogManager?.showCircleProgressDialog()
+        mDialogManager.showCircleProgressDialog()
     }
 
     override fun hideProgressDialog() {
-        mDialogManager?.dismissAll()
+        mDialogManager.dismissAll()
     }
 
     override fun getShotSuccess(shots: MutableList<Shot>?, isLoadMore: Boolean) {
@@ -151,12 +152,12 @@ class BucketShotsActivity : BaseActivity(), IBucketShotsView {
 
     private fun mountList(shots: MutableList<Shot>) {
         mShots = shots
-        mListAdapter = ItemShotAdapter(mShots!!, { _, position ->
-            EventBus.getDefault().postSticky(mShots!![position])
+        mListAdapter = ItemShotAdapter(mShots, {
+            EventBus.getDefault().postSticky(mShots[it])
             startActivity(Intent(this, DetailsActivity::class.java),
                     ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
-        }, { _, position ->
-            EventBus.getDefault().postSticky(shots[position].user)
+        }, {
+            EventBus.getDefault().postSticky(shots[it].user)
             startActivity(Intent(applicationContext, UserActivity::class.java))
         })
         mRecyclerView.adapter = mListAdapter
@@ -181,7 +182,7 @@ class BucketShotsActivity : BaseActivity(), IBucketShotsView {
 
     override fun removeShotFailed(msg: String) {
         toast("${resources.getString(R.string.delete_success)}:$msg")
-        mListAdapter?.addItem(mDelPosition, mDelShot!!)
+        mListAdapter?.addItem(mDelPosition, mDelShot)
         mRecyclerView.scrollToPosition(mDelPosition)
     }
 }

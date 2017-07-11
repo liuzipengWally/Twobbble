@@ -6,13 +6,14 @@ import rx.subscriptions.CompositeSubscription
  * Created by liuzipeng on 2017/2/22.
  */
 abstract class BasePresenter {
-    var mSubscription: CompositeSubscription? = null
-
-    init {
-        mSubscription = CompositeSubscription()
+    val mSubscription: CompositeSubscription by lazy {
+        CompositeSubscription()
     }
 
+
     open fun unSubscriber() {
-        mSubscription?.unsubscribe()
+        if (mSubscription.hasSubscriptions()) {
+            mSubscription.unsubscribe()
+        }
     }
 }

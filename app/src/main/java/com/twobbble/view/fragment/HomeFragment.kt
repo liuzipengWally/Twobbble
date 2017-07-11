@@ -25,15 +25,24 @@ import org.greenrobot.eventbus.EventBus
  * Created by liuzipeng on 2017/2/17.
  */
 class HomeFragment : BaseFragment() {
-    private var mRecentFragment: ShotsFragment? = null
-    private var mPopularFragment: ShotsFragment? = null
-    private var mFollowingFragment: FollowingFragment? = null
-    var mFragments: List<Fragment>? = null
     val TITLE_RECENT = "RECENT"
     val TITLE_POPULAR = "POPULAR"
     val TITLE_FOLLOWING = "FOLLOWING"
-    var mTitles: List<String>? = null
-    var mPagerAdapter: PagerAdapter? = null
+
+    private val mRecentFragment: ShotsFragment by lazy {
+        ShotsFragment.newInstance(ShotsFragment.RECENT)
+    }
+    private val mPopularFragment: ShotsFragment by lazy {
+        ShotsFragment.newInstance()
+    }
+    private val mFollowingFragment: FollowingFragment by lazy {
+        FollowingFragment()
+    }
+    private lateinit var mFragments: MutableList<Fragment>
+    private val mTitles: MutableList<String> by lazy {
+        mutableListOf(TITLE_POPULAR, TITLE_RECENT)
+    }
+    private var mPagerAdapter: PagerAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,11 +58,7 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun init() {
-        mRecentFragment = ShotsFragment.newInstance(ShotsFragment.RECENT)
-        mPopularFragment = ShotsFragment.newInstance()
-        mFollowingFragment = FollowingFragment()
-        mFragments = arrayListOf(mPopularFragment!!, mRecentFragment!!)
-        mTitles = arrayListOf(TITLE_POPULAR, TITLE_RECENT)
+        mFragments = arrayListOf(mPopularFragment, mRecentFragment)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -80,8 +85,8 @@ class HomeFragment : BaseFragment() {
 
     private fun loadPager() {
         mPagerAdapter = PagerAdapter(childFragmentManager)
-        mViewPager?.adapter = mPagerAdapter
-        mTabLayout?.setViewPager(mViewPager)
+        mViewPager.adapter = mPagerAdapter
+        mTabLayout.setViewPager(mViewPager)
     }
 
     private fun bindEvent() {
@@ -134,11 +139,11 @@ class HomeFragment : BaseFragment() {
     //加inner标签才能访问外部对象
     inner class PagerAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
         override fun getPageTitle(position: Int): CharSequence {
-            return mTitles!![position]
+            return mTitles[position]
         }
 
-        override fun getItem(position: Int): Fragment = mFragments!![position]
+        override fun getItem(position: Int): Fragment = mFragments[position]
 
-        override fun getCount(): Int = mFragments?.size!!
+        override fun getCount(): Int = mFragments.size
     }
 }

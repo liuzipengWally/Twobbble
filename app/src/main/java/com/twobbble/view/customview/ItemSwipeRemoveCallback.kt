@@ -30,12 +30,12 @@ class ItemSwipeRemoveCallback(val onDelete: (Int, View) -> Unit) : ItemTouchHelp
 
     override fun isItemViewSwipeEnabled(): Boolean = true
 
-    override fun onMove(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?, target: RecyclerView.ViewHolder?): Boolean {
-        if (viewHolder?.itemViewType != target?.itemViewType) return false
+    override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+        if (viewHolder.itemViewType != target.itemViewType) return false
         return false
     }
 
-    override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, direction: Int) {
-        onDelete.invoke(viewHolder?.adapterPosition!!, viewHolder.itemView)
+    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        onDelete(viewHolder.adapterPosition, viewHolder.itemView)
     }
 }

@@ -21,10 +21,10 @@ class SearchBar(context: Context?, attrs: AttributeSet?) : CardView(context, att
     val SEARCH_DURATION_ANIM: Long = 300
 
     fun showSearchView(width: Int, animationEnd: () -> Unit) {
-        val cx = width - Utils.dp2px(16, resources.displayMetrics)
-        val cy = Utils.dp2px(24, resources.displayMetrics)
+        val cx = width - Utils.dp2px(16)
+        val cy = Utils.dp2px(24)
         val dx = Math.max(cx, width - cx)
-        val dy = Math.max(cy, Utils.dp2px(48, resources.displayMetrics) - cy)
+        val dy = Math.max(cy, Utils.dp2px(48) - cy)
         val finalRadius = Math.hypot(dx.toDouble(), dy.toDouble()).toFloat()
         val animator = ViewAnimationUtils.createCircularReveal(this, cx.toInt(), cy.toInt(), 0f, finalRadius)
         animator.interpolator = AccelerateInterpolator()
@@ -54,9 +54,9 @@ class SearchBar(context: Context?, attrs: AttributeSet?) : CardView(context, att
 
     fun hideSearchView(animationEnd: () -> Unit) {
         val cx = measuredWidth
-        val cy = Utils.dp2px(24, resources.displayMetrics)
+        val cy = Utils.dp2px(24)
         val dx = Math.max(cx, measuredWidth - cx)
-        val dy = Math.max(cy, Utils.dp2px(48, resources.displayMetrics) - cy)
+        val dy = Math.max(cy, Utils.dp2px(48) - cy)
         val finalRadius = Math.hypot(dx.toDouble(), dy.toDouble()).toFloat()
         val animator = ViewAnimationUtils.createCircularReveal(this, cx, cy.toInt(), finalRadius, 0f)
         animator.interpolator = AccelerateInterpolator()

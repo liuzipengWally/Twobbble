@@ -13,14 +13,12 @@ import org.jetbrains.annotations.NotNull
  * Created by liuzipeng on 2017/3/9.
  */
 class MyBucketsPresenter(val mMyBucketsView: IMyBucketsView) : BasePresenter() {
-    var mMyBucketsBiz: IMyBucketsBiz? = null
-
-    init {
-        mMyBucketsBiz = MyBucketsBiz()
+    private  val mMyBucketsBiz: IMyBucketsBiz by lazy {
+        MyBucketsBiz()
     }
 
     fun getMyBuckets(@NotNull token: String, page: Int? = null) {
-        mMyBucketsBiz?.getMyBuckets(token, page, object : NetSubscriber<MutableList<Bucket>>(mMyBucketsView) {
+        mMyBucketsBiz.getMyBuckets(token, page, object : NetSubscriber<MutableList<Bucket>>(mMyBucketsView) {
             override fun onNext(t: MutableList<Bucket>?) {
                 mMyBucketsView.getBucketsSuccess(t)
             }
@@ -32,7 +30,7 @@ class MyBucketsPresenter(val mMyBucketsView: IMyBucketsView) : BasePresenter() {
     }
 
     fun createBucket(@NotNull token: String, @NotNull name: String, description: String?) {
-        mMyBucketsBiz?.createBucket(token, name, description, object : NetSubscriber<Bucket>() {
+        mMyBucketsBiz.createBucket(token, name, description, object : NetSubscriber<Bucket>() {
             override fun onStart() {
                 mMyBucketsView.showProgressDialog()
                 super.onStart()
@@ -55,7 +53,7 @@ class MyBucketsPresenter(val mMyBucketsView: IMyBucketsView) : BasePresenter() {
     }
 
     fun deleteBucket(@NotNull token: String, @NotNull id: Long) {
-        mMyBucketsBiz?.deleteBucket(token, id, object : NetSubscriber<Bucket>() {
+        mMyBucketsBiz.deleteBucket(token, id, object : NetSubscriber<Bucket>() {
             override fun onStart() {
                 mMyBucketsView.showProgressDialog()
                 super.onStart()
@@ -79,7 +77,7 @@ class MyBucketsPresenter(val mMyBucketsView: IMyBucketsView) : BasePresenter() {
     }
 
     fun modifyBucket(@NotNull token: String, @NotNull id: Long, @NotNull name: String, description: String?, position: Int) {
-        mMyBucketsBiz?.modifyBucket(token, id, name, description, object : NetSubscriber<Bucket>() {
+        mMyBucketsBiz.modifyBucket(token, id, name, description, object : NetSubscriber<Bucket>() {
             override fun onStart() {
                 mMyBucketsView.showProgressDialog()
                 super.onStart()
@@ -102,7 +100,7 @@ class MyBucketsPresenter(val mMyBucketsView: IMyBucketsView) : BasePresenter() {
     }
 
     fun addShot2Bucket(@NotNull id: Long, @NotNull token: String = singleData.token!!, @NotNull shotId: Long) {
-        mMyBucketsBiz?.addShot2Bucket(id, token, shotId, object : NetSubscriber<Shot>() {
+        mMyBucketsBiz.addShot2Bucket(id, token, shotId, object : NetSubscriber<Shot>() {
             override fun onStart() {
                 mMyBucketsView.showProgressDialog()
                 super.onStart()

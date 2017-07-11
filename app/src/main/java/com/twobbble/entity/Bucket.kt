@@ -16,9 +16,9 @@ class Bucket {
      */
 
     var id: Long = 0
-    var name: String? = null
+    var name: String? = ""
     var description: String? = null
     var shots_count: Int = 0
-    var created_at: String? = null
-    var updated_at: String? = null
+    var created_at: String? = ""
+    var updated_at: String? = ""
 }

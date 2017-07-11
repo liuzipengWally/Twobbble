@@ -40,7 +40,7 @@ class DialogManager(private val mContext: Context) {
                          onCancel: () -> Unit) {
         val dialog = AlertDialog.Builder(mContext)
         dialog.setTitle(title).setMessage(content).setPositiveButton(confirmText) { _, _ ->
-            onConfirm.invoke()
+            onConfirm()
         }.setNegativeButton(CancelText, { _, _ ->
             onCancel.invoke()
         }).setCancelable(false)
@@ -55,7 +55,7 @@ class DialogManager(private val mContext: Context) {
         view.mBucketDescriptionEdit.setText(description)
         dialog.setTitle(title).setPositiveButton(R.string.create) { _, _ ->
             if (!view.mBucketNameEdit.text.isNullOrBlank()) {
-                onConfirm.invoke(view.mBucketNameEdit.text.toString(), view.mBucketDescriptionEdit.text.toString())
+                onConfirm(view.mBucketNameEdit.text.toString(), view.mBucketDescriptionEdit.text.toString())
             } else {
                 toast(R.string.bucket_name_null)
             }

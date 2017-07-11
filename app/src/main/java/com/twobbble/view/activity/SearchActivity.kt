@@ -48,8 +48,8 @@ class SearchActivity : BaseActivity() {
         mSortBtn.visibility = View.VISIBLE
         mKeyword = intent.getStringExtra(KEY_KEYWORD)
         mSearchEdit.setText(mKeyword)
-        mSortSpinner.dropDownVerticalOffset = Utils.dp2px(16, resources.displayMetrics).toInt()
-        mSortListSpinner.dropDownVerticalOffset = Utils.dp2px(16, resources.displayMetrics).toInt()
+        mSortSpinner.dropDownVerticalOffset = Utils.dp2px(16).toInt()
+        mSortListSpinner.dropDownVerticalOffset = Utils.dp2px(16).toInt()
     }
 
     override fun onStart() {

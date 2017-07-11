@@ -22,13 +22,13 @@ class MyBucketsAdapter(val mBuckets: MutableList<Bucket>, val onClick: (Int) -> 
         return ViewHolder(LayoutInflater.from(parent?.context).inflate(R.layout.item_bucket, parent, false))
     }
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        holder?.bindMyBuckets(mBuckets[position], position)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bindMyBuckets(mBuckets[position], position)
         if (Utils.hasNavigationBar(App.instance)) {
             if (position == mBuckets.size - 1) {
-                val item = holder?.itemView?.mItemBucket
-                val params = item?.layoutParams as ViewGroup.MarginLayoutParams
-                params.bottomMargin = Utils.dp2px(48, App.instance.resources.displayMetrics).toInt()
+                val item = holder.itemView.mItemBucket
+                val params = item.layoutParams as ViewGroup.MarginLayoutParams
+                params.bottomMargin = Utils.dp2px(48).toInt()
                 item.layoutParams = params
             }
         }
@@ -48,15 +48,17 @@ class MyBucketsAdapter(val mBuckets: MutableList<Bucket>, val onClick: (Int) -> 
         notifyItemRemoved(position)
     }
 
-    override fun onViewAttachedToWindow(holder: ViewHolder?) {
+    override fun onViewAttachedToWindow(holder: ViewHolder) {
         super.onViewAttachedToWindow(holder)
-        addItemAnimation(holder?.itemView?.mItemBucket)
+        addItemAnimation(holder.itemView.mItemBucket)
     }
 
     private fun addItemAnimation(view: View?) {
-        val translationX = ObjectAnimator.ofFloat(view, "translationX", view?.width?.toFloat()!!, 0f)
-        translationX.duration = 500
-        translationX.start()
+        view?.let {
+            val translationX = ObjectAnimator.ofFloat(view, "translationX", view.width.toFloat(), 0f)
+            translationX.duration = 500
+            translationX.start()
+        }
     }
 
     fun addItems(buckets: MutableList<Bucket>) {

@@ -26,10 +26,10 @@ abstract class NetSubscriber<T>(val baseView: IBaseView? = null) : Subscriber<T>
         baseView?.hideProgress()
     }
 
-    override fun onError(t: Throwable?) {
+    override fun onError(t: Throwable) {
         baseView?.hideProgress()
-        t?.printStackTrace()
-        onFailed(t?.message.toString())
+        t.printStackTrace()
+        onFailed(t.message.toString())
     }
 
     abstract fun onFailed(msg: String)

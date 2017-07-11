@@ -12,13 +12,12 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 open class BaseActivity : AppCompatActivity() {
     var screenWidth: Int = 0
     var screenHeight: Int = 0
-    var mSimpleIo: QuickSimpleIO? = null
-    var mDialogManager: DialogManager? = null
+    val mDialogManager: DialogManager by lazy {
+        DialogManager(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mSimpleIo = QuickSimpleIO.instance
-        mDialogManager = DialogManager(this)
         getScreenPixel()
     }
 
@@ -36,6 +35,6 @@ open class BaseActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mDialogManager?.dismissAll()
+        mDialogManager.dismissAll()
     }
 }

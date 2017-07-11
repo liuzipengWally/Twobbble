@@ -31,9 +31,13 @@ import org.greenrobot.eventbus.EventBus
  * Created by liuzipeng on 2017/2/17.
  */
 class LikesFragment : BaseFragment(), ILikeView {
-    private var mPresenter: LikePresenter? = null
+    private val mPresenter: LikePresenter by lazy {
+        LikePresenter(this)
+    }
     private var mPage: Int = 1
-    private var mLikes: MutableList<Like>? = null
+    private val mLikes: MutableList<Like> by lazy {
+        mutableListOf<Like>()
+    }
     private var mListAdapter: LikesAdapter? = null
     private var isLoading: Boolean = false
 
@@ -50,13 +54,8 @@ class LikesFragment : BaseFragment(), ILikeView {
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        init()  //init放在onCreate中是因为  lazyLoad比onCreateView先走，所以懒加载的操作会因为很多对象还没初始化而不走
         initView()
         geLikes(false)
-    }
-
-    private fun init() {
-        mPresenter = LikePresenter(this)
     }
 
     override fun onStart() {
@@ -66,7 +65,7 @@ class LikesFragment : BaseFragment(), ILikeView {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        mPresenter?.unSubscriber()
+        mPresenter.unSubscriber()
     }
 
     private fun initView() {
@@ -79,7 +78,7 @@ class LikesFragment : BaseFragment(), ILikeView {
     fun geLikes(isLoadMore: Boolean = false) {
         if (singleData.isLogin()) {
             isLoading = true
-            mPresenter?.getMyLike(
+            mPresenter.getMyLike(
                     singleData.token!!,
                     page = mPage,
                     isLoadMore = isLoadMore)
@@ -104,10 +103,10 @@ class LikesFragment : BaseFragment(), ILikeView {
         }
 
         mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                val linearManager = recyclerView?.layoutManager as LinearLayoutManager
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val linearManager = recyclerView.layoutManager as LinearLayoutManager
                 val position = linearManager.findLastVisibleItemPosition()
-                if (mLikes?.isNotEmpty()!! && position == mLikes?.size!!) {
+                if (mLikes.isNotEmpty() && position == mLikes.size) {
                     if (!isLoading) {
                         mPage += 1
                         geLikes(true)
@@ -136,12 +135,12 @@ class LikesFragment : BaseFragment(), ILikeView {
     }
 
     private fun mountList(likes: MutableList<Like>) {
-        mLikes = likes
-        mListAdapter = LikesAdapter(mLikes!!, { _, position ->
-            EventBus.getDefault().postSticky(mLikes!![position].shot)
+        mLikes.addAll(likes)
+        mListAdapter = LikesAdapter(mLikes, { _, position ->
+            EventBus.getDefault().postSticky(mLikes[position].shot)
             startDetailsActivity()
         }, { _, position ->
-            EventBus.getDefault().postSticky(likes[position].shot?.user)
+            EventBus.getDefault().postSticky(likes[position].shot.user)
             startActivity(Intent(activity, UserActivity::class.java))
         })
         mRecyclerView.adapter = mListAdapter

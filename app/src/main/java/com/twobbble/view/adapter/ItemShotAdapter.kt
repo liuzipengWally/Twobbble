@@ -16,7 +16,6 @@ import com.twobbble.application.App
 import com.twobbble.entity.Shot
 import com.twobbble.tools.ImageLoad
 import com.twobbble.tools.Utils
-import com.twobbble.tools.log
 import kotlinx.android.synthetic.main.item_card_bottom.view.*
 import kotlinx.android.synthetic.main.item_card_head.view.*
 import kotlinx.android.synthetic.main.item_shots.view.*
@@ -26,11 +25,11 @@ import kotlinx.android.synthetic.main.pull_up_load_layout.view.*
 /**
  * Created by liuzipeng on 2017/2/22.
  */
-class ItemShotAdapter(var mShots: MutableList<Shot>, val itemClick: (View, Int) -> Unit, val userClick: (View, Int) -> Unit) : RecyclerView.Adapter<ItemShotAdapter.ViewHolder>() {
+class ItemShotAdapter(var mShots: MutableList<Shot>, val itemClick: (Int) -> Unit, val userClick: (Int) -> Unit) : RecyclerView.Adapter<ItemShotAdapter.ViewHolder>() {
     val NORMAL = 0
     val LOAD_MORE = 1
     val CARD_TAP_DURATION: Long = 100
-    private var mLastViewHolder: ViewHolder? = null
+    lateinit private var mLastViewHolder: ViewHolder
     private var mOldPosition = 0
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
@@ -43,47 +42,49 @@ class ItemShotAdapter(var mShots: MutableList<Shot>, val itemClick: (View, Int) 
 
     override fun getItemCount(): Int = mShots.size + 1
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (position == mShots.size) {
             if (Utils.hasNavigationBar(App.instance)) {
-                holder?.itemView?.mNavigationBar?.visibility = View.VISIBLE
+                holder.itemView.mNavigationBar.visibility = View.VISIBLE
             } else {
-                holder?.itemView?.mNavigationBar?.visibility = View.GONE
+                holder.itemView.mNavigationBar.visibility = View.GONE
             }
             mLastViewHolder = holder
         } else {
-            holder?.bindShots(mShots[position])
-            holder?.itemView?.mItemCard?.setOnClickListener {
-                itemClick.invoke(holder.itemView.mItemCard!!, position)
+            holder.bindShots(mShots[position])
+            holder.itemView.mItemCard.setOnClickListener {
+                itemClick.invoke(position)
             }
 
-            holder?.itemView?.mHeadLayout?.setOnClickListener {
-                userClick.invoke(holder.itemView?.mHeadLayout!!, position)
+            holder.itemView.mHeadLayout.setOnClickListener {
+                userClick.invoke(position)
             }
-            addCardZAnimation(holder?.itemView?.mItemCard)
+            addCardZAnimation(holder.itemView?.mItemCard)
         }
     }
 
-    override fun onViewAttachedToWindow(holder: ViewHolder?) {
-        if (holder?.layoutPosition!! > mOldPosition) {
+    override fun onViewAttachedToWindow(holder: ViewHolder) {
+        if (holder.layoutPosition > mOldPosition) {
             addItemAnimation(holder.itemView.mItemCard)
             mOldPosition = holder.layoutPosition
         }
     }
 
     private fun addItemAnimation(mItemCard: CardView?) {
-        val scaleX = ObjectAnimator.ofFloat(mItemCard, "translationY", 500f, 0f)
+        mItemCard?.let {
+            val scaleX = ObjectAnimator.ofFloat(mItemCard, "translationY", 500f, 0f)
 //        val scaleY = ObjectAnimator.ofFloat(mItemCard, "scaleY", 0.5f, 1f)
 //        val set = AnimatorSet()
 //        set.playTogether(scaleX, scaleY)
-        scaleX.duration = 500
-        scaleX.start()
+            scaleX.duration = 500
+            scaleX.start()
+        }
     }
 
     private fun addCardZAnimation(mItemCard: CardView?) {
         mItemCard?.setOnTouchListener { _, motionEvent ->
             when (motionEvent.action) {
-                MotionEvent.ACTION_DOWN -> mItemCard.animate().translationZ(Utils.dp2px(24, App.instance.resources.displayMetrics)).duration = CARD_TAP_DURATION
+                MotionEvent.ACTION_DOWN -> mItemCard.animate().translationZ(Utils.dp2px(24)).duration = CARD_TAP_DURATION
                 MotionEvent.ACTION_UP -> mItemCard.animate().translationZ(0f).duration = CARD_TAP_DURATION
                 MotionEvent.ACTION_CANCEL -> mItemCard.animate().translationZ(0f).duration = CARD_TAP_DURATION
             }
@@ -92,15 +93,15 @@ class ItemShotAdapter(var mShots: MutableList<Shot>, val itemClick: (View, Int) 
     }
 
     fun hideProgress() {
-        mLastViewHolder?.itemView?.mLoadLayout?.visibility = View.GONE
+        mLastViewHolder.itemView.mLoadLayout.visibility = View.GONE
     }
 
     fun loadError(retryListener: () -> Unit) {
-        mLastViewHolder?.itemView?.mRetryLoadProgress?.visibility = View.GONE
-        mLastViewHolder?.itemView?.mReTryText?.visibility = View.VISIBLE
-        mLastViewHolder?.itemView?.mLoadLayout?.setOnClickListener {
-            mLastViewHolder?.itemView?.mRetryLoadProgress?.visibility = View.VISIBLE
-            mLastViewHolder?.itemView?.mReTryText?.visibility = View.GONE
+        mLastViewHolder.itemView.mRetryLoadProgress.visibility = View.GONE
+        mLastViewHolder.itemView.mReTryText.visibility = View.VISIBLE
+        mLastViewHolder.itemView.mLoadLayout.setOnClickListener {
+            mLastViewHolder.itemView.mRetryLoadProgress.visibility = View.VISIBLE
+            mLastViewHolder.itemView.mReTryText.visibility = View.GONE
             retryListener.invoke()
         }
     }

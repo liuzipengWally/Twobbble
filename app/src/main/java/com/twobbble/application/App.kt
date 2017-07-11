@@ -29,8 +29,8 @@ class App : Application() {
     }
 
     private fun initFont() {
-        CalligraphyConfig.initDefault(CalligraphyConfig.Builder().
-                setDefaultFontPath("fonts/yuehei.ttf").setFontAttrId(R.attr.fontPath).build())
+//        CalligraphyConfig.initDefault(CalligraphyConfig.Builder().
+//                setDefaultFontPath("fonts/yuehei.ttf").setFontAttrId(R.attr.fontPath).build())
     }
 
     private fun init() {

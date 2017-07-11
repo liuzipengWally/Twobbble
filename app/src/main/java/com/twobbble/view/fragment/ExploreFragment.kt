@@ -37,14 +37,18 @@ class ExploreFragment : BaseFragment(), IShotsView {
         hideSearchView()
     }
 
-    private var mPresenter: ShotsPresenter? = null
+    private val mPresenter: ShotsPresenter by lazy {
+        ShotsPresenter(this)
+    }
+
     private var mSort: String? = null
     private var mSortList: String? = null
     private var mTimeFrame: String? = null
     private var mPage: Int = 1
-    private var mShots: MutableList<Shot>? = null
+    private lateinit var mShots: MutableList<Shot>
     private var mListAdapter: ItemShotAdapter? = null
     private var isLoading: Boolean = false
+
     private val mSorts = listOf(null, Parameters.COMMENTS, Parameters.RECENT, Parameters.VIEWS)
     private val mList = listOf(null, Parameters.ANIMATED, Parameters.ATTACHMENTS,
             Parameters.DEBUTS, Parameters.DEBUTS, Parameters.PLAYOFFS, Parameters.REBOUNDS, Parameters.TEAMS)
@@ -57,13 +61,8 @@ class ExploreFragment : BaseFragment(), IShotsView {
         return LayoutInflater.from(activity).inflate(R.layout.fragment_explore, null)
     }
 
-    private fun init() {
-        mPresenter = ShotsPresenter(this)
-    }
-
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        init()  //init放在onCreate中是因为  lazyLoad比onCreateView先走，所以懒加载的操作会因为很多对象还没初始化而不走
         initView()
         bindEvent()
         getShots(false)
@@ -81,15 +80,15 @@ class ExploreFragment : BaseFragment(), IShotsView {
 
     fun getShots(isLoadMore: Boolean = false) {
         isLoading = true
-        val token = mSimpleIo?.getString(Constant.KEY_TOKEN)
+        val token = QuickSimpleIO.getString(Constant.KEY_TOKEN)
         if (token == null || token == "") {
-            mPresenter?.getShots(sort = mSort,
+            mPresenter.getShots(sort = mSort,
                     list = mSortList,
                     timeframe = mTimeFrame,
                     page = mPage,
                     isLoadMore = isLoadMore)
         } else {
-            mPresenter?.getShots(access_token = token,
+            mPresenter.getShots(access_token = token,
                     sort = mSort,
                     list = mSortList,
                     timeframe = mTimeFrame,
@@ -136,7 +135,7 @@ class ExploreFragment : BaseFragment(), IShotsView {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 val linearManager = recyclerView?.layoutManager as LinearLayoutManager
                 val position = linearManager.findLastVisibleItemPosition()
-                if (mShots?.isNotEmpty()!! && position == mShots?.size!!) {
+                if (mShots.isNotEmpty() && position == mShots.size) {
                     if (!isLoading) {
                         mPage += 1
                         getShots(true)
@@ -218,11 +217,11 @@ class ExploreFragment : BaseFragment(), IShotsView {
 
     private fun mountList(shots: MutableList<Shot>) {
         mShots = shots
-        mListAdapter = ItemShotAdapter(mShots!!, { _, position ->
-            EventBus.getDefault().postSticky(mShots!![position])
+        mListAdapter = ItemShotAdapter(mShots, {
+            EventBus.getDefault().postSticky(mShots[it])
             startDetailsActivity()
-        }, { _, position ->
-            EventBus.getDefault().postSticky(shots[position].user)
+        }, {
+            EventBus.getDefault().postSticky(shots[it].user)
             startActivity(Intent(activity, UserActivity::class.java))
         })
         mRecyclerView.adapter = mListAdapter

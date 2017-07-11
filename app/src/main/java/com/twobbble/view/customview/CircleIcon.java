@@ -41,7 +41,7 @@ public class CircleIcon extends View {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CircleIcon);
 
         mText = typedArray.getString(R.styleable.CircleIcon_circleText);
-        mTextSize = (int) typedArray.getDimension(R.styleable.CircleIcon_circleTextSize, Utils.INSTANCE.sp2px(20, getResources().getDisplayMetrics()));
+        mTextSize = (int) typedArray.getDimension(R.styleable.CircleIcon_circleTextSize, Utils.INSTANCE.sp2px(20));
         mColor = typedArray.getColor(R.styleable.CircleIcon_circleColor, getResources().getColor(R.color.colorAccent));
         mIconResId = typedArray.getResourceId(R.styleable.CircleIcon_circleIcon, 0);
 

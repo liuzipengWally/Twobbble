@@ -21,9 +21,15 @@ class SettingsFragment : PreferenceFragment() {
     val KEY_CLEAR_CACHE = "clearCache"
     val KEY_LICENSE = "license"
 
-    private var mVersionItem: PreferenceScreen? = null
-    private var mClearItem: PreferenceScreen? = null
-    private var mLicenseItem: PreferenceScreen? = null
+    private val mVersionItem: PreferenceScreen by lazy {
+        findPreference(KEY_VERSION) as PreferenceScreen
+    }
+    private val mClearItem: PreferenceScreen by lazy {
+        findPreference(KEY_CLEAR_CACHE) as PreferenceScreen
+    }
+    private val mLicenseItem: PreferenceScreen by lazy {
+        findPreference(KEY_LICENSE) as PreferenceScreen
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,16 +38,13 @@ class SettingsFragment : PreferenceFragment() {
     }
 
     private fun init() {
-        mLicenseItem = findPreference(KEY_LICENSE) as PreferenceScreen
-        mVersionItem = findPreference(KEY_VERSION) as PreferenceScreen
-        mVersionItem?.summary = Utils.getVersion(activity)
-        mClearItem = findPreference(KEY_CLEAR_CACHE) as PreferenceScreen
+        mVersionItem.summary = Utils.getVersion(activity)
         Observable.create<String> { subscribe ->
             subscribe.onNext(Utils.formatFileSize(getFolderSize(activity.externalCacheDir).toDouble()))
             subscribe.onCompleted()
         }.compose(RxHelper.singleModeThreadNormal())
                 .subscribe({ size ->
-                    mClearItem?.summary = size
+                    mClearItem.summary = size
                 }, Throwable::printStackTrace)
     }
 
@@ -73,19 +76,19 @@ class SettingsFragment : PreferenceFragment() {
     }
 
     private fun bindEvent() {
-        mVersionItem?.setOnPreferenceClickListener {
+        mVersionItem.setOnPreferenceClickListener {
             Beta.checkUpgrade(true, false)
             true
         }
 
-        mClearItem?.setOnPreferenceClickListener {
+        mClearItem.setOnPreferenceClickListener {
             Utils.deleteFolderFile(activity.externalCacheDir.toString(), true)
-            mClearItem?.summary = "0MB"
+            mClearItem.summary = "0MB"
             toast(R.string.clear_success)
             true
         }
 
-        mLicenseItem?.setOnPreferenceClickListener {
+        mLicenseItem.setOnPreferenceClickListener {
             startActivity(Intent(activity, LicenseActivity::class.java))
             true
         }

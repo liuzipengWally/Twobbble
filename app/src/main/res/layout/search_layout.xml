@@ -22,9 +22,9 @@
             android:id="@+id/mBackBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:foreground="?android:attr/selectableItemBackground"
             android:padding="@dimen/dp8"
             android:src="@drawable/ic_arrow_back_black_24dp" />
 
@@ -45,7 +45,7 @@
             android:id="@+id/mSearchBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:foreground="?android:attr/selectableItemBackground"
+            android:background="?android:attr/selectableItemBackground"
             android:padding="@dimen/dp8"
             android:src="@drawable/ic_search_black_24dp" />
 
@@ -53,7 +53,7 @@
             android:id="@+id/mVoiceBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:foreground="?android:attr/selectableItemBackground"
+            android:background="?android:attr/selectableItemBackground"
             android:padding="@dimen/dp8"
             android:src="@drawable/ic_keyboard_voice_black_24dp" />
 
@@ -61,7 +61,7 @@
             android:id="@+id/mSortBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:foreground="?android:attr/selectableItemBackground"
+            android:background="?android:attr/selectableItemBackground"
             android:padding="@dimen/dp8"
             android:src="@drawable/ic_filter_list_black_24dp"
             android:visibility="gone" />

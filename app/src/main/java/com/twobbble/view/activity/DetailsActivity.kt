@@ -10,6 +10,7 @@ import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewAnimationUtils
@@ -32,15 +33,20 @@ import kotlinx.android.synthetic.main.count_info_layout.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import org.jetbrains.anko.*
 import java.io.File
 import java.util.concurrent.TimeUnit
 
 class DetailsActivity : BaseActivity(), IDetailsView {
-    private var mPresenter: DetailsPresenter? = null
+    private val mPresenter: DetailsPresenter by lazy {
+        DetailsPresenter(this)
+    }
     private var mId: Long = 0
     private var mAdapter: CommentAdapter? = null
-    private var mComments: MutableList<Comment>? = null
-    private var mShot: Shot? = null
+    private  val mComments: MutableList<Comment> by lazy {
+        mutableListOf(Comment())
+    }
+    private lateinit var mShot: Shot
     private var mLiked: Boolean = false
     private var mBucketFragment: BucketsFragment? = null
     private var bucketIsShowing = false
@@ -48,13 +54,8 @@ class DetailsActivity : BaseActivity(), IDetailsView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
-        init()
         initView()
         EventBus.getDefault().register(this)
-    }
-
-    private fun init() {
-        mPresenter = DetailsPresenter(this)
     }
 
     private fun initView() {
@@ -85,7 +86,7 @@ class DetailsActivity : BaseActivity(), IDetailsView {
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
-        mPresenter?.unSubscriber()
+        mPresenter.unSubscriber()
     }
 
     private fun bindEvent() {
@@ -93,13 +94,13 @@ class DetailsActivity : BaseActivity(), IDetailsView {
 
         mContentImg.setOnClickListener {
             val intent = Intent(this, ImageFullActivity::class.java)
-            intent.putExtra(ImageFullActivity.KEY_TITLE, mShot?.title)
-            val urlNormal: String = mShot?.images?.hidpi ?: mShot?.images?.normal!!
+            intent.putExtra(ImageFullActivity.KEY_TITLE, mShot.title)
+            val urlNormal: String = mShot.images?.hidpi ?: mShot.images?.normal!!
             intent.putExtra(ImageFullActivity.KEY_URL_NORMAL, urlNormal)
-            if (mShot?.images?.hidpi != null) {
-                intent.putExtra(ImageFullActivity.KEY_URL_LOW, mShot?.images?.normal)
+            if (mShot.images?.hidpi != null) {
+                intent.putExtra(ImageFullActivity.KEY_URL_LOW, mShot.images?.normal)
             } else {
-                intent.putExtra(ImageFullActivity.KEY_URL_LOW, mShot?.images?.teaser)
+                intent.putExtra(ImageFullActivity.KEY_URL_LOW, mShot.images?.teaser)
             }
             startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
         }
@@ -107,12 +108,12 @@ class DetailsActivity : BaseActivity(), IDetailsView {
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.mDownload -> {
-                    val url = mShot?.images?.hidpi ?: mShot?.images?.normal
+                    val url = mShot.images?.hidpi ?: mShot.images?.normal
                     val urls = url?.split(".")
                     DownloadUtils.DownloadImg(url.toString(),
-                            "${Constant.IMAGE_DOWNLOAD_PATH}${File.separator}${mShot?.title}.${urls!![urls.size - 1]}")
+                            "${Constant.IMAGE_DOWNLOAD_PATH}${File.separator}${mShot.title}.${urls!![urls.size - 1]}")
                 }
-                R.id.mOpenInBrowser -> openLink(mShot?.html_url!!)
+                R.id.mOpenInBrowser -> openLink(mShot.html_url!!)
                 R.id.mShare -> share()
                 R.id.mAddBucket -> showBuckets()
             }
@@ -122,10 +123,10 @@ class DetailsActivity : BaseActivity(), IDetailsView {
         mFavoriteBtn.setOnClickListener {
             if (singleData.isLogin()) {
                 if (!mLiked) {
-                    mPresenter?.likeShot(mShot?.id!!, singleData.token!!)
+                    mPresenter.likeShot(mShot.id, singleData.token!!)
                     mLiked = true
                 } else {
-                    mPresenter?.unlikeShot(mShot?.id!!, singleData.token!!)
+                    mPresenter.unlikeShot(mShot.id, singleData.token!!)
                     mLiked = false
                 }
 
@@ -152,7 +153,7 @@ class DetailsActivity : BaseActivity(), IDetailsView {
 
         RxView.clicks(mSendBtn).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe {
             Utils.hideKeyboard(mCommentEdit)
-            mPresenter?.createComment(mShot!!.id, singleData.token!!, mCommentEdit.text.toString())
+            mPresenter.createComment(mShot.id, singleData.token!!, mCommentEdit.text.toString())
         }
     }
 
@@ -229,7 +230,7 @@ class DetailsActivity : BaseActivity(), IDetailsView {
         sendIntent.action = Intent.ACTION_SEND
         sendIntent.type = "text/plain"
         sendIntent.putExtra(Intent.EXTRA_TEXT,
-                "我分享了${mShot?.user?.name}的作品《${mShot?.title}》\n ${mShot?.html_url}\n来自@${resources.getString(R.string.app_name)}")
+                "我分享了${mShot.user?.name}的作品《${mShot.title}》\n ${mShot.html_url}\n来自@${resources.getString(R.string.app_name)}")
         sendIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(Intent.createChooser(sendIntent, resources.getString(R.string.share)))
     }
@@ -239,14 +240,14 @@ class DetailsActivity : BaseActivity(), IDetailsView {
         mId = shot.id
         mShot = shot
         if (singleData.isLogin()) {
-            mPresenter?.checkIfLikeShot(shot.id, singleData.token.toString())
+            mPresenter.checkIfLikeShot(shot.id, singleData.token.toString())
         }
         mountData(shot)
         getComments()
         ImageLoad.frescoLoadCircle(mCommentAvatarImg, singleData.avatar.toString())
 //        EventBus.getDefault().removeStickyEvent(shot)
         if (mBucketFragment == null) {
-            mBucketFragment = BucketsFragment.newInstance(BucketsFragment.ADD_SHOT, mShot!!.id)
+            mBucketFragment = BucketsFragment.newInstance(BucketsFragment.ADD_SHOT, mShot.id)
             fragmentManager.beginTransaction().add(R.id.mAddLayout, mBucketFragment).commit()
         }
     }
@@ -258,7 +259,7 @@ class DetailsActivity : BaseActivity(), IDetailsView {
 
     private fun getComments() {
         val token = singleData.token ?: Constant.ACCESS_TOKEN
-        mPresenter?.getComments(mId, token, null)
+        mPresenter.getComments(mId, token, null)
     }
 
     private fun mountData(shot: Shot) {
@@ -267,10 +268,9 @@ class DetailsActivity : BaseActivity(), IDetailsView {
                 urlNormal,
                 shot.images?.teaser.toString(), true)
 
-        mComments = mutableListOf(Comment())
-        mAdapter = CommentAdapter(shot, mComments!!,
+        mAdapter = CommentAdapter(shot, mComments,
                 userClick = { _, i ->
-                    EventBus.getDefault().postSticky(mComments!![i].user)
+                    EventBus.getDefault().postSticky(mComments[i].user)
                     startActivity(Intent(this, UserActivity::class.java))
                 }, likeClick = { _, _ ->
             //TODO 评论中的喜欢点击事件
@@ -312,7 +312,7 @@ class DetailsActivity : BaseActivity(), IDetailsView {
 
     override fun addCommentSuccess(comment: Comment?) {
         if (comment != null) {
-            mAdapter?.addItem(mComments?.size!!, comment)
+            mAdapter?.addItem(mComments.size, comment)
         }
     }
 

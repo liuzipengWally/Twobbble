@@ -39,14 +39,16 @@ class CommentAdapter(val mShot: Shot,
     private val COMMENT = 2
     private var mFirstHolder: ViewHolder? = null
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (position != 0) {
-            holder?.bindComment(mComments[position])
+            holder.bindComment(mComments[position])
             bindCommentEvent(holder, position)
         } else {
-            holder?.bindShotInfo(mShot)
-            if (mShot.tags != null && mShot.tags!!.isNotEmpty()) {
-                mountTags(mShot.tags!!, holder)
+            holder.bindShotInfo(mShot)
+            mShot.tags?.let {
+                if (mShot.tags!!.isNotEmpty()) {
+                    mountTags(mShot.tags!!, holder)
+                }
             }
             mFirstHolder = holder
         }
@@ -83,35 +85,35 @@ class CommentAdapter(val mShot: Shot,
     /**
      * 绑定标签数据
      */
-    private fun mountTags(tags: List<String>, holder: ViewHolder?) {
-        holder?.itemView?.mTagLayout?.visibility = View.VISIBLE
-        holder?.itemView?.mTags?.adapter = object : TagAdapter<String>(tags) {
-            override fun getView(parent: FlowLayout?, position: Int, t: String?): View {
-                val mTagBtn = LayoutInflater.from(parent?.ctx).inflate(R.layout.tag_layout, holder?.itemView?.mTags, false) as TextView
+    private fun mountTags(tags: List<String>, holder: ViewHolder) {
+        holder.itemView.mTagLayout.visibility = View.VISIBLE
+        holder.itemView.mTags.adapter = object : TagAdapter<String>(tags) {
+            override fun getView(parent: FlowLayout, position: Int, t: String?): View {
+                val mTagBtn = LayoutInflater.from(parent.ctx).inflate(R.layout.tag_layout, holder.itemView.mTags, false) as TextView
                 if (position != tags.size - 1) mTagBtn.text = "$t," else mTagBtn.text = t
                 mTagBtn.setOnClickListener {
-                    tagClick.invoke(position)
+                    tagClick(position)
                 }
                 return mTagBtn
             }
         }
     }
 
-    private fun bindCommentEvent(holder: ViewHolder?, position: Int) {
-        holder?.itemView?.mCommentAvatarImg?.setOnClickListener {
-            userClick.invoke(it, position)
+    private fun bindCommentEvent(holder: ViewHolder, position: Int) {
+        holder.itemView.mCommentAvatarImg.setOnClickListener {
+            userClick(it, position)
         }
 
-        holder?.itemView?.mCommentLikeBtn?.setOnClickListener {
-            likeClick.invoke(holder.itemView.mLikeImg, position)
+        holder.itemView.mCommentLikeBtn.setOnClickListener {
+            likeClick(holder.itemView.mLikeImg, position)
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         if (viewType == COMMENT) {
-            return ViewHolder(LayoutInflater.from(parent?.context).inflate(R.layout.item_comment, parent, false))
+            return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_comment, parent, false))
         } else {
-            return ViewHolder(LayoutInflater.from(parent?.context).inflate(R.layout.item_details_head, parent, false))
+            return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_details_head, parent, false))
         }
     }
 
@@ -145,11 +147,11 @@ class CommentAdapter(val mShot: Shot,
                 itemView.mAttachmentCountText.text = attachments_count.toString()
             }
 
-            itemView.mCommentHintText.setOnClickListener { commentHintClick.invoke() }
-            itemView.mAuthorLayout.setOnClickListener { authorClick.invoke() }
-            itemView.mLikeCountBtn.setOnClickListener { countClick.invoke(Constant.DETAILS_EVENT_LIKE_COUNT) }
-            itemView.mAttachmentCountBtn.setOnClickListener { countClick.invoke(Constant.DETAILS_EVENT_ATTACHMENT_COUNT) }
-            itemView.mBucketCountBtn.setOnClickListener { countClick.invoke(Constant.DETAILS_EVENT_BUCKET_COUNT) }
+            itemView.mCommentHintText.setOnClickListener { commentHintClick() }
+            itemView.mAuthorLayout.setOnClickListener { authorClick() }
+            itemView.mLikeCountBtn.setOnClickListener { countClick(Constant.DETAILS_EVENT_LIKE_COUNT) }
+            itemView.mAttachmentCountBtn.setOnClickListener { countClick(Constant.DETAILS_EVENT_ATTACHMENT_COUNT) }
+            itemView.mBucketCountBtn.setOnClickListener { countClick(Constant.DETAILS_EVENT_BUCKET_COUNT) }
         }
     }
 }

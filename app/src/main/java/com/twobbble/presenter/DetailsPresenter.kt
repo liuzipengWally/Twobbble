@@ -15,14 +15,12 @@ import org.jetbrains.annotations.NotNull
  * Created by liuzipeng on 2017/3/1.
  */
 class DetailsPresenter(val mDetailsView: IDetailsView) : BasePresenter() {
-    private var mDetailsBiz: IDetailsBiz? = null
-
-    init {
-        mDetailsBiz = DetailsBiz()
+    private val mDetailsBiz: IDetailsBiz by lazy {
+        DetailsBiz()
     }
 
     fun getComments(@NotNull id: Long, @NotNull token: String, page: Int?) {
-        val subscribe = mDetailsBiz?.getComments(id, token, page, object : NetSubscriber<MutableList<Comment>>(mDetailsView) {
+        val subscribe = mDetailsBiz.getComments(id, token, page, object : NetSubscriber<MutableList<Comment>>(mDetailsView) {
             override fun onFailed(msg: String) {
                 mDetailsView.getCommentsFailed(msg)
             }
@@ -32,11 +30,11 @@ class DetailsPresenter(val mDetailsView: IDetailsView) : BasePresenter() {
             }
         })
 
-        mSubscription?.add(subscribe)
+        mSubscription.add(subscribe)
     }
 
     fun likeShot(@NotNull id: Long, @NotNull token: String) {
-        val subscribe = mDetailsBiz?.likeShot(id, token, object : NetSubscriber<LikeShotResponse>() {
+        val subscribe = mDetailsBiz.likeShot(id, token, object : NetSubscriber<LikeShotResponse>() {
             override fun onFailed(msg: String) {
                 mDetailsView.likeShotFailed("${App.instance.resources.getString(R.string.like_failed)}:$msg")
             }
@@ -46,11 +44,11 @@ class DetailsPresenter(val mDetailsView: IDetailsView) : BasePresenter() {
             }
         })
 
-        mSubscription?.add(subscribe)
+        mSubscription.add(subscribe)
     }
 
     fun checkIfLikeShot(@NotNull id: Long, @NotNull token: String) {
-        val subscribe = mDetailsBiz?.checkIfLikeShot(id, token, object : NetSubscriber<LikeShotResponse>() {
+        val subscribe = mDetailsBiz.checkIfLikeShot(id, token, object : NetSubscriber<LikeShotResponse>() {
             override fun onFailed(msg: String) {
                 log(msg)
                 mDetailsView.checkIfLikeFailed()
@@ -61,11 +59,11 @@ class DetailsPresenter(val mDetailsView: IDetailsView) : BasePresenter() {
             }
         })
 
-        mSubscription?.add(subscribe)
+        mSubscription.add(subscribe)
     }
 
     fun unlikeShot(@NotNull id: Long, @NotNull token: String) {
-        val subscribe = mDetailsBiz?.unlikeShot(id, token, object : NetSubscriber<LikeShotResponse>() {
+        val subscribe = mDetailsBiz.unlikeShot(id, token, object : NetSubscriber<LikeShotResponse>() {
             override fun onFailed(msg: String) {
                 mDetailsView.unLikeShotFailed("${App.instance.resources.getString(R.string.unlike_failed)}:$msg")
             }
@@ -75,11 +73,11 @@ class DetailsPresenter(val mDetailsView: IDetailsView) : BasePresenter() {
             }
         })
 
-        mSubscription?.add(subscribe)
+        mSubscription.add(subscribe)
     }
 
     fun createComment(@NotNull id: Long, @NotNull token: String, @NotNull body: String) {
-        val subscribe = mDetailsBiz?.createComment(id, token, body, object : NetSubscriber<Comment>() {
+        val subscribe = mDetailsBiz.createComment(id, token, body, object : NetSubscriber<Comment>() {
             override fun onStart() {
                 super.onStart()
                 mDetailsView.showSendProgress()
@@ -100,6 +98,6 @@ class DetailsPresenter(val mDetailsView: IDetailsView) : BasePresenter() {
             }
         })
 
-        mSubscription?.add(subscribe)
+        mSubscription.add(subscribe)
     }
 }

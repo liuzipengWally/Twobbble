@@ -14,10 +14,8 @@ import com.twobbble.view.api.IUserView
  * Created by liuzipeng on 2017/3/15.
  */
 class UserPresenter(val mUserView: IUserView) : BasePresenter() {
-    private var mUserBiz: IUserBiz? = null
-
-    init {
-        mUserBiz = UserBiz()
+    private val mUserBiz: IUserBiz by lazy {
+        UserBiz()
     }
 
     fun getUserShot(user: String,
@@ -26,7 +24,7 @@ class UserPresenter(val mUserView: IUserView) : BasePresenter() {
                     page: Int,
                     isLoadMore: Boolean) {
 
-        val subscribe = mUserBiz?.getUserShot(user, id, token, page, object : NetSubscriber<MutableList<Shot>>(mUserView) {
+        val subscribe = mUserBiz.getUserShot(user, id, token, page, object : NetSubscriber<MutableList<Shot>>(mUserView) {
             override fun onNext(t: MutableList<Shot>?) {
                 mUserView.getShotSuccess(t, isLoadMore)
             }
@@ -36,11 +34,11 @@ class UserPresenter(val mUserView: IUserView) : BasePresenter() {
             }
         })
 
-        mSubscription?.add(subscribe)
+        mSubscription.add(subscribe)
     }
 
     fun checkIfFollowingUser(id: Long) {
-        val subscribe = mUserBiz?.checkIfFollowingUser(id, singleData.token!!, object : NetSubscriber<NullResponse>() {
+        val subscribe = mUserBiz.checkIfFollowingUser(id, singleData.token!!, object : NetSubscriber<NullResponse>() {
             override fun onNext(t: NullResponse?) {
                 mUserView.following()
             }
@@ -51,11 +49,11 @@ class UserPresenter(val mUserView: IUserView) : BasePresenter() {
             }
         })
 
-        mSubscription?.add(subscribe)
+        mSubscription.add(subscribe)
     }
 
     fun followUser(id: Long) {
-        val subscribe = mUserBiz?.followUser(id, singleData.token!!, object : NetSubscriber<NullResponse>() {
+        val subscribe = mUserBiz.followUser(id, singleData.token!!, object : NetSubscriber<NullResponse>() {
             override fun onCompleted() {
                 super.onCompleted()
                 mUserView.hideProgressDialog()
@@ -76,11 +74,11 @@ class UserPresenter(val mUserView: IUserView) : BasePresenter() {
             }
         })
 
-        mSubscription?.add(subscribe)
+        mSubscription.add(subscribe)
     }
 
     fun unFollowUser(id: Long) {
-        val subscribe = mUserBiz?.unFollowUser(id, singleData.token!!, object : NetSubscriber<NullResponse>() {
+        val subscribe = mUserBiz.unFollowUser(id, singleData.token!!, object : NetSubscriber<NullResponse>() {
             override fun onCompleted() {
                 super.onCompleted()
                 mUserView.hideProgressDialog()
@@ -101,6 +99,6 @@ class UserPresenter(val mUserView: IUserView) : BasePresenter() {
             }
         })
 
-        mSubscription?.add(subscribe)
+        mSubscription.add(subscribe)
     }
 }
