@@ -135,6 +135,7 @@ class LikesFragment : BaseFragment(), ILikeView {
     }
 
     private fun mountList(likes: MutableList<Like>) {
+        mLikes.clear()
         mLikes.addAll(likes)
         mListAdapter = LikesAdapter(mLikes, { _, position ->
             EventBus.getDefault().postSticky(mLikes[position].shot)

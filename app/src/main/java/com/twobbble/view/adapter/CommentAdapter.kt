@@ -67,8 +67,10 @@ class CommentAdapter(val mShot: Shot,
     }
 
     fun showCommentHint(msgResId: Int) {
-        mFirstHolder?.itemView?.mCommentHintText?.visibility = View.VISIBLE
-        mFirstHolder?.itemView?.mCommentHintText?.setText(msgResId)
+        mFirstHolder?.let {
+            it.itemView.mCommentHintText.visibility = View.VISIBLE
+            it.itemView.mCommentHintText.setText(msgResId)
+        }
     }
 
     fun addItem(position: Int, comment: Comment) {

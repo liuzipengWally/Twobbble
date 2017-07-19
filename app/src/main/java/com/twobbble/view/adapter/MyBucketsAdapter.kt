@@ -11,6 +11,7 @@ import com.twobbble.R
 import com.twobbble.application.App
 import com.twobbble.entity.Bucket
 import com.twobbble.tools.Utils
+import com.twobbble.tools.hasNavigationBar
 import com.twobbble.tools.log
 import kotlinx.android.synthetic.main.item_bucket.view.*
 
@@ -24,7 +25,7 @@ class MyBucketsAdapter(val mBuckets: MutableList<Bucket>, val onClick: (Int) -> 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bindMyBuckets(mBuckets[position], position)
-        if (Utils.hasNavigationBar(App.instance)) {
+        App.instance.hasNavigationBar {
             if (position == mBuckets.size - 1) {
                 val item = holder.itemView.mItemBucket
                 val params = item.layoutParams as ViewGroup.MarginLayoutParams
@@ -55,7 +56,7 @@ class MyBucketsAdapter(val mBuckets: MutableList<Bucket>, val onClick: (Int) -> 
 
     private fun addItemAnimation(view: View?) {
         view?.let {
-            val translationX = ObjectAnimator.ofFloat(view, "translationX", view.width.toFloat(), 0f)
+            val translationX = ObjectAnimator.ofFloat(it, "translationX", it.width.toFloat(), 0f)
             translationX.duration = 500
             translationX.start()
         }

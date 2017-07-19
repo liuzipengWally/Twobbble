@@ -16,6 +16,7 @@ import com.twobbble.application.App
 import com.twobbble.entity.Shot
 import com.twobbble.tools.ImageLoad
 import com.twobbble.tools.Utils
+import com.twobbble.tools.hasNavigationBar
 import kotlinx.android.synthetic.main.item_card_bottom.view.*
 import kotlinx.android.synthetic.main.item_card_head.view.*
 import kotlinx.android.synthetic.main.item_shots.view.*
@@ -44,10 +45,8 @@ class ItemShotAdapter(var mShots: MutableList<Shot>, val itemClick: (Int) -> Uni
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (position == mShots.size) {
-            if (Utils.hasNavigationBar(App.instance)) {
+            App.instance.hasNavigationBar {
                 holder.itemView.mNavigationBar.visibility = View.VISIBLE
-            } else {
-                holder.itemView.mNavigationBar.visibility = View.GONE
             }
             mLastViewHolder = holder
         } else {
@@ -72,7 +71,7 @@ class ItemShotAdapter(var mShots: MutableList<Shot>, val itemClick: (Int) -> Uni
 
     private fun addItemAnimation(mItemCard: CardView?) {
         mItemCard?.let {
-            val scaleX = ObjectAnimator.ofFloat(mItemCard, "translationY", 500f, 0f)
+            val scaleX = ObjectAnimator.ofFloat(it, "translationY", 500f, 0f)
 //        val scaleY = ObjectAnimator.ofFloat(mItemCard, "scaleY", 0.5f, 1f)
 //        val set = AnimatorSet()
 //        set.playTogether(scaleX, scaleY)

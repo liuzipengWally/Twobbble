@@ -158,6 +158,7 @@ class ShotsFragment : BaseFragment(), IShotsView {
     }
 
     private fun mountList(shots: MutableList<Shot>) {
+        mShots.clear()
         mShots.addAll(shots)
         mListAdapter = ItemShotAdapter(mShots, {
             EventBus.getDefault().postSticky(mShots[it])

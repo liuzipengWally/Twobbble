@@ -15,6 +15,7 @@ import com.twobbble.application.App
 import com.twobbble.entity.Shot
 import com.twobbble.tools.ImageLoad
 import com.twobbble.tools.Utils
+import com.twobbble.tools.hasNavigationBar
 import com.twobbble.tools.log
 import kotlinx.android.synthetic.main.bio_layout.view.*
 import kotlinx.android.synthetic.main.item_comment_load.view.*
@@ -41,7 +42,7 @@ class UserShotAdapter(val mShots: MutableList<Shot>, val bio: String?, val itemC
         when (getItemViewType(position)) {
             BIO -> bindBio(holder)
             LOAD -> {
-                if (Utils.hasNavigationBar(App.instance)) {
+                App.instance.hasNavigationBar {
                     holder.itemView.mNavigationBar.visibility = View.VISIBLE
                 }
                 mLoadHolder = holder
@@ -78,17 +79,21 @@ class UserShotAdapter(val mShots: MutableList<Shot>, val bio: String?, val itemC
     }
 
     fun showLoadHint(msgResId: Int) {
-        mLoadHolder?.itemView?.mCommentHintText?.visibility = View.VISIBLE
-        mLoadHolder?.itemView?.mCommentHintText?.setText(msgResId)
+        mLoadHolder?.let {
+            it.itemView.mCommentHintText.visibility = View.VISIBLE
+            it.itemView.mCommentHintText.setText(msgResId)
+        }
     }
 
     fun loadError(msgResId: Int, retryListener: () -> Unit) {
-        mLoadHolder?.itemView?.mCommentProgress?.visibility = View.GONE
-        showLoadHint(msgResId)
-        mLoadHolder?.itemView?.mLoadLayout?.setOnClickListener {
-            mLoadHolder?.itemView?.mCommentProgress?.visibility = View.VISIBLE
-            mLoadHolder?.itemView?.mCommentHintText?.visibility = View.GONE
-            retryListener()
+        mLoadHolder?.let { holder ->
+            holder.itemView.mCommentProgress.visibility = View.GONE
+            showLoadHint(msgResId)
+            holder.itemView.mLoadLayout.setOnClickListener {
+                holder.itemView.mCommentProgress.visibility = View.VISIBLE
+                holder.itemView.mCommentHintText.visibility = View.GONE
+                retryListener()
+            }
         }
     }
 

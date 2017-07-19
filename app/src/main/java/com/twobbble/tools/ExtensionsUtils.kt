@@ -8,8 +8,7 @@ import android.speech.RecognizerIntent
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat.startActivityForResult
 import android.util.Log
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -124,4 +123,16 @@ fun Activity.startSpeak() {
     intent.putExtra(RecognizerIntent.EXTRA_PROMPT, resources.getString(R.string.start_speak))
     //开始执行我们的Intent、语音识别
     startActivityForResult(intent, Constant.VOICE_CODE)
+}
+
+inline fun Context.hasNavigationBar(block: () -> Unit) {
+    //通过判断设备是否有返回键、菜单键(不是虚拟键,是手机屏幕外的按键)来确定是否有navigation bar
+    val hasMenuKey = ViewConfiguration.get(this)
+            .hasPermanentMenuKey()
+    val hasBackKey = KeyCharacterMap
+            .deviceHasKey(KeyEvent.KEYCODE_BACK)
+
+    if (!hasMenuKey && !hasBackKey) {
+        block()
+    }
 }

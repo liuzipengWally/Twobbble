@@ -16,10 +16,7 @@ import com.twobbble.entity.Bucket
 import com.twobbble.event.HideBucketEvent
 import com.twobbble.event.OpenDrawerEvent
 import com.twobbble.presenter.MyBucketsPresenter
-import com.twobbble.tools.Utils
-import com.twobbble.tools.showErrorImg
-import com.twobbble.tools.singleData
-import com.twobbble.tools.toast
+import com.twobbble.tools.*
 import com.twobbble.view.activity.BucketShotsActivity
 import com.twobbble.view.adapter.MyBucketsAdapter
 import com.twobbble.view.api.IMyBucketsView
@@ -99,9 +96,11 @@ class BucketsFragment : BaseFragment(), IMyBucketsView {
     }
 
     private fun initView() {
-        if (Utils.hasNavigationBar(activity) && mType != ADD_SHOT) {
-            val params = mAddBtn.layoutParams as ViewGroup.MarginLayoutParams
-            params.setMargins(0, 0, Utils.dp2px(16).toInt(), Utils.dp2px(64).toInt())
+        activity.hasNavigationBar {
+            if (mType != ADD_SHOT) {
+                val params = mAddBtn.layoutParams as ViewGroup.MarginLayoutParams
+                params.setMargins(0, 0, Utils.dp2px(16).toInt(), Utils.dp2px(64).toInt())
+            }
         }
 
         mRefresh.setColorSchemeResources(R.color.google_red, R.color.google_yellow, R.color.google_green, R.color.google_blue)
@@ -129,8 +128,8 @@ class BucketsFragment : BaseFragment(), IMyBucketsView {
 
     override fun onDestroy() {
         super.onDestroy()
-        mDialogManager?.dismissAll()
-        mPresenter?.unSubscriber()
+        mDialogManager.dismissAll()
+        mPresenter.unSubscriber()
     }
 
     private fun bindEvent() {
@@ -178,6 +177,7 @@ class BucketsFragment : BaseFragment(), IMyBucketsView {
 
     override fun getBucketsSuccess(buckets: MutableList<Bucket>?) {
         if (buckets != null) {
+            mBuckets.clear()
             mBuckets.addAll(buckets)
             mRecyclerView.visibility = View.VISIBLE
             mRecyclerView.adapter = getAdapter(mBuckets)

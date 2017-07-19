@@ -17,6 +17,7 @@ import com.twobbble.entity.Like
 import com.twobbble.entity.Shot
 import com.twobbble.tools.ImageLoad
 import com.twobbble.tools.Utils
+import com.twobbble.tools.hasNavigationBar
 import com.twobbble.tools.log
 import kotlinx.android.synthetic.main.item_card_bottom.view.*
 import kotlinx.android.synthetic.main.item_card_head.view.*
@@ -45,10 +46,8 @@ class LikesAdapter(var mLikes: MutableList<Like>, val itemClick: (View, Int) -> 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (position == mLikes.size) {
-            if (Utils.hasNavigationBar(App.instance)) {
+            App.instance.hasNavigationBar {
                 holder.itemView.mNavigationBar.visibility = View.VISIBLE
-            } else {
-                holder.itemView.mNavigationBar.visibility = View.GONE
             }
             mLastViewHolder = holder
         } else {
@@ -69,8 +68,8 @@ class LikesAdapter(var mLikes: MutableList<Like>, val itemClick: (View, Int) -> 
 
     private fun addItemAnimation(mItemCard: CardView?) {
         mItemCard?.let {
-            val scaleX = ObjectAnimator.ofFloat(mItemCard, "scaleX", 0.5f, 1f)
-            val scaleY = ObjectAnimator.ofFloat(mItemCard, "scaleY", 0.5f, 1f)
+            val scaleX = ObjectAnimator.ofFloat(it, "scaleX", 0.5f, 1f)
+            val scaleY = ObjectAnimator.ofFloat(it, "scaleY", 0.5f, 1f)
             val set = AnimatorSet()
             set.playTogether(scaleX, scaleY)
             set.duration = 500
@@ -90,13 +89,16 @@ class LikesAdapter(var mLikes: MutableList<Like>, val itemClick: (View, Int) -> 
     }
 
     fun loadError(retryListener: () -> Unit) {
-        mLastViewHolder?.itemView?.mRetryLoadProgress?.visibility = View.GONE
-        mLastViewHolder?.itemView?.mReTryText?.visibility = View.VISIBLE
-        mLastViewHolder?.itemView?.mLoadLayout?.setOnClickListener {
-            mLastViewHolder?.itemView?.mRetryLoadProgress?.visibility = View.VISIBLE
-            mLastViewHolder?.itemView?.mReTryText?.visibility = View.GONE
-            retryListener()
+        mLastViewHolder?.let { holder ->
+            holder.itemView.mRetryLoadProgress.visibility = View.GONE
+            holder.itemView.mReTryText.visibility = View.VISIBLE
+            holder.itemView.mLoadLayout.setOnClickListener {
+                holder.itemView.mRetryLoadProgress.visibility = View.VISIBLE
+                holder.itemView.mReTryText.visibility = View.GONE
+                retryListener()
+            }
         }
+
     }
 
     fun hideProgress() {
