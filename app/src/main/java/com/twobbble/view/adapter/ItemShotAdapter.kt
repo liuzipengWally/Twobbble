@@ -27,9 +27,12 @@ import kotlinx.android.synthetic.main.pull_up_load_layout.view.*
  * Created by liuzipeng on 2017/2/22.
  */
 class ItemShotAdapter(var mShots: MutableList<Shot>, val itemClick: (Int) -> Unit, val userClick: (Int) -> Unit) : RecyclerView.Adapter<ItemShotAdapter.ViewHolder>() {
-    val NORMAL = 0
-    val LOAD_MORE = 1
-    val CARD_TAP_DURATION: Long = 100
+    companion object {
+        val NORMAL = 0
+        val LOAD_MORE = 1
+        val CARD_TAP_DURATION: Long = 100
+    }
+
     lateinit private var mLastViewHolder: ViewHolder
     private var mOldPosition = 0
 
@@ -71,12 +74,12 @@ class ItemShotAdapter(var mShots: MutableList<Shot>, val itemClick: (Int) -> Uni
 
     private fun addItemAnimation(mItemCard: CardView?) {
         mItemCard?.let {
-            val scaleX = ObjectAnimator.ofFloat(it, "translationY", 500f, 0f)
+            val translationY = ObjectAnimator.ofFloat(it, "translationY", 500f, 0f)
 //        val scaleY = ObjectAnimator.ofFloat(mItemCard, "scaleY", 0.5f, 1f)
 //        val set = AnimatorSet()
 //        set.playTogether(scaleX, scaleY)
-            scaleX.duration = 500
-            scaleX.start()
+            translationY.duration = 500
+            translationY.start()
         }
     }
 

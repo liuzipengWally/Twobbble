@@ -31,15 +31,18 @@ class UserActivity : BaseActivity(), IUserView {
     lateinit private var mShots: MutableList<Shot>
     lateinit private var mPresenter: UserPresenter
 
-    private val MYSELF = 0
-    private val OTHERS = 1
+    companion object {
+        private val MYSELF = 0
+        private val OTHERS = 1
 
-    private val PATH_USER = "user"
-    private val PATH_USERS = "users"
+        private val PATH_USER = "user"
+        private val PATH_USERS = "users"
 
-    val EXPANDED = 0x02
-    val COLLAPSED = 0x03
-    val INTERNEDIATE = 0x04
+        val EXPANDED = 0x02
+        val COLLAPSED = 0x03
+        val INTERNEDIATE = 0x04
+    }
+
     private var mAppBarState = EXPANDED
 
     private var mWho = MYSELF

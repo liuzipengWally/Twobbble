@@ -2,10 +2,10 @@ package com.twobbble.tools
 
 import android.net.ParseException
 import com.google.gson.JsonParseException
+import io.reactivex.Observable
+import io.reactivex.functions.Function
 import org.json.JSONException
-import retrofit2.adapter.rxjava.HttpException
-import rx.Observable
-import rx.functions.Func1
+import retrofit2.HttpException
 import java.net.ConnectException
 import java.net.UnknownHostException
 import javax.net.ssl.SSLHandshakeException
@@ -15,14 +15,16 @@ import javax.net.ssl.SSLHandshakeException
  * Created by liuzipeng on 2017/2/20.
  */
 class NetExceptionHandler {
-    private val UNAUTHORIZED = 401
-    private val FORBIDDEN = 403
-    private val NOT_FOUND = 404
-    private val REQUEST_TIMEOUT = 408
-    private val INTERNAL_SERVER_ERROR = 500
-    private val BAD_GATEWAY = 502
-    private val SERVICE_UNAVAILABLE = 503
-    private val GATEWAY_TIMEOUT = 504
+    companion object {
+        private val UNAUTHORIZED = 401
+        private val FORBIDDEN = 403
+        private val NOT_FOUND = 404
+        private val REQUEST_TIMEOUT = 408
+        private val INTERNAL_SERVER_ERROR = 500
+        private val BAD_GATEWAY = 502
+        private val SERVICE_UNAVAILABLE = 503
+        private val GATEWAY_TIMEOUT = 504
+    }
 
     fun handleException(e: Throwable): ResponseException {
         val ex: ResponseException
@@ -101,8 +103,8 @@ class NetExceptionHandler {
         override var message: String? = null
     }
 
-    open class HttpResponseFunc<T> : Func1<Throwable, Observable<T>> {
-        override fun call(t: Throwable): Observable<T> {
+    open class HttpResponseFunc<T> : Function<Throwable, Observable<T>> {
+        override fun apply(t: Throwable): Observable<T> {
             return Observable.error(NetExceptionHandler().handleException(t))
         }
     }

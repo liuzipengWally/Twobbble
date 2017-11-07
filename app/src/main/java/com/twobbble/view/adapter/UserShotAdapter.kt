@@ -25,10 +25,15 @@ import kotlinx.android.synthetic.main.item_user_shot.view.*
 /**
  * Created by liuzipeng on 2017/3/15.
  */
-class UserShotAdapter(val mShots: MutableList<Shot>, val bio: String?, val itemClick: (View, Int) -> Unit) : RecyclerView.Adapter<UserShotAdapter.ViewHolder>() {
-    private val BIO = 0
-    private val CONTENT = 1
-    private val LOAD = 2
+class UserShotAdapter(private val mShots: MutableList<Shot>,
+                      private val bio: String?,
+                      private val itemClick: (View, Int) -> Unit) : RecyclerView.Adapter<UserShotAdapter.ViewHolder>() {
+    companion object {
+        private val BIO = 0
+        private val CONTENT = 1
+        private val LOAD = 2
+    }
+
     private var mLoadHolder: ViewHolder? = null
     private var mOldPosition = 0
 
@@ -45,6 +50,7 @@ class UserShotAdapter(val mShots: MutableList<Shot>, val bio: String?, val itemC
                 App.instance.hasNavigationBar {
                     holder.itemView.mNavigationBar.visibility = View.VISIBLE
                 }
+
                 mLoadHolder = holder
             }
             else -> bindImg(mShots[position], holder, position)

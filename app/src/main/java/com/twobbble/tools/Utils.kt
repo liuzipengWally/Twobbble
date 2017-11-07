@@ -1,5 +1,6 @@
 package com.twobbble.tools
 
+import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.content.ComponentName
 import android.content.Context
@@ -86,77 +87,18 @@ object Utils {
     }
 
     /**
-     * 替换电话号码中段4位为·
-
-     * @param phoneNumber
-     * *
-     * @return
-     */
-    fun encryptionPhoneNumber(phoneNumber: String): StringBuffer {
-        val buffer = StringBuffer()
-        for (i in 0..phoneNumber.length - 1) {
-            var num = phoneNumber[i]
-            if (i in 3..6) {
-                num = '·'
-            }
-            buffer.append(num)
-        }
-
-        return buffer
-    }
-
-    /**
-     * 判断某个服务是否正在运行的方法
-
-     * @param mContext
-     * *
-     * @param serviceName 是包名+服务的类名（例如:net.loonggg.testbackstage.TestService）
-     * *
-     * @return true代表正在运行，false代表服务没有正在运行
-     */
-    fun isServiceWork(mContext: Context, serviceName: String): Boolean {
-        val myAM = mContext
-                .getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        val myList = myAM.getRunningServices(Integer.MAX_VALUE)
-        if (myList.size <= 0) {
-            return false
-        }
-        val isWorked: Boolean? = myList.any { serviceName == it.service.className }
-        return isWorked!!
-    }
-
-    /**
-     * 激活receiver  用于对付安全软件的自启控制
-
-     * @param context 上下文
-     * *
-     * @param name    要激活的receiver的名字--要带包名例:com.test.TimeReceiver
-     */
-    fun decide(context: Context, name: String) {
-        val pm = context.packageManager
-        val mComponentName = ComponentName(context, name)
-        if (pm.getComponentEnabledSetting(mComponentName) != 1) {
-            pm.setComponentEnabledSetting(mComponentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                    PackageManager.DONT_KILL_APP)
-        }
-    }
-
-    /**
      * 获取版本号
 
      * @param context
      * *
      * @return
      */
-    fun getVersion(context: Context): String {
-        try {
-            val pi = context.packageManager.getPackageInfo(context.packageName, 0)
-            return pi.versionName
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
-            return "版本未知"
-        }
-
+    fun getVersion(context: Context): String = try {
+        val pi = context.packageManager.getPackageInfo(context.packageName, 0)
+        pi.versionName
+    } catch (e: PackageManager.NameNotFoundException) {
+        e.printStackTrace()
+        "版本未知"
     }
 
     /**
@@ -218,25 +160,27 @@ object Utils {
         }
     }
 
-    /**
-     * 获取imei
+    @SuppressLint("MissingPermission")
+            /**
+             * 获取imei
 
-     * @param context
-     * *
-     * @return
-     */
+             * @param context
+             * *
+             * @return
+             */
     fun getDeviceImei(context: Context): String {
         val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
         return telephonyManager.deviceId
     }
 
-    /**
-     * 获取手机号码
+    @SuppressLint("MissingPermission")
+            /**
+             * 获取手机号码
 
-     * @param context
-     * *
-     * @return
-     */
+             * @param context
+             * *
+             * @return
+             */
     fun getPhoneNumber(context: Context): String {
         val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
         return telephonyManager.line1Number.substring(3, 14)

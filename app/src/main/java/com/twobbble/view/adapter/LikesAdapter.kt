@@ -28,10 +28,15 @@ import kotlinx.android.synthetic.main.pull_up_load_layout.view.*
 /**
  * Created by liuzipeng on 2017/2/22.
  */
-class LikesAdapter(var mLikes: MutableList<Like>, val itemClick: (View, Int) -> Unit, val userClick: (View, Int) -> Unit) : RecyclerView.Adapter<LikesAdapter.ViewHolder>() {
-    val NORMAL = 0
-    val LOAD_MORE = 1
-    val CARD_TAP_DURATION: Long = 100
+class LikesAdapter(private var mLikes: MutableList<Like>,
+                   private val itemClick: (View, Int) -> Unit,
+                   private val userClick: (View, Int) -> Unit) : RecyclerView.Adapter<LikesAdapter.ViewHolder>() {
+    companion object {
+        val NORMAL = 0
+        val LOAD_MORE = 1
+        val CARD_TAP_DURATION: Long = 100
+    }
+
     private var mLastViewHolder: ViewHolder? = null
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {

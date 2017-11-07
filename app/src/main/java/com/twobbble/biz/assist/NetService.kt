@@ -2,10 +2,9 @@ package com.twobbble.biz.assist
 
 import com.twobbble.entity.*
 import com.twobbble.tools.Constant
+import io.reactivex.Observable
 import org.jetbrains.annotations.NotNull
 import retrofit2.http.*
-import rx.Observable
-import rx.Observer
 
 /**
  * Created by liuzipeng on 2017/2/21.

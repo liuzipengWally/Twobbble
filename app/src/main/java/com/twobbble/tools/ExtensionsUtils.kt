@@ -4,10 +4,12 @@ import android.app.Activity
 import android.app.Fragment
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.speech.RecognizerIntent
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat.startActivityForResult
 import android.util.Log
+import android.util.TypedValue
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -15,6 +17,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.twobbble.R
 import com.twobbble.application.App
+import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.find
 import org.jetbrains.annotations.NotNull
 
@@ -90,20 +93,20 @@ fun Activity.showErrorImg(@NotNull viewGroup: ViewGroup, @NotNull msg: String, i
 }
 
 /**
- * 隐藏错无图片
+ * 隐藏错误图片
  */
 fun Fragment.hideErrorImg(@NotNull viewGroup: ViewGroup) {
     viewGroup.visibility = View.GONE
 }
 
 /**
- * 隐藏错无图片
+ * 隐藏错误图片
  */
 fun Activity.hideErrorImg(@NotNull viewGroup: ViewGroup) {
     viewGroup.visibility = View.GONE
 }
 
-fun Fragment.startSpeak() {
+inline fun Fragment.startSpeak() {
     //通过Intent传递语音识别的模式
     val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
     //语言模式和自由形式的语音识别
@@ -114,7 +117,7 @@ fun Fragment.startSpeak() {
     startActivityForResult(intent, Constant.VOICE_CODE)
 }
 
-fun Activity.startSpeak() {
+inline fun Activity.startSpeak() {
     //通过Intent传递语音识别的模式
     val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
     //语言模式和自由形式的语音识别
@@ -135,4 +138,46 @@ inline fun Context.hasNavigationBar(block: () -> Unit) {
     if (!hasMenuKey && !hasBackKey) {
         block()
     }
+}
+
+inline fun Any.supportL(block: () -> Unit) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        block()
+    }
+}
+
+/**
+ * sp2px
+ */
+inline fun Int.sp2px(): Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this.toFloat(), App.instance.displayMetrics)
+
+/**
+ * dp2px
+ */
+inline fun Int.dp2px(): Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), App.instance.displayMetrics)
+
+/**
+ * dp2px
+ */
+inline fun Float.dp2px(): Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, App.instance.displayMetrics)
+
+/**
+ * 当前网络是否可用
+ */
+inline fun Any.netAvailable(block: (a: Boolean) -> Unit) {
+    if (Utils.isNetworkAvailable(App.instance)) block(true) else block(false)
+}
+
+/**
+ * 获取字符串
+ */
+inline fun  Context.obtainString(resId: Int): String = this.resources.getString(resId)
+
+/**
+ * 获取颜色
+ */
+inline fun Context.obtainColor(resId: Int): Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    this.resources.getColor(resId, null)
+} else {
+    this.resources.getColor(resId)
 }

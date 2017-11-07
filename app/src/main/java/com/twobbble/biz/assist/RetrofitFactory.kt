@@ -3,14 +3,13 @@ package com.twobbble.biz.assist
 import android.content.Context
 import com.twobbble.application.App
 import com.twobbble.tools.Utils
-import com.twobbble.tools.log
 import okhttp3.Cache
 import okhttp3.CacheControl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
@@ -19,18 +18,19 @@ import java.util.concurrent.TimeUnit
  * Created by liuzipeng on 2017/2/20.
  */
 class RetrofitFactory private constructor() {
-    val API_BASE_URL = "https://api.dribbble.com/v1/"
-    val WEBSITE_BASE_URL = "https://dribbble.com/"
-    val TIMEOUT: Long = 20
     private var mRetrofit: Retrofit? = null
-    private var mNetService: NetService? = null
+    private lateinit var mNetService: NetService
 
     init {
         if (mRetrofit == null) createRetrofit(App.instance)
     }
 
     companion object {
-        fun getInstance(): RetrofitFactory {
+        val API_BASE_URL = "https://api.dribbble.com/v1/"
+        val WEBSITE_BASE_URL = "https://dribbble.com/"
+        val TIMEOUT: Long = 20
+
+        fun instance(): RetrofitFactory {
             return Single.Instance
         }
     }
@@ -43,17 +43,17 @@ class RetrofitFactory private constructor() {
      * 配置OkHttpClient、Retrofit、NetService三个关键对象
      * @param context
      */
-    fun createRetrofit(context: Context) {
+    private fun createRetrofit(context: Context) {
         mRetrofit = Retrofit.Builder().client(constructClient(context)).baseUrl(API_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create()).build()
-        mNetService = mRetrofit?.create(NetService::class.java)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create()).build()
+        mNetService = mRetrofit?.create(NetService::class.java)!!
     }
 
     fun createWebsiteRetrofit(): NetService {
         return Retrofit.Builder().client(constructClient(App.instance)).baseUrl(WEBSITE_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create()).build()
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create()).build()
                 .create(NetService::class.java)
     }
 
@@ -67,7 +67,8 @@ class RetrofitFactory private constructor() {
     private fun constructClient(context: Context): OkHttpClient {
         val cacheSize: Long = 10 * 1024 * 1024
         val file = context.externalCacheDir
-        val client = OkHttpClient.Builder()
+
+        return OkHttpClient.Builder()
                 .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
                 .writeTimeout(TIMEOUT, TimeUnit.SECONDS).readTimeout(TIMEOUT, TimeUnit.SECONDS)
                 .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
@@ -76,14 +77,12 @@ class RetrofitFactory private constructor() {
                 .addInterceptor(getInterceptor())
                 .retryOnConnectionFailure(true)
                 .build()
-
-        return client
     }
 
     /**
      * 设置返回数据的  Interceptor  判断网络   没网读取缓存
      */
-    fun getInterceptor(): Interceptor {
+    private fun getInterceptor(): Interceptor {
         return Interceptor { chain ->
             var request = chain.request()
             if (!Utils.isNetworkAvailable(App.instance)) {
@@ -95,7 +94,7 @@ class RetrofitFactory private constructor() {
         }
     }
 
-    fun getNetworkInterceptor(): Interceptor {
+    private fun getNetworkInterceptor(): Interceptor {
         return Interceptor { chain ->
             val request = chain.request()
             val response = chain.proceed(request)
@@ -123,5 +122,5 @@ class RetrofitFactory private constructor() {
 
      * @return NetService
      */
-    fun getService(): NetService = mNetService!!
+    fun getService(): NetService = mNetService
 }

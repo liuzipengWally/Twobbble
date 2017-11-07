@@ -2,6 +2,7 @@ package com.twobbble.view.customview.behavior
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.FloatingActionButton
@@ -20,12 +21,12 @@ class AutoFabBehavior(context: Context, attrs: AttributeSet) : CoordinatorLayout
     private var mStatus: Boolean = false
 
     //判断滑动方向，因为我们只要垂直滑动，所以用nestedScrollAxes去&ViewCompat.SCROLL_AXIS_VERTICAL，如果不为0，就是垂直
-    override fun onStartNestedScroll(coordinatorLayout: CoordinatorLayout?, child: View?, directTargetChild: View?, target: View?, nestedScrollAxes: Int): Boolean {
-        return nestedScrollAxes and ViewCompat.SCROLL_AXIS_VERTICAL != 0
+    override fun onStartNestedScroll(coordinatorLayout: CoordinatorLayout, child: View, directTargetChild: View, target: View, axes: Int, type: Int): Boolean {
+        return axes and ViewCompat.SCROLL_AXIS_VERTICAL != 0
     }
 
     //根据滑动距离，显示隐藏。
-    override fun onNestedPreScroll(coordinatorLayout: CoordinatorLayout?, child: View?, target: View?, dx: Int, dy: Int, consumed: IntArray?) {
+    override fun onNestedPreScroll(coordinatorLayout: CoordinatorLayout, child: View, target: View, dx: Int, dy: Int, consumed: IntArray, type: Int) {
         if (mAutoHideFab == null) {
             mAutoHideFab = child as FloatingActionButton?
         }
@@ -37,6 +38,7 @@ class AutoFabBehavior(context: Context, attrs: AttributeSet) : CoordinatorLayout
         }
     }
 
+    @SuppressLint("ObjectAnimatorBinding")
     fun show() {
         if (!mStatus) {
             val scaleX = ObjectAnimator.ofFloat(mAutoHideFab, "scaleX", 0f, 1f)
@@ -54,6 +56,7 @@ class AutoFabBehavior(context: Context, attrs: AttributeSet) : CoordinatorLayout
         }
     }
 
+    @SuppressLint("ObjectAnimatorBinding")
     fun hide() {
         if (mStatus) {
             val scaleX = ObjectAnimator.ofFloat(mAutoHideFab, "scaleX", 1f, 0f)

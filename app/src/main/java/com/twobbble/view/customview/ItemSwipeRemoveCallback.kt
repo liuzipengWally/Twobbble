@@ -10,21 +10,16 @@ import android.view.View
  * Created by liuzipeng on 2017/3/10.
  */
 class ItemSwipeRemoveCallback(val onDelete: (Int, View) -> Unit) : ItemTouchHelper.Callback() {
-    override fun getMovementFlags(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?): Int {
-        if (recyclerView?.layoutManager is GridLayoutManager || recyclerView?.layoutManager is StaggeredGridLayoutManager) {
-            val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-            val swipeFlags = 0
-            return makeMovementFlags(dragFlags, swipeFlags)
-        } else {
-            val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
-            val swipeFlags = ItemTouchHelper.END or ItemTouchHelper.START
-            return makeMovementFlags(dragFlags, swipeFlags)
-        }
-    }
-
-    override fun clearView(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?) {
-        super.clearView(recyclerView, viewHolder)
-    }
+    override fun getMovementFlags(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?): Int =
+            if (recyclerView?.layoutManager is GridLayoutManager || recyclerView?.layoutManager is StaggeredGridLayoutManager) {
+                val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+                val swipeFlags = 0
+                makeMovementFlags(dragFlags, swipeFlags)
+            } else {
+                val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
+                val swipeFlags = ItemTouchHelper.END or ItemTouchHelper.START
+                makeMovementFlags(dragFlags, swipeFlags)
+            }
 
     override fun isLongPressDragEnabled(): Boolean = false
 

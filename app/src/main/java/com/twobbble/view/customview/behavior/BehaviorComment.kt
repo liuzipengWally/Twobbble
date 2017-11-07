@@ -14,12 +14,12 @@ import com.twobbble.tools.Utils
  */
 class BehaviorComment(context: Context, attrs: AttributeSet) : CoordinatorLayout.Behavior<View>(context, attrs) {
     //判断滑动方向，因为我们只要垂直滑动，所以用nestedScrollAxes去&ViewCompat.SCROLL_AXIS_VERTICAL，如果不为0，就是垂直
-    override fun onStartNestedScroll(coordinatorLayout: CoordinatorLayout?, child: View?, directTargetChild: View?, target: View?, nestedScrollAxes: Int): Boolean {
-        return nestedScrollAxes and ViewCompat.SCROLL_AXIS_VERTICAL != 0
+    override fun onStartNestedScroll(coordinatorLayout: CoordinatorLayout, child: View, directTargetChild: View, target: View, axes: Int, type: Int): Boolean {
+        return axes and ViewCompat.SCROLL_AXIS_VERTICAL != 0
     }
 
     //根据滑动距离，显示隐藏。
-    override fun onNestedPreScroll(coordinatorLayout: CoordinatorLayout?, child: View?, target: View?, dx: Int, dy: Int, consumed: IntArray?) {
+    override fun onNestedPreScroll(coordinatorLayout: CoordinatorLayout, child: View, target: View, dx: Int, dy: Int, consumed: IntArray, type: Int) {
         if (dy >= 2) {
             hideChild(child)
         } else if (dy < -2) {

@@ -23,6 +23,8 @@ abstract class BaseFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
+
+
     open fun onBackPressed() {}
 
     open fun onKeyDown(keyCode: Int, event: KeyEvent?) {

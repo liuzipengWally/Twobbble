@@ -5,19 +5,14 @@ import android.app.ActivityOptions
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.BottomSheetDialog
-import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.Toolbar
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.OvershootInterpolator
-import com.jakewharton.rxbinding.view.RxView
-import com.jakewharton.rxbinding.widget.RxTextView
+import com.jakewharton.rxbinding2.view.RxView
+import com.jakewharton.rxbinding2.widget.RxTextView
 import com.twobbble.R
 import com.twobbble.entity.Comment
 import com.twobbble.entity.Shot
@@ -33,7 +28,6 @@ import kotlinx.android.synthetic.main.count_info_layout.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.jetbrains.anko.*
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -43,7 +37,7 @@ class DetailsActivity : BaseActivity(), IDetailsView {
     }
     private var mId: Long = 0
     private var mAdapter: CommentAdapter? = null
-    private  val mComments: MutableList<Comment> by lazy {
+    private val mComments: MutableList<Comment> by lazy {
         mutableListOf(Comment())
     }
     private lateinit var mShot: Shot
@@ -110,7 +104,7 @@ class DetailsActivity : BaseActivity(), IDetailsView {
                 R.id.mDownload -> {
                     val url = mShot.images?.hidpi ?: mShot.images?.normal
                     val urls = url?.split(".")
-                    DownloadUtils.DownloadImg(url.toString(),
+                    DownloadUtils.downloadImg(this@DetailsActivity, url.toString(),
                             "${Constant.IMAGE_DOWNLOAD_PATH}${File.separator}${mShot.title}.${urls!![urls.size - 1]}")
                 }
                 R.id.mOpenInBrowser -> openLink(mShot.html_url!!)

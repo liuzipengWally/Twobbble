@@ -26,8 +26,8 @@ import kotlinx.android.synthetic.main.item_details_head.view.*
 /**
  * Created by liuzipeng on 2017/3/1.
  */
-class CommentAdapter(val mShot: Shot,
-                     val mComments: MutableList<Comment>,
+class CommentAdapter(private val mShot: Shot,
+                     private val mComments: MutableList<Comment>,
                      val likeClick: (View, Int) -> Unit,
                      val userClick: (View, Int) -> Unit,
                      val authorClick: () -> Unit,
@@ -35,8 +35,11 @@ class CommentAdapter(val mShot: Shot,
                      val countClick: (Int) -> Unit,
                      val tagClick: (Int) -> Unit) : RecyclerView.Adapter<CommentAdapter.ViewHolder>() {
 
-    private val HEAD = 1
-    private val COMMENT = 2
+    companion object {
+        private val HEAD = 1
+        private val COMMENT = 2
+    }
+
     private var mFirstHolder: ViewHolder? = null
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

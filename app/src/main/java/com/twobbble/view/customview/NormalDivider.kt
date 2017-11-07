@@ -27,7 +27,7 @@ class NormalDivider : RecyclerView.ItemDecoration() {
     override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State?) {
         val childCount = parent.childCount
         if (childCount != 0) {
-            for (i in 0..childCount - 1) {
+            for (i in 0 until childCount) {
                 if (i != childCount - 1) {
                     val child = parent.getChildAt(i)
                     val params = child.layoutParams as RecyclerView.LayoutParams

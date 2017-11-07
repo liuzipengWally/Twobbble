@@ -18,7 +18,9 @@ import org.jetbrains.anko.find
  * Created by liuzipeng on 2017/3/4.
  */
 class SearchBar(context: Context?, attrs: AttributeSet?) : CardView(context, attrs) {
-    val SEARCH_DURATION_ANIM: Long = 300
+    companion object {
+        val SEARCH_DURATION_ANIM: Long = 300
+    }
 
     fun showSearchView(width: Int, animationEnd: () -> Unit) {
         val cx = width - Utils.dp2px(16)

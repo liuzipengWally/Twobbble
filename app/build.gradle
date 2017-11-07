@@ -7,8 +7,8 @@ static def releaseTime() {
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
 
     signingConfigs {
         release {
@@ -29,7 +29,7 @@ android {
     defaultConfig {
         applicationId "com.twobbble"
         minSdkVersion 21
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 2
         versionName "1.0.2"
     }
@@ -56,57 +56,54 @@ android {
     }
 
     android.applicationVariants.all { variant ->
-        variant.outputs.each { output ->
+        variant.outputs.all { output ->
             def outputFile = output.outputFile
             if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                File outputDirectory = new File(outputFile.parent);
-                def fileName
                 if (variant.buildType.name == "release") {
-                    fileName = "Twobbble_v${defaultConfig.versionName}_${releaseTime()}.apk"
+                    outputFileName = "twobbble_v${defaultConfig.versionName}_${releaseTime()}.apk"
                 } else {
-                    fileName = "Twobbble_v${defaultConfig.versionName}_${releaseTime()}_debug.apk"
+                    outputFileName = "twobbble_v${defaultConfig.versionName}_${releaseTime()}_debug.apk"
                 }
-                output.outputFile = new File(outputDirectory, fileName)
             }
         }
+    }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
     }
 }
 
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "org.jetbrains.anko:anko-common:$anko_version"
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.android.support:cardview-v7:25.3.1'
-    compile 'com.android.support:support-v13:25.3.1'
-    compile 'com.squareup.retrofit2:retrofit:2.0.2'
-    compile 'com.google.code.gson:gson:2.7'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
-    compile 'io.reactivex:rxjava:1.1.5'
-    compile 'io.reactivex:rxandroid:1.2.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.1.2'
-    compile 'com.zhy:flowlayout-lib:1.0.3'
-    compile 'com.android.support:support-vector-drawable:25.3.1'
-    compile 'com.android.support:palette-v7:25.3.1'
-    compile 'uk.co.chrisjenx:calligraphy:2.2.0'
-    compile 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
-    compile 'com.facebook.fresco:imagepipeline-okhttp3:1.1.0'
-    compile 'com.facebook.fresco:fresco:1.1.0'
-    compile 'com.facebook.fresco:animated-gif:1.1.0'
-    compile 'me.zhanghai.android.materialprogressbar:library:1.3.0'
-    compile 'com.liulishuo.filedownloader:library:1.4.1'
-    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar'
-    compile 'me.relex:photodraweeview:1.1.2'
-    compile 'com.jakewharton.rxbinding:rxbinding:1.0.1'
-    compile 'de.psdev.licensesdialog:licensesdialog:1.8.1'
-    compile 'com.tencent.bugly:crashreport_upgrade:latest.release'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile "org.jetbrains.anko:anko-sdk25-coroutines:$anko_version"
-    compile "org.jetbrains.anko:anko-appcompat-v7-coroutines:$anko_version"
-    compile "org.jetbrains.anko:anko:$anko_version"
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    api "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    api "org.jetbrains.anko:anko-common:$anko_version"
+    api 'com.android.support:appcompat-v7:26.1.0'
+    api 'org.greenrobot:eventbus:3.0.0'
+    api 'com.android.support:design:26.1.0'
+    api 'com.android.support:cardview-v7:26.1.0'
+    api 'com.android.support:support-v13:26.1.0'
+    api 'com.squareup.retrofit2:retrofit:2.2.0'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
+    api 'com.squareup.retrofit2:converter-gson:2.2.0'
+    api 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+    api 'com.google.code.gson:gson:2.8.1'
+    api 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    api 'io.reactivex.rxjava2:rxjava:2.1.3'
+    api 'com.zhy:flowlayout-lib:1.0.3'
+    api 'com.android.support:support-vector-drawable:26.1.0'
+    api 'com.android.support:palette-v7:26.1.0'
+    api 'uk.co.chrisjenx:calligraphy:2.2.0'
+    api 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
+    api 'com.facebook.fresco:imagepipeline-okhttp3:1.2.0'
+    api 'com.facebook.fresco:fresco:1.2.0'
+    api 'com.facebook.fresco:animated-gif:1.2.0'
+    api 'me.zhanghai.android.materialprogressbar:library:1.4.1'
+    api 'com.liulishuo.filedownloader:library:1.4.1'
+    api 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
+    api 'me.relex:photodraweeview:1.1.2'
+    api 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+    api 'de.psdev.licensesdialog:licensesdialog:1.8.1'
+    api 'com.tencent.bugly:crashreport_upgrade:latest.release'
+    api 'com.android.support.constraint:constraint-layout:1.0.2'
 }

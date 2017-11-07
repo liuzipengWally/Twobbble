@@ -10,16 +10,18 @@ import com.twobbble.tools.RxHelper
 import com.twobbble.tools.Utils
 import com.twobbble.tools.toast
 import com.twobbble.view.activity.LicenseActivity
-import rx.Observable
+import io.reactivex.Observable
 import java.io.File
 
 /**
  * Created by liuzipeng on 2017/3/16.
  */
 class SettingsFragment : PreferenceFragment() {
-    val KEY_VERSION = "version"
-    val KEY_CLEAR_CACHE = "clearCache"
-    val KEY_LICENSE = "license"
+    companion object {
+        val KEY_VERSION = "version"
+        val KEY_CLEAR_CACHE = "clearCache"
+        val KEY_LICENSE = "license"
+    }
 
     private val mVersionItem: PreferenceScreen by lazy {
         findPreference(KEY_VERSION) as PreferenceScreen
@@ -39,9 +41,9 @@ class SettingsFragment : PreferenceFragment() {
 
     private fun init() {
         mVersionItem.summary = Utils.getVersion(activity)
-        Observable.create<String> { subscribe ->
-            subscribe.onNext(Utils.formatFileSize(getFolderSize(activity.externalCacheDir).toDouble()))
-            subscribe.onCompleted()
+        Observable.create<String> {
+            it.onNext(Utils.formatFileSize(getFolderSize(activity.externalCacheDir).toDouble()))
+            it.onComplete()
         }.compose(RxHelper.singleModeThreadNormal())
                 .subscribe({ size ->
                     mClearItem.summary = size

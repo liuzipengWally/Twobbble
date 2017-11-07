@@ -1,14 +1,11 @@
 package com.twobbble.tools
 
 import android.Manifest
+import android.app.Activity
 import com.liulishuo.filedownloader.BaseDownloadTask
 import com.liulishuo.filedownloader.FileDownloadListener
-import android.R.attr.path
 import com.liulishuo.filedownloader.FileDownloader
-import com.tbruyelle.rxpermissions.RxPermissions
-import com.twobbble.application.App
-import rx.functions.Action1
-import java.io.File
+import com.tbruyelle.rxpermissions2.RxPermissions
 
 
 /**
@@ -16,8 +13,8 @@ import java.io.File
  */
 class DownloadUtils {
     companion object {
-        fun DownloadImg(url: String, path: String) {
-            RxPermissions.getInstance(App.instance).request(Manifest.permission.READ_EXTERNAL_STORAGE,
+        fun downloadImg(activity: Activity, url: String, path: String) {
+            RxPermissions(activity).request(Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE).
                     subscribe({ aBoolean ->
                         if (aBoolean) {

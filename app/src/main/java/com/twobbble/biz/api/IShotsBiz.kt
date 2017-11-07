@@ -1,10 +1,8 @@
 package com.twobbble.biz.api
 
 import com.twobbble.entity.Shot
-import com.twobbble.tools.NetSubscriber
+import com.twobbble.tools.NetObserver
 import org.jetbrains.annotations.NotNull
-import rx.Subscriber
-import rx.Subscription
 
 /**
  * Created by liuzipeng on 2017/2/22.
@@ -25,5 +23,5 @@ interface IShotsBiz {
                  timeframe: String?,
                  sort: String?,
                  page: Int?,
-                 subscriber: NetSubscriber<MutableList<Shot>>): Subscription
+                 observer: NetObserver<MutableList<Shot>>)
 }

@@ -49,7 +49,7 @@ class ImageFullActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.mDownload -> {
                     val urls = mUrlNormal?.split(".")
-                    DownloadUtils.DownloadImg(mUrlNormal.toString(),
+                    DownloadUtils.downloadImg(this@ImageFullActivity, mUrlNormal.toString(),
                             "${Constant.IMAGE_DOWNLOAD_PATH}${File.separator}$mTitle.${urls!![urls.size - 1]}")
                 }
             }

@@ -1,10 +1,9 @@
 package com.twobbble.tools
 
-import com.twobbble.view.api.IBaseView
-import rx.Observable
-import rx.Scheduler
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import io.reactivex.ObservableTransformer
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by liuzipeng on 2017/2/21.
@@ -20,9 +19,9 @@ class RxHelper {
          */
         fun <T> listModeThread(subscribeThread: Scheduler? = Schedulers.io(),
                                unSubscribeThread: Scheduler? = Schedulers.io(),
-                               observeThread: Scheduler? = AndroidSchedulers.mainThread()): Observable.Transformer<MutableList<T>, MutableList<T>> {
-            return Observable.Transformer { observable ->
-                observable.onErrorResumeNext(NetExceptionHandler.HttpResponseFunc())
+                               observeThread: Scheduler? = AndroidSchedulers.mainThread()): ObservableTransformer<MutableList<T>, MutableList<T>> {
+            return ObservableTransformer {
+                it.onErrorResumeNext(NetExceptionHandler.HttpResponseFunc())
                         .retry(Constant.RX_RETRY_TIME)
                         .subscribeOn(subscribeThread).
                         unsubscribeOn(unSubscribeThread).
@@ -39,9 +38,9 @@ class RxHelper {
          */
         fun <T> singleModeThread(subscribeThread: Scheduler? = Schedulers.io(),
                                  unSubscribeThread: Scheduler? = Schedulers.io(),
-                                 observeThread: Scheduler? = AndroidSchedulers.mainThread()): Observable.Transformer<T, T> {
-            return Observable.Transformer { observable ->
-                observable.onErrorResumeNext(NetExceptionHandler.HttpResponseFunc())
+                                 observeThread: Scheduler? = AndroidSchedulers.mainThread()): ObservableTransformer<T, T> {
+            return ObservableTransformer {
+                it.onErrorResumeNext(NetExceptionHandler.HttpResponseFunc())
                         .retry(Constant.RX_RETRY_TIME)
                         .subscribeOn(subscribeThread).
                         unsubscribeOn(unSubscribeThread).
@@ -58,9 +57,9 @@ class RxHelper {
          */
         fun <T> singleModeThreadNormal(subscribeThread: Scheduler? = Schedulers.io(),
                                        unSubscribeThread: Scheduler? = Schedulers.io(),
-                                       observeThread: Scheduler? = AndroidSchedulers.mainThread()): Observable.Transformer<T, T> {
-            return Observable.Transformer { observable ->
-                observable.subscribeOn(subscribeThread).
+                                       observeThread: Scheduler? = AndroidSchedulers.mainThread()): ObservableTransformer<T, T> {
+            return ObservableTransformer {
+                it.subscribeOn(subscribeThread).
                         unsubscribeOn(unSubscribeThread).
                         observeOn(observeThread)
             }

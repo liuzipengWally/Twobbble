@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import com.facebook.drawee.view.SimpleDraweeView
 import com.twobbble.R
 import com.twobbble.application.App
 import com.twobbble.tools.Utils
@@ -25,13 +26,13 @@ class CommentDivider : RecyclerView.ItemDecoration() {
     }
 
     override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State?) {
-        val circle_icon = parent.findViewById(R.id.mCommentAvatarImg)
+        val circle_icon = parent.findViewById<SimpleDraweeView>(R.id.mCommentAvatarImg)
         val childCount = parent.childCount
         if (childCount != 0) {
             val left = (circle_icon.width + Utils.dp2px(32))
             val right = (parent.width - Utils.dp2px(16))
 
-            for (i in 0..childCount - 1) {
+            for (i in 0 until childCount) {
                 val child = parent.getChildAt(i)
                 val params = child.layoutParams as RecyclerView.LayoutParams
                 val top = child.bottom + params.bottomMargin
