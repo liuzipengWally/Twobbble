@@ -1,5 +1,7 @@
 # Twobbble
 
+##备注: 目前Dribbble已经正式关闭了所有第三方应用对V1接口的访问权限，所以已经拿不到数据了。V2接口如果要接的话会丢失很多功能。短时间可能我不会接。
+
 Twobbble是一个Android平台的第三方Dribbble客户端，与大多数这类应用一样，他完全基于MaterialDesign设计。而值得一提的是Twobbble完全使用Kotlin开发，并使用了RxJava，Retrofit2，EventBus，Fresco，等多个常用第三方项目，会充分的证明了Kotlin在实际生产中的可靠与Java to Kotlin的过渡之平滑，如果你是初学Kotlin，Twobbble会是一个不错的学习对象。
 
 该项目目前实现了Dribbble官方所给出的大多数API，当然还有很多功能未实现，日后也会继续完善，当然如果你有兴趣，欢迎你fork并参与到开发中来。
