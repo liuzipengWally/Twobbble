@@ -34,6 +34,10 @@ class MainPresenter(val mMainView: IMainView) : BasePresenter() {
             mMainView.getUserSuccess(it)
         }, {
             log(it)
+            log("18523385462")
+            log("pmn:115628")
+            log("aadonggangddsd00")
+            log("requuid=2bd7778d")
         }))
     }
 }
